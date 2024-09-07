@@ -1,0 +1,11 @@
+{
+  "name": "mobile_shop",
+  "version": "1.0.0",
+  "description": "A mobile shop webapplication designed to provide smooth interaction with products. Developed by Mr kuldeep kumar.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mr kuldeep kumar",
+  "license": "ISC"
+}
