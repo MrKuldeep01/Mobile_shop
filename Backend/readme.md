@@ -1,7 +1,19 @@
 # Backend for a mobile shop 
 
-## Models 
 
+## Packeges that may require :
+- express : to easily develop the backend
+- mongoose : to talk with mongoDB
+- dotenv : for credentials to be secure
+- jwt : for tokens
+- bcrypt : for password maintaining 
+- multer : to handle image files 
+- cloudenary : for image uploading from local to cloud. & fetching data for that image. 
+- cors : for cors policies
+- to be continue...
+
+
+## Models 
 - **owner model** 
     - name : String, 
     - mobile : number,
@@ -11,6 +23,11 @@
     - gender : enum["male","female"] default="male",
     - experience : Date,
     - rating : enum["1","2","3","4","5"],
+    <!-- history of item sold -->
+    - history : [
+        type : ObjectId,
+        ref : "Product",
+    ]
 
 ---
 - **user model**
@@ -21,6 +38,13 @@
     - image : String,
     - refreshToken : String,
     - gender : enum["male","female"] default="male",
+    - address : String,
+    - history : [
+        type: ObjectId,
+        ref: "Product"
+    ]
+
+---
 
 - **product model** 
     - name : Sting,
@@ -42,7 +66,20 @@
                 "Bluetooth", "headphones", "speakers","neckbends"
             ],
         ],
-        timestamps
+        timestamps;
+
+
+
 
 
      
+     
+
+## Routes & task to be performed :: /api/v1/
+- all products available here :: /products 
+- specific product via " id from url " :: /products/:productID,
+<!-- Protected routes  -->
+- owner's details along with sold product history :: profile/owner,
+- owner details edit portel  :: profile/owner/edit/:ownerID,
+- user's details along with product history :: /profile/userId  --> we can save the user at this point in redux.
+- user profile edit portel :: profile/user/edit/:ownerID,

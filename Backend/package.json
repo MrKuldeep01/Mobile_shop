@@ -3,9 +3,19 @@
   "version": "1.0.0",
   "description": "A mobile shop webapplication designed to provide smooth interaction with products. Developed by Mr kuldeep kumar.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon -r dotenv/config --experimental/json//index.js"
   },
   "author": "mr kuldeep kumar",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.6.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.4"
+  }
 }
