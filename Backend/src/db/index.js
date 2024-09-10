@@ -1,10 +1,15 @@
 import mongoose from "mongoose"
+import envConfig from "../../Config/envConfig.js";
+import constants from "../constants.js";
 
-export const connection = async ()=>{
+const connection = async ()=>{
     try {
-        mongoose.connect(connectionString)
+      const connect = await mongoose.connect(`${envConfig.dataBaseUri}/${constants.dataBaseName}`);
+      console.log(connect.connection.name , " :: DB is connected.");
     } catch (error) {
-        console.log("error while connection to DB ");
+        console.log("Error while connection to DB :: db :: ",error.message);
         process.exit(1);
     }
-}
+}   
+
+export default connection;
