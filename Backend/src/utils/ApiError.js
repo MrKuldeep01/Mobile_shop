@@ -6,9 +6,10 @@ class ApiError extends Error {
     this.errors = errors;
     this.data = null;
     this.success = false;
-    errorStack ? this.errorStack = errorStack : Error.captureStackTrace()
+    errorStack ? 
+    (this.errorStack = errorStack) :
+    Error.captureStackTrace(this,this.constructor)
   }
 }
 
-const result = new ApiError(200,"message is shown as this like error...");
 export default ApiError
