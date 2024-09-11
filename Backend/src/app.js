@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"))
 
-import homeRouter from "./routes/home.js"
+import homeRouter from "./routes/Home.route.js"
 app.use(`${constants.baseUrl}/`,homeRouter)
 
 export default app;

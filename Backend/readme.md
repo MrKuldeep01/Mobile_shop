@@ -75,11 +75,19 @@
     timestamps;
 
 ## Routes & task to be performed :: /api/v1/
+<!-- Auth route -->
+- register :: /register  :: we can give a button on frontend to ensure the coming request form owner or user.
+- login :: /login
 
+<!-- Product route -->
 - all products available here :: /products
 - specific product via " id from url " :: /products/:productID,
 <!-- Protected routes  -->
+- add/edit a product :: /products/add/_:id_ :: if we get id then this page is opened for edit . ONLY OPEND FOR --> OWNER <--
+
+<!-- profile route -->
 - owner's details along with sold product history :: profile/owner,
 - owner details edit portel :: profile/owner/edit/:ownerID,
+
 - user's details along with product history :: /profile/userId --> we can save the user at this point in redux.
 - user profile edit portel :: profile/user/edit/:ownerID,
