@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-
-const OwnerSchema = new mongoose.Schema(
+import schemaMethods from "../utils/SchemaMethods.js";
+const ownerSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -67,4 +67,20 @@ const OwnerSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Owner = mongoose.Model("Owner", OwnerSchema);
+ownerSchema.pre("save",schemaMethods.hashPassword(next))
+// hash the given password and save to the user 
+
+ownerSchema.methods.checkPassword = function (password){
+// check password and return true or false
+ return schemaMethods.checkPassword(password)
+}
+ownerSchema.methods.generateAccessToken = function (){
+// generate Access Token
+return schemaMethods.generateAccessToken();
+}
+ownerSchema.methods.generateRefreshToken = function (){
+// generate refresh Token
+return schemaMethods.generateRefreshToken();
+}
+export const Owner 
+= mongoose.Model("Owner", ownerSchema);

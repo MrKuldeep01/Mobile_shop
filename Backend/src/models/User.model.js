@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
-
+import schemaMethods from "../utils/SchemaMethods.js";
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
+      index:true,
     },
     gmail: {
       type: String,
@@ -56,18 +57,21 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-export const User = mongoose.model("User", userSchema);
 
-
-userSchema.methods.hashPassword = function (password){
+userSchema.pre("save",schemaMethods.hashPassword(next))
 // hash the given password and save to the user 
-}
-userSchema.methods.passwordChecker = function (password){
+
+userSchema.methods.checkPassword = function (password){
 // check password and return true or false
+ return schemaMethods.checkPassword(password)
 }
 userSchema.methods.generateAccessToken = function (){
 // generate Access Token
+return schemaMethods.generateAccessToken();
 }
 userSchema.methods.generateRefreshToken = function (){
 // generate refresh Token
+return schemaMethods.generateRefreshToken();
 }
+
+export const User = mongoose.model("User", userSchema);
