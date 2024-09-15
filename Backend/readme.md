@@ -91,3 +91,26 @@
 
 - user's details along with product history :: /profile/userId --> we can save the user at this point in redux.
 - user profile edit portel :: profile/user/edit/:ownerID,
+
+
+
+
+
+----
+## controllers
+
+```js
+/*
+Register user
+
+read inputs 
+validate inputs
+check for user existence with same credetials 
+hash the password 
+save the user
+
+send the response with the created user by removing the password and tokens from the user object.
+
+
+*/
+```

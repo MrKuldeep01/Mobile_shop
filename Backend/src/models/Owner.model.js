@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 import schemaMethods from "../utils/SchemaMethods.js";
+const historySchema = new mongoose.Schema({
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+  },
+  customer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+},{timestamps:true})
 const ownerSchema = new mongoose.Schema(
   {
     name: {
@@ -11,35 +21,31 @@ const ownerSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      lowercase: true, // This will automatically convert the email to lowercase
-      validate: {
-        validator: function (v) {
-          // Optional: Regular expression to validate email format
-          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-        },
-        message: (props) => `${props.value} is not a valid email!`,
-      },
+      lowercase: true, // This will automatically convert the email to lowercase    
     },
     mobile: {
       type: Number,
       unique: [true, "mobile number is required."],
     },
-    payment: String,
+    upiID:String,
+    upiName:String,
+    upiCurrencyCode : {
+      type:String,
+      default:"INR"
+    },
     image: {
       type: String,
       required: true,
-      default: "",
+      default: "https://cdn2.iconfinder.com/data/icons/business-persons-flat-1/512/person_3-512.png",
     },
     password: {
       type: String,
       required: true,
     },
-    refresher: String,
+    refreshToken: String,
     gender: {
       type: String,
-      enum: {
-        value: ["male", "female"],
-      },
+      enum:  ["male", "female"],
       default: "male",
     },
     experience: {
@@ -47,27 +53,27 @@ const ownerSchema = new mongoose.Schema(
       default: 12,
     },
     rating: {
+      type: Number,
       enum: [1, 2, 3, 4, 5],
       default: 4,
     },
     history: [
       {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-        },
-        customer: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-        doneOn: Date.now(),
+       historySchema
       },
     ],
   },
   { timestamps: true }
 );
 
-ownerSchema.pre("save",schemaMethods.hashPassword(next))
+
+ownerSchema.pre("save",async (next) => {
+  if (!this.isModified("password")) return next();
+    console.log("hasing the password ...");
+    this.password = await bcrypt.hash(this.password, constants.bcryptRound);
+    console.log("done, hash pass is ready");
+    next();
+})
 // hash the given password and save to the user 
 
 ownerSchema.methods.checkPassword = function (password){

@@ -1,4 +1,4 @@
-import ApiError from "./ApiError";
+import ApiError from "./ApiError.js";
 
 async function AsyncHandler(subFun) {
   return async (req, res, next) => {
