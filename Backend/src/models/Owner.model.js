@@ -57,17 +57,15 @@ const ownerSchema = new mongoose.Schema(
       enum: [1, 2, 3, 4, 5],
       default: 4,
     },
-    history: [
-      {
-       historySchema
-      },
-    ],
+    history:{
+      type : [ historySchema ],
+    }
   },
   { timestamps: true }
 );
 
 
-ownerSchema.pre("save",async (next) => {
+ownerSchema.pre("save",async function(next){
   if (!this.isModified("password")) return next();
     console.log("hasing the password ...");
     this.password = await bcrypt.hash(this.password, constants.bcryptRound);

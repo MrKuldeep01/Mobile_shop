@@ -137,4 +137,14 @@ export const register = AsyncHandler(async (req, res) => {
     registerUser(name, gmail, mobile, gender, address);
   }
 });
-export const login = AsyncHandler(async (req, res) => {});
+export const login = AsyncHandler(async (req, res) => {
+// login steps 
+/*
+get data
+validate 
+check password 
+assign cookies
+
+*/
+
+});

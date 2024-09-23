@@ -51,17 +51,17 @@ const userSchema = new mongoose.Schema(
     address: {
       type: String,
     },
-    history: [
-      {
-        historySchema,
-      },
-    ],
+    history: {
+      type : [
+        historySchema
+      ]
+    }
   },
   { timestamps: true }
 );
 
 // userSchema.pre("save", schemaMethods.hashPassword(next));
-userSchema.pre("save", async (next) => {
+userSchema.pre("save", async function(next){
   if (!this.isModified("password")) return next();
     console.log("hasing the password ...");
     this.password = await bcrypt.hash(this.password, constants.bcryptRound);
