@@ -34,7 +34,7 @@ export const register = AsyncHandler(async (req, res) => {
     address,
     rating,
     experience,
-    entityrole,
+    isOwner,
   } = req.body;
 
   if (
@@ -50,15 +50,8 @@ export const register = AsyncHandler(async (req, res) => {
   if (existingUser) {
     throw new ApiError(409, "this gmail or mobile number is already in use!");
   }
-
-  async function registerUser(
-    name,
-    gmail,
-    mobile,
-    gender,
-    password,
-    address = ""
-  ) {
+ 
+  async function registerUser(name, gmail, mobile, gender, password, address) {
     const createdUser = await userModel.create({
       name,
       gmail,
@@ -96,9 +89,9 @@ export const register = AsyncHandler(async (req, res) => {
     name,
     gmail,
     mobile,
+    password,
     gender,
     address,
-    password,
     rating = 4,
     experience = 12
   ) {
@@ -118,6 +111,8 @@ export const register = AsyncHandler(async (req, res) => {
     }
 
     const { accessToken, refreshToken } = generateTokens(createdOwner);
+    createdOwner.refreshToken = refreshToken;
+    await createdOwner.save({ validateBeforeSave: false });
     const newOwner = await ownerModel
       .findById(createdOwner._id)
       .select("-password -refreshToken");
@@ -128,18 +123,39 @@ export const register = AsyncHandler(async (req, res) => {
       .status(200)
       .cookie("accessToken", accessToken, constants.optionsForCookies)
       .cookie("refreshToken", refreshToken, constants.optionsForCookies)
-      .json(new ApiResponse(201, `Owner ${newOwner.name} is created successfuly.`, newOwner));
+      .json(
+        new ApiResponse(
+          201,
+          `Owner ${newOwner.name} is created successfuly.`,
+          newOwner
+        )
+      );
   }
-  if (entityrole && entityrole === "owner") {
-    registerOwner(name, gmail, mobile, gender, address, rating,
-        experience);
-  } else {
-    registerUser(name, gmail, mobile, gender, address);
+
+  if (!isOwner) {
+    registerUser(
+      name,
+      gmail, 
+      mobile, 
+      gender, 
+      password,
+      address
+    );
   }
+  registerOwner(
+    name,
+    gmail, 
+    mobile, 
+    password,
+    gender, 
+    address,
+    rating, 
+    experience
+  );
 });
 export const login = AsyncHandler(async (req, res) => {
-// login steps 
-/*
+  // login steps
+  /*
 get data
 validate 
 check password 
@@ -147,4 +163,68 @@ assign cookies
 
 */
 
+  const { gmail, password, mobile, isOwner } = req.body;
+  // isOwner = true/false;
+
+  if ([gmail, password, mobile].some((val) => val?.trim() === "")) {
+    throw new ApiError(409, `${val} is required field`);
+  }
+
+  if (!isOwner) {
+    const user = await userModel.find({
+      $or: [{ gmail }, { mobile }],
+    });
+    if (!user) {
+      throw new ApiError(401, "you are not valid user, please register first!");
+    }
+    const isPasswordOk = await user.methods.checkPassword(password);
+    console.log("entered password is : ", isPasswordOk);
+    if (!isPasswordOk) {
+      throw new ApiError(402, "Check the fields and fill with care!");
+    }
+
+    const { accessToken, refreshToken } = await generateTokens(user);
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+    const authenticatedUser = await userModel
+      .findById(user._id)
+      .select(" -password -refreshToken ");
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, optionsForCookies)
+      .cookie("refreshToken", refreshToken, optionsForCookies)
+      .json(
+        new ApiResponse(201, "User logged in Successfully", authenticatedUser)
+      );
+  }
+
+  const owner = await ownerModel.find({
+    $or: [{ gmail }, { mobile }],
+  });
+
+  if (!owner) {
+    throw new ApiError(409, "Not a valid Owner, please register first!");
+  }
+  const isPasswordOk = await owner.methods.checkPassword(password);
+  if (!isPasswordOk) {
+    throw new ApiError(409, "Invalid credentials, fill it carefully1");
+  }
+  const { accessToken, refreshToken } = generateTokens(owner);
+  owner.refreshToken = refreshToken;
+  await owner.save({ validateBeforeSave: false });
+  const authenticatedOwner = await ownerModel
+    .findById(owner._id)
+    .select("-password -refreshToke");
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, optionsForCookies)
+    .cookie("refreshToken", refreshToken, optionsForCookies)
+    .json(
+      new ApiResponse(
+        201,
+        "Owner is successfully logged in :)",
+        authenticatedOwner
+      )
+    );
 });
