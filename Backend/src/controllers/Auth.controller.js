@@ -37,15 +37,24 @@ export const register = AsyncHandler(async (req, res) => {
     isOwner,
   } = req.body;
   console.log(
-    "name ",name,
-    "gmail ",gmail,
-    "mobile ",mobile,
-    "gender ",gender,
-    "password ",password,
-    "address ",address,
-    "rating ",rating,
-    "experience ",experience,
-    "isOwner ",isOwner,
+    "name ",
+    name,
+    "gmail ",
+    gmail,
+    "mobile ",
+    mobile,
+    "gender ",
+    gender,
+    "password ",
+    password,
+    "address ",
+    address,
+    "rating ",
+    rating,
+    "experience ",
+    experience,
+    "isOwner ",
+    isOwner
   );
   if (
     [name, gmail, mobile, gender, password].some(
@@ -58,9 +67,11 @@ export const register = AsyncHandler(async (req, res) => {
     $or: [{ gmail }, { mobile }],
   });
   if (existingUser) {
-    throw new ApiError(409, "this gmail or mobile number is already in use!",[existingUser]);
+    throw new ApiError(409, "this gmail or mobile number is already in use!", [
+      existingUser,
+    ]);
   }
- 
+
   async function registerUser(name, gmail, mobile, gender, password, address) {
     const createdUser = await userModel.create({
       name,
@@ -113,8 +124,8 @@ export const register = AsyncHandler(async (req, res) => {
       address,
       password,
       rating,
-      experience
-  }); 
+      experience,
+    });
 
     if (!createdOwner) {
       throw new ApiError(409, "Error in owner's regesteration!");
@@ -136,34 +147,27 @@ export const register = AsyncHandler(async (req, res) => {
       .json(
         new ApiResponse(
           201,
-          `Owner ${newOwner.name} is created successfuly.`,
+          `Owner -: ${newOwner.name} :- is created successfuly.`,
           newOwner
         )
       );
   }
- 
-  if (!isOwner) {
-    registerUser(
-      name,
-      gmail, 
-      mobile, 
-      gender, 
-      password,
-      address
-    );
-  }
-  registerOwner(
-    name,
-    gmail, 
-    mobile, 
-    password,
-    gender, 
-    address,
-    rating, 
-    experience
-  );
-});
 
+  if (isOwner) {
+    registerOwner(
+      name,
+      gmail,
+      mobile,
+      password,
+      gender,
+      address,
+      rating,
+      experience
+    );
+  } else {
+    registerUser(name, gmail, mobile, gender, password, address);
+  }
+});
 
 export const login = AsyncHandler(async (req, res) => {
   // login steps
@@ -182,7 +186,7 @@ assign cookies
     throw new ApiError(409, `${val} is required field`);
   }
 
-  if (!isOwner) {
+  if (isOwner === undefined || isOwner === false) {
     const user = await userModel.findOne({
       $or: [{ gmail }, { mobile }],
     });
