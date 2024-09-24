@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import schemaMethods from "../utils/SchemaMethods.js";
+import constants from "../constants.js";
+import bcrypt from "bcrypt";
 const historySchema = new mongoose.Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
@@ -21,17 +23,21 @@ const ownerSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      lowercase: true, // This will automatically convert the email to lowercase    
+      lowercase: true, 
     },
     mobile: {
       type: Number,
-      unique: [true, "mobile number is required."],
+      required: [true, "Mobile number is required."],
+      unique: [true, "This mobile number is used by someone."],
     },
     upiID:String,
     upiName:String,
     upiCurrencyCode : {
       type:String,
       default:"INR"
+    },
+    address:{
+      type:String
     },
     image: {
       type: String,
@@ -87,4 +93,4 @@ ownerSchema.methods.generateRefreshToken = function (){
 return schemaMethods.generateRefreshToken();
 }
 export const Owner 
-= mongoose.Model("Owner", ownerSchema);
+= mongoose.model("Owner", ownerSchema);

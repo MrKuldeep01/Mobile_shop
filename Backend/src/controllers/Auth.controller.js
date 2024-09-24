@@ -36,7 +36,17 @@ export const register = AsyncHandler(async (req, res) => {
     experience,
     isOwner,
   } = req.body;
-
+  console.log(
+    "name ",name,
+    "gmail ",gmail,
+    "mobile ",mobile,
+    "gender ",gender,
+    "password ",password,
+    "address ",address,
+    "rating ",rating,
+    "experience ",experience,
+    "isOwner ",isOwner,
+  );
   if (
     [name, gmail, mobile, gender, password].some(
       (field) => field?.trim() === ""
@@ -44,11 +54,11 @@ export const register = AsyncHandler(async (req, res) => {
   ) {
     throw new ApiError(402, ` ${field} is required!`);
   }
-  const existingUser = await userModel.find({
+  const existingUser = await userModel.findOne({
     $or: [{ gmail }, { mobile }],
   });
   if (existingUser) {
-    throw new ApiError(409, "this gmail or mobile number is already in use!");
+    throw new ApiError(409, "this gmail or mobile number is already in use!",[existingUser]);
   }
  
   async function registerUser(name, gmail, mobile, gender, password, address) {
@@ -95,7 +105,7 @@ export const register = AsyncHandler(async (req, res) => {
     rating = 4,
     experience = 12
   ) {
-    const createdOwner = await ownerModel.create(
+    const createdOwner = await ownerModel.create({
       name,
       gmail,
       mobile,
@@ -104,7 +114,7 @@ export const register = AsyncHandler(async (req, res) => {
       password,
       rating,
       experience
-    );
+  }); 
 
     if (!createdOwner) {
       throw new ApiError(409, "Error in owner's regesteration!");
@@ -131,7 +141,7 @@ export const register = AsyncHandler(async (req, res) => {
         )
       );
   }
-
+ 
   if (!isOwner) {
     registerUser(
       name,
@@ -153,6 +163,8 @@ export const register = AsyncHandler(async (req, res) => {
     experience
   );
 });
+
+
 export const login = AsyncHandler(async (req, res) => {
   // login steps
   /*
@@ -171,7 +183,7 @@ assign cookies
   }
 
   if (!isOwner) {
-    const user = await userModel.find({
+    const user = await userModel.findOne({
       $or: [{ gmail }, { mobile }],
     });
     if (!user) {
@@ -198,7 +210,7 @@ assign cookies
       );
   }
 
-  const owner = await ownerModel.find({
+  const owner = await ownerModel.findOne({
     $or: [{ gmail }, { mobile }],
   });
 

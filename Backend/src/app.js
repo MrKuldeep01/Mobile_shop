@@ -15,3 +15,4 @@ import authRoute from "./routes/Auth.route.js"
 app.use(`${constants.baseUrl}/`,homeRouter)
 app.use(`${constants.baseUrl}/auth`,authRoute)
 export default app;
+  

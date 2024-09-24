@@ -10,7 +10,7 @@ connection()
     app.on("error", (error) => {
       // process.exit(1);
       console.log(
-        "Error occured during database connection in app :: index.js :: ",
+        "Error occured with server connection in app :: index.js :: ",
         error
       );
     });

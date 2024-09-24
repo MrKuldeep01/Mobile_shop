@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import schemaMethods from "../utils/SchemaMethods.js";
+import bcrypt from "bcrypt"
+import constants from "../constants.js";
 const historySchema = new mongoose.Schema(
   {
     product: {
