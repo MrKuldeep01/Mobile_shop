@@ -36,34 +36,14 @@ export const register = AsyncHandler(async (req, res) => {
     experience,
     isOwner,
   } = req.body;
-  console.log(
-    "name ",
-    name,
-    "gmail ",
-    gmail,
-    "mobile ",
-    mobile,
-    "gender ",
-    gender,
-    "password ",
-    password,
-    "address ",
-    address,
-    "rating ",
-    rating,
-    "experience ",
-    experience,
-    "isOwner ",
-    isOwner
-  );
-  if (
-    [name, gmail, mobile, gender, password].some(
-      (field) => field?.trim() === ""
-    )
-  ) {
-    throw new ApiError(402, ` ${field} is required!`);
+  console.log( "name ", name, "gmail ", gmail, "mobile ", mobile, "gender ", gender, "password ", password, "address ", address, "rating ", rating, "experience ", experience, "isOwner ", isOwner );
+  const requiredField =  {name, gmail, mobile, gender, password}
+  for(const [key,val] of Object.entries(requiredField)){
+    if(key?.val?.trim() === ""){
+      throw new ApiError(402,`${key} is required field!`)
+    }
   }
-  const existingUser = await userModel.findOne({
+    const existingUser = await userModel.findOne({
     $or: [{ gmail }, { mobile }],
   });
   if (existingUser) {
@@ -71,7 +51,25 @@ export const register = AsyncHandler(async (req, res) => {
       existingUser,
     ]);
   }
-
+  
+  if (isOwner === true || isOwner == "true" ) {
+  await registerOwner(
+      name,
+      gmail,
+      mobile,
+      password,
+      gender,
+      address,
+      rating,
+      experience
+    );
+  return;
+  } 
+  else{
+    await registerUser(name, gmail, mobile, gender, password, address); 
+    return;
+  }
+  
   async function registerUser(name, gmail, mobile, gender, password, address) {
     const createdUser = await userModel.create({
       name,
@@ -153,31 +151,17 @@ export const register = AsyncHandler(async (req, res) => {
       );
   }
 
-  if (isOwner) {
-    registerOwner(
-      name,
-      gmail,
-      mobile,
-      password,
-      gender,
-      address,
-      rating,
-      experience
-    );
-  } else {
-    registerUser(name, gmail, mobile, gender, password, address);
-  }
+
 });
 
 export const login = AsyncHandler(async (req, res) => {
   // login steps
   /*
-get data
-validate 
-check password 
-assign cookies
-
-*/
+    get data
+    validate 
+    check password 
+    assign cookies
+  */
 
   const { gmail, password, mobile, isOwner } = req.body;
   // isOwner = true/false;

@@ -8,7 +8,7 @@ const router = Router();
 // },(_,res)=>{
 //   res.send("hello sir this is working...");
 // })
-
+ 
 //second
 router.route("/").get((_, res) => {
     res.send(
