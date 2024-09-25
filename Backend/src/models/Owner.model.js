@@ -80,9 +80,9 @@ ownerSchema.pre("save",async function(next){
 })
 // hash the given password and save to the user 
 
-ownerSchema.methods.checkPassword = function (password){
+ownerSchema.methods.checkPassword = async function (passwordString){
 // check password and return true or false
- return schemaMethods.checkPassword(password)
+return await bcrypt.compare(passwordString, this.password);
 }
 ownerSchema.methods.generateAccessToken = function (){
 // generate Access Token

@@ -36,14 +36,33 @@ export const register = AsyncHandler(async (req, res) => {
     experience,
     isOwner,
   } = req.body;
-  console.log( "name ", name, "gmail ", gmail, "mobile ", mobile, "gender ", gender, "password ", password, "address ", address, "rating ", rating, "experience ", experience, "isOwner ", isOwner );
-  const requiredField =  {name, gmail, mobile, gender, password}
-  for(const [key,val] of Object.entries(requiredField)){
-    if(key?.val?.trim() === ""){
-      throw new ApiError(402,`${key} is required field!`)
+  console.log(
+    "name ",
+    name,
+    "gmail ",
+    gmail,
+    "mobile ",
+    mobile,
+    "gender ",
+    gender,
+    "password ",
+    password,
+    "address ",
+    address,
+    "rating ",
+    rating,
+    "experience ",
+    experience,
+    "isOwner ",
+    isOwner
+  );
+  const requiredField = { name, gmail, mobile, gender, password };
+  for (const [key, val] of Object.entries(requiredField)) {
+    if (key?.val?.trim() === "") {
+      throw new ApiError(402, `${key} is required field!`);
     }
   }
-    const existingUser = await userModel.findOne({
+  const existingUser = await userModel.findOne({
     $or: [{ gmail }, { mobile }],
   });
   if (existingUser) {
@@ -51,9 +70,9 @@ export const register = AsyncHandler(async (req, res) => {
       existingUser,
     ]);
   }
-  
-  if (isOwner === true || isOwner == "true" ) {
-  await registerOwner(
+
+  if (isOwner === true || isOwner == "true") {
+    await registerOwner(
       name,
       gmail,
       mobile,
@@ -63,13 +82,12 @@ export const register = AsyncHandler(async (req, res) => {
       rating,
       experience
     );
-  return;
-  } 
-  else{
-    await registerUser(name, gmail, mobile, gender, password, address); 
+    return;
+  } else {
+    await registerUser(name, gmail, mobile, gender, password, address);
     return;
   }
-  
+
   async function registerUser(name, gmail, mobile, gender, password, address) {
     const createdUser = await userModel.create({
       name,
@@ -93,8 +111,8 @@ export const register = AsyncHandler(async (req, res) => {
     }
     return res
       .status(200)
-      .cookie("accessToken", accessToken, constants.optionsForCookies)
-      .cookie("refreshToken", refreshToken, constants.optionsForCookies)
+      .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
+      .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
       .json(
         new ApiResponse(
           201,
@@ -140,8 +158,8 @@ export const register = AsyncHandler(async (req, res) => {
     }
     return res
       .status(200)
-      .cookie("accessToken", accessToken, constants.optionsForCookies)
-      .cookie("refreshToken", refreshToken, constants.optionsForCookies)
+      .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
+      .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
       .json(
         new ApiResponse(
           201,
@@ -150,8 +168,6 @@ export const register = AsyncHandler(async (req, res) => {
         )
       );
   }
-
-
 });
 
 export const login = AsyncHandler(async (req, res) => {
@@ -165,19 +181,56 @@ export const login = AsyncHandler(async (req, res) => {
 
   const { gmail, password, mobile, isOwner } = req.body;
   // isOwner = true/false;
+console.log(
+  "gmail, password, mobile, isOwner :: ", gmail, password, mobile, isOwner
+);
+if(!(password && (gmail || mobile))){
+  console.log("bhai required fields to bhro phle!");
+  throw new ApiError(405,"You have missed some fields!")
+}
+{
 
-  if ([gmail, password, mobile].some((val) => val?.trim() === "")) {
-    throw new ApiError(409, `${val} is required field`);
-  }
+}
+  if (isOwner === true || isOwner == "true") {
+    const owner = await ownerModel.findOne({
+      $or: [{ gmail }, { mobile }],
+    });
 
-  if (isOwner === undefined || isOwner === false) {
+    if (!owner) {
+      throw new ApiError(409, "Not a valid Owner, please register first!");
+    }
+    
+    const isPasswordOk = await owner.checkPassword(password);
+    if (!isPasswordOk) {
+      throw new ApiError(409, "Invalid credentials, fill it carefully1");
+    }
+    const { accessToken, refreshToken } = generateTokens(owner);
+    owner.refreshToken = refreshToken;
+    await owner.save({ validateBeforeSave: false });
+    const authenticatedOwner = await ownerModel
+      .findById(owner._id)
+      .select("-password -refreshToke");
+    
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
+      .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
+      .json(
+        new ApiResponse(
+          201,
+          "Owner is successfully logged in :)",
+          authenticatedOwner
+        )
+      );
+  } else {
+
     const user = await userModel.findOne({
       $or: [{ gmail }, { mobile }],
     });
     if (!user) {
       throw new ApiError(401, "you are not valid user, please register first!");
     }
-    const isPasswordOk = await user.methods.checkPassword(password);
+    const isPasswordOk = await user.checkPassword(password);
     console.log("entered password is : ", isPasswordOk);
     if (!isPasswordOk) {
       throw new ApiError(402, "Check the fields and fill with care!");
@@ -189,42 +242,15 @@ export const login = AsyncHandler(async (req, res) => {
     const authenticatedUser = await userModel
       .findById(user._id)
       .select(" -password -refreshToken ");
+      
+      
+
     return res
       .status(200)
-      .cookie("accessToken", accessToken, optionsForCookies)
-      .cookie("refreshToken", refreshToken, optionsForCookies)
+      .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
+      .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
       .json(
         new ApiResponse(201, "User logged in Successfully", authenticatedUser)
       );
   }
-
-  const owner = await ownerModel.findOne({
-    $or: [{ gmail }, { mobile }],
-  });
-
-  if (!owner) {
-    throw new ApiError(409, "Not a valid Owner, please register first!");
-  }
-  const isPasswordOk = await owner.methods.checkPassword(password);
-  if (!isPasswordOk) {
-    throw new ApiError(409, "Invalid credentials, fill it carefully1");
-  }
-  const { accessToken, refreshToken } = generateTokens(owner);
-  owner.refreshToken = refreshToken;
-  await owner.save({ validateBeforeSave: false });
-  const authenticatedOwner = await ownerModel
-    .findById(owner._id)
-    .select("-password -refreshToke");
-
-  return res
-    .status(200)
-    .cookie("accessToken", accessToken, optionsForCookies)
-    .cookie("refreshToken", refreshToken, optionsForCookies)
-    .json(
-      new ApiResponse(
-        201,
-        "Owner is successfully logged in :)",
-        authenticatedOwner
-      )
-    );
 });

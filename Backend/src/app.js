@@ -9,7 +9,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"))
- 
+console.log(constants.ATOptionsForCookies);
+console.log(constants.RTOptionsForCookies);
 import homeRouter from "./routes/Home.route.js"
 import authRoute from "./routes/Auth.route.js"
 app.use(`${constants.baseUrl}/`,homeRouter)

@@ -72,10 +72,10 @@ userSchema.pre("save", async function(next){
 });
 // hash the given password and save to the user
 
-userSchema.methods.checkPassword = function (password) {
+userSchema.methods.checkPassword = async function (passwordString){
   // check password and return true or false
-  return schemaMethods.checkPassword(password);
-};
+  return await bcrypt.compare(passwordString, this.password);
+  }
 userSchema.methods.generateAccessToken = function () {
   // generate Access Token
   return schemaMethods.generateAccessToken();

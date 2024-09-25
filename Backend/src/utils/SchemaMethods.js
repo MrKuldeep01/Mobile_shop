@@ -13,11 +13,6 @@ import constants from "../constants.js";
 // };
 
 // to check the password at any time
-const checkPassword = async function (passwordString){
-    console.log("checking password...");
-    return await bcrypt.compare(passwordString, this.password);
-};
-
 // to generate tokens
 // REFRESH TOKEN 
 const generateRefreshToken = async function(){
@@ -49,7 +44,6 @@ console.log("Done : access token generating.");
 };
 
 export default {
-  checkPassword,
   generateAccessToken,
   generateRefreshToken,
 };
