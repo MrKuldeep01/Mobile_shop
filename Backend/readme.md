@@ -93,6 +93,37 @@
 - user profile edit portel :: profile/user/edit/:ownerID,
 
 
+====================
+## Routes
+
+### **Authentication Routes**:
+- **Register**: `/api/v1/register`  
+   Allow users and owners to sign up.  ✅
+- **Login**: `/api/v1/login`  
+   Allow users and owners to log in.  ✅
+
+### **Product Routes**:
+- **All Products**: `/api/v1/products`  
+   Get all available products.
+- **Product by ID**: `/api/v1/products/:productId`  
+   Fetch a specific product by its ID.
+
+### **Protected Routes (Owner Only)**:
+- **Add/Edit Product**: `/api/v1/products/add/:id`  
+   Add or edit products. If an `id` is provided, the product will be edited.
+
+### **Profile Routes**:
+- **Owner Profile**: `/api/v1/profile/owner`  
+   View the owner’s profile along with their sold product history.
+- **Edit Owner Profile**: `/api/v1/profile/owner/edit/:ownerId`  
+   Edit the owner’s profile.
+- **User Profile**: `/api/v1/profile/user/:userId`  
+   View the user’s profile along with their purchase history.
+- **Edit User Profile**: `/api/v1/profile/user/edit/:userId`  
+   Edit the user’s profile.
+
+---
+====================
 
 
 

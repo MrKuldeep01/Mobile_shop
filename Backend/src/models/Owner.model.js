@@ -58,6 +58,10 @@ const ownerSchema = new mongoose.Schema(
       type: Number,
       default: 12,
     },
+    isOwner : {
+      type : Boolean,
+      default : true
+    },
     rating: {
       type: Number,
       enum: [1, 2, 3, 4, 5],

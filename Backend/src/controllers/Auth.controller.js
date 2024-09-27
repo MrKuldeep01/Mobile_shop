@@ -181,17 +181,18 @@ export const login = AsyncHandler(async (req, res) => {
 
   const { gmail, password, mobile, isOwner } = req.body;
   // isOwner = true/false;
-console.log(
-  "gmail, password, mobile, isOwner :: ", gmail, password, mobile, isOwner
-);
-if(!(password && (gmail || mobile))){
-  console.log("bhai required fields to bhro phle!");
-  throw new ApiError(405,"You have missed some fields!")
-}
-{
-
-}
-  if (isOwner === true || isOwner == "true") {
+  console.log(
+    "gmail, password, mobile, isOwner :: ",
+    gmail,
+    password,
+    mobile,
+    isOwner
+  );
+  if (!(password && (gmail || mobile))) {
+    console.log("bhai required fields to bhro phle!");
+    throw new ApiError(405, "You have missed some fields!");
+  }
+  if (Boolean(isOwner) === true || isOwner == "true") {
     const owner = await ownerModel.findOne({
       $or: [{ gmail }, { mobile }],
     });
@@ -199,7 +200,7 @@ if(!(password && (gmail || mobile))){
     if (!owner) {
       throw new ApiError(409, "Not a valid Owner, please register first!");
     }
-    
+
     const isPasswordOk = await owner.checkPassword(password);
     if (!isPasswordOk) {
       throw new ApiError(409, "Invalid credentials, fill it carefully1");
@@ -209,8 +210,8 @@ if(!(password && (gmail || mobile))){
     await owner.save({ validateBeforeSave: false });
     const authenticatedOwner = await ownerModel
       .findById(owner._id)
-      .select("-password -refreshToke");
-    
+      .select("-password -refreshToken");
+
     return res
       .status(200)
       .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
@@ -223,7 +224,6 @@ if(!(password && (gmail || mobile))){
         )
       );
   } else {
-
     const user = await userModel.findOne({
       $or: [{ gmail }, { mobile }],
     });
@@ -242,8 +242,6 @@ if(!(password && (gmail || mobile))){
     const authenticatedUser = await userModel
       .findById(user._id)
       .select(" -password -refreshToken ");
-      
-      
 
     return res
       .status(200)
@@ -254,3 +252,27 @@ if(!(password && (gmail || mobile))){
       );
   }
 });
+
+export const getCurrentUser = AsyncHandler(async (req, res)=> {
+  return res
+  .status(200)
+  json( new ApiResponse(200,"User successfully fetched",req.user));
+})
+
+export const passwordChange = AsyncHandler( async (req, res)=> {
+  /*
+  if edit route is accessible then this is logged in user
+  Hence user - req.user via middleware 
+  --- fields must not't be changed
+  email, mobile, name
+
+  ====
+  - get data to update 
+  - validat the comming data
+  - update data 
+  - all good
+  */
+
+  
+
+})

@@ -34,7 +34,7 @@ const generateAccessToken = async function (){
             gmail: this.gmail,
             mobile: this.mobile,
             gender: this.gender,
-            payment: this?.payment || ""
+            isOwner: this.isOwner
         },
     envConfig.accessTokenSecretKey,
     { expiresIn: envConfig.accessTokenExpiry }

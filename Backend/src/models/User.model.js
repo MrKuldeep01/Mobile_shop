@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    isOwner : {
+      type: Boolean,
+      default: false
+    },
     image: {
       type: String,
       required: true,
