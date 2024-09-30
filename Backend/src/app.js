@@ -9,11 +9,11 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"))
-console.log(constants.ATOptionsForCookies);
-console.log(constants.RTOptionsForCookies);
+
 import homeRouter from "./routes/Home.route.js"
 import authRoute from "./routes/Auth.route.js"
+import productRoute from "./routes/Products.route.js"
 app.use(`${constants.baseUrl}/`,homeRouter)
 app.use(`${constants.baseUrl}/auth`,authRoute)
+app.use(`${constants.baseUrl}/product`,productRoute)
 export default app;
-  
