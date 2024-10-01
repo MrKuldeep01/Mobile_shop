@@ -23,7 +23,7 @@ export const getProduct = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Product successfully found"), product);
 });
 //add products
-export const addProduct = AsyncHandler(async (req, res) => {
+export const adProduct = AsyncHandler(async (req, res) => {
   const { name, price, desc, catagory } = req.body;
   const imageLocalPath = req.file.image.path;
   console.log(image);
@@ -62,5 +62,11 @@ export const addProduct = AsyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(201, "product created successfully."));
 });
+
+export const addProduct = AsyncHandler(async (req, res)=> {
+  console.log(req.body);
+  console.log(req.file);
+  res.status(200).json({success:true,data: req.file})
+})
 
 // ----------------------------------------------------------------

@@ -15,5 +15,5 @@ import authRoute from "./routes/Auth.route.js"
 import productRoute from "./routes/Products.route.js"
 app.use(`${constants.baseUrl}/`,homeRouter)
 app.use(`${constants.baseUrl}/auth`,authRoute)
-app.use(`${constants.baseUrl}/product`,productRoute)
+app.use(`${constants.baseUrl}/products`,productRoute)
 export default app;
