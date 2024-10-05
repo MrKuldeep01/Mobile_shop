@@ -21,10 +21,9 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Math.round(Math.random() * 1000 + 100);
-    const ext = file.originalname.slice(file.originalname.lastIndexOf('.'));
-    console.log("extention name is : ",ext);
+    const ext = file.originalname.slice(file.originalname.lastIndexOf("."));
     cb(null, file.fieldname + "_" + uniqueSuffix + ext);
   },
 });
-
+ 
 export const upload = multer({ storage });

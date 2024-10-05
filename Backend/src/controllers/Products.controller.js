@@ -7,6 +7,9 @@ import cloudinaryUploader from "../utils/Cloudinary.js";
 export const getProducts = AsyncHandler(async (req, res) => {
   const products = await productModel.find();
   console.log("getting product list...");
+  if(!products){
+    throw new ApiError("503", `Faild to load products data`);
+  }
   return res
     .status(201)
     .json(new ApiResponse(200, "Product list successfully found", products));
@@ -16,69 +19,40 @@ export const getProduct = AsyncHandler(async (req, res) => {
   ////////////////// this is must to send product id in url as  /:productId
   let productId = req.params?.productId;
   const product = await productModel.findById(productId);
-  console.log("getting product from db...");
-
+  console.log("getting product from db... "+ productId);
+  console.log(product);
+  if(!product){
+    throw new ApiError("400", `product is not found!`);
+  }
   return res
     .status(201)
-    .json(new ApiResponse(200, "Product successfully found"), product);
+    .json(new ApiResponse(200,"Product found successfully",product))
 });
 //add products
-export const adProduct = AsyncHandler(async (req, res) => {
-  const { name, price, desc, catagory } = req.body;
-  const imageLocalPath = req.file.image.path;
-  console.log(image);
-  console.table([name, price, desc, catagory]);
-
-  // all fields are required
-  // if for edit : must to send productId in url
-
-  for (let value of [name, price, desc, catagory]) {
-    if (value.trim() === "") {
-      throw new ApiError(406, ` ${value} is required`);
-    }
-    if (!imageLocalPath) {
-      throw new ApiError(406, `Image is required`);
-    }
-  }
-  const uploadedImage = await cloudinaryUploader(imageLocalPath);
-  const product = await productModel.create({
-    name,
-    price,
-    desc,
-    image: uploadedImage,
-    catagory,
-  });
-
-  if (!product) {
-    throw new ApiError(
-      403,
-      "Something wrong with creation of product :: products.controller:ediAddProduct() "
-    );
-  }
-  return res
-    .status(201)
-    .json(new ApiResponse(201, "product created successfully."));
-});
 
 export const addProduct = AsyncHandler(async (req, res) => {
   const { name, desc, catagory, price } = req.body;
-  const imageLocalPath = await req?.file["path"];
-  if (!imageLocalPath) {
-    throw new ApiError(400, "Product image is required!");
-  }
+  const imageLocalPath = await req?.file?.path;
   for (let value of [name, desc, catagory, price]) {
     if (value.trim() === "") {
       throw new ApiError("400", `${value} is required to proceed further!`);
     }
   }
+  if (!imageLocalPath) {
+    throw new ApiError(400, " 400 Product image is required!");
+  }
+  
+  const image = await cloudinaryUploader(imageLocalPath);
+  if (!image) {
+    throw new ApiError(501, " 501 Product image is required!");
+  }
 
-  const cloudinaryImage = await cloudinaryUploader(imageLocalPath).url;
   const createdProduct = await productModel.create({
     name,
     desc,
     catagory,
     price,
-    image: cloudinaryImage,
+    image
   });
   res
     .status(200)

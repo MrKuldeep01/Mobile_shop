@@ -20,7 +20,7 @@ async function cloudinaryUploader(fileLink) {
     if (uploadedFile) {
       fs.unlinkSync(fileLink);
       console.log("file uploaded on cloudinary ", uploadedFile);
-      return uploadedFile;
+      return uploadedFile.url;
     }
   } catch (error) {
     fs.unlinkSync(fileLink);
