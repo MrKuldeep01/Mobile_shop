@@ -3,31 +3,7 @@ import { Product as productModel } from "../models/Product.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import cloudinaryUploader from "../utils/Cloudinary.js";
-// all products OK-TESTED
-export const getProducts = AsyncHandler(async (req, res) => {
-  const products = await productModel.find();
-  console.log("getting product list...");
-  if(!products){
-    throw new ApiError("503", `Faild to load products data`);
-  }
-  return res
-    .status(201)
-    .json(new ApiResponse(200, "Product list successfully found", products));
-});
-// specific product
-export const getProduct = AsyncHandler(async (req, res) => {
-  ////////////////// this is must to send product id in url as  /:productId
-  let productId = req.params?.productId;
-  const product = await productModel.findById(productId);
-  console.log("getting product from db... "+ productId);
-  console.log(product);
-  if(!product){
-    throw new ApiError("400", `product is not found!`);
-  }
-  return res
-    .status(201)
-    .json(new ApiResponse(200,"Product found successfully",product))
-});
+
 //add products
 
 export const addProduct = AsyncHandler(async (req, res) => {
@@ -41,7 +17,7 @@ export const addProduct = AsyncHandler(async (req, res) => {
   if (!imageLocalPath) {
     throw new ApiError(400, " 400 Product image is required!");
   }
-  
+
   const image = await cloudinaryUploader(imageLocalPath);
   if (!image) {
     throw new ApiError(501, " 501 Product image is required!");
@@ -52,7 +28,7 @@ export const addProduct = AsyncHandler(async (req, res) => {
     desc,
     catagory,
     price,
-    image
+    image,
   });
   res
     .status(200)
@@ -65,4 +41,88 @@ export const addProduct = AsyncHandler(async (req, res) => {
     );
 });
 
+// edit product
+export const editProduct = AsyncHandler(async (req, res) => {
+  const productId = req?.params?.productId;
+  if (!productId) {
+    throw new ApiError(400, "Please provide product id to edit!");
+  }
+  const existingProduct = await productModel.findById(productId);
+  if (!existingProduct) {
+    throw new ApiError(400, "Not a valid Product id");
+  }
+  const imageLocalPath = req?.file?.path;
+  const image =
+    (imageLocalPath && (await cloudinaryUploader(imageLocalPath))) ||
+    existingProduct.image;
+  // const { name, catagory, price, desc } = req.body;
+
+  const name = req.body?.name || existingProduct.name;
+  const price = req.body?.price || existingProduct.price;
+  const desc = req.body?.desc || existingProduct.desc;
+  const catagory = req.body?.catagory || existingProduct.catagory;
+  console.log(name, desc, price, catagory, image);
+  [name, Number(price), desc, catagory, image].map((elm) => {
+    existingProduct.elm = elm;
+  });
+  await existingProduct.save();
+  console.log("existingProduct " + existingProduct);
+  const editedProduct = await productModel.findById(existingProduct._id);
+
+  if (!editedProduct) {
+    throw new ApiError(500, "faild to update the product!");
+  }
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        200,
+        ` ${name} Product edited successfully`,
+        editedProduct
+      )
+    );
+});
+
+// all products OK-TESTED
+export const getProducts = AsyncHandler(async (req, res) => {
+  const products = await productModel.find();
+  console.log("getting product list...");
+  if (!products) {
+    throw new ApiError("503", `Faild to load products data`);
+  }
+  return res
+    .status(201)
+    .json(new ApiResponse(200, "Product list successfully found", products));
+});
+
+// specific product
+export const getProduct = AsyncHandler(async (req, res) => {
+  ////////////////// this is must to send product id in url as  /:productId
+  let productId = req.params?.productId;
+  const product = await productModel.findById(productId);
+  console.log("getting product from db... " + productId);
+  console.log(product);
+  if (!product) {
+    throw new ApiError("400", `product is not found!`);
+  }
+  return res
+    .status(201)
+    .json(new ApiResponse(200, "Product found successfully", product));
+});
+
+// delete Product
+export const deleteProduct = AsyncHandler(async (req, res) => {
+  const productId = req?.params?.productId;
+  if (!productId) {
+    throw new ApiError(400, "Please provide product id to delete.");
+  }
+  console.log(`finding the product ${productId} to delete`);
+  const deletedProduct = await productModel.deleteOne({ _id: productId });
+  if (!deleteProduct) {
+    throw new ApiError(500, "failed to delete product ", productId);
+  }
+  res
+    .status(204)
+    .json(new ApiResponse(200, "Product deleted successfully", deletedProduct));
+});
 // ----------------------------------------------------------------
