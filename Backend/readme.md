@@ -109,8 +109,9 @@
    Fetch a specific product by its ID.
 
 ### **Protected Routes (Owner Only)**:
-- **Add/Edit Product**: `/api/v1/products/add/:id`  
-   Add or edit products. If an `id` is provided, the product will be edited.
+- **Add Product**: `/api/v1/products/add/`  
+- **Edit Product**: `/api/v1/products/edit/productId`  
+- **Delete Product**: `/api/v1/products/delete/:productId`  
 
 ### **Profile Routes**:
 - **Owner Profile**: `/api/v1/profile/owner`  

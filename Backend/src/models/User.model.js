@@ -15,6 +15,7 @@ const historySchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+import {addressSchema} from './schema.js';
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -55,7 +56,9 @@ const userSchema = new mongoose.Schema(
       default: "male",
     },
     address: {
-      type: String,
+      type: [
+        addressSchema
+      ]
     },
     history: {
       type : [

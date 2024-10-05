@@ -61,13 +61,13 @@ export const editProduct = AsyncHandler(async (req, res) => {
   const price = req.body?.price || existingProduct.price;
   const desc = req.body?.desc || existingProduct.desc;
   const catagory = req.body?.catagory || existingProduct.catagory;
-  console.log(name, desc, price, catagory, image);
-  [name, Number(price), desc, catagory, image].map((elm) => {
-    existingProduct.elm = elm;
-  });
-  await existingProduct.save();
-  console.log("existingProduct " + existingProduct);
-  const editedProduct = await productModel.findById(existingProduct._id);
+  const editedProduct = await productModel.findByIdAndUpdate(
+    existingProduct._id,
+    { name, desc, price, catagory, image },
+    {
+      new: true,
+    }
+  );
 
   if (!editedProduct) {
     throw new ApiError(500, "faild to update the product!");

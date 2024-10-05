@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import schemaMethods from "../utils/SchemaMethods.js";
 import constants from "../constants.js";
 import bcrypt from "bcrypt";
+import {addressSchema} from './schema.js';
+
 const historySchema = new mongoose.Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
@@ -37,12 +39,14 @@ const ownerSchema = new mongoose.Schema(
       default:"INR"
     },
     address:{
-      type:String
+      type:[
+        addressSchema
+      ]
     },
     image: {
       type: String,
       required: true,
-      default: "https://cdn2.iconfinder.com/data/icons/business-persons-flat-1/512/person_3-512.png",
+      // default: "https://cdn2.iconfinder.com/data/icons/business-persons-flat-1/512/person_3-512.png",
     },
     password: {
       type: String,
@@ -52,7 +56,6 @@ const ownerSchema = new mongoose.Schema(
     gender: {
       type: String,
       enum:  ["male", "female"],
-      default: "male",
     },
     experience: {
       type: Number,

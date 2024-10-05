@@ -4,6 +4,7 @@ import AsyncHandler from "../utils/AsyncHandler.js";
 import { User as userModel } from "../models/User.model.js";
 import constants from "../constants.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
+import cloudinaryUploader from "../utils/Cloudinary.js";
 
 function generateTokens(user) {
   const accessToken = user.generateAccessToken();
@@ -56,6 +57,7 @@ export const register = AsyncHandler(async (req, res) => {
     "isOwner ",
     isOwner
   );
+
   const requiredField = { name, gmail, mobile, gender, password };
   for (const [key, val] of Object.entries(requiredField)) {
     if (key?.val?.trim() === "") {
@@ -70,25 +72,35 @@ export const register = AsyncHandler(async (req, res) => {
       existingUser,
     ]);
   }
+  const imageLocalPath = req?.file?.path;
+
+  let image;
 
   if (isOwner === true || isOwner == "true") {
+    image = imageLocalPath
+      ? await cloudinaryUploader(imageLocalPath)
+      : "https://raw.githubusercontent.com/MrKuldeep01/Mobile_shop/refs/heads/main/Backend/public/images/owner.png";
     await registerOwner(
       name,
       gmail,
       mobile,
       password,
       gender,
+      image,
       address,
       rating,
       experience
     );
     return;
   } else {
-    await registerUser(name, gmail, mobile, gender, password, address);
+    image = imageLocalPath
+      ? await cloudinaryUploader(imageLocalPath)
+      : "https://raw.githubusercontent.com/MrKuldeep01/Mobile_shop/refs/heads/main/Backend/public/images/user.png";
+    await registerUser(name, gmail, mobile, gender, password, image, address);
     return;
   }
 
-  async function registerUser(name, gmail, mobile, gender, password, address) {
+  async function registerUser(name, gmail, mobile, gender, password, image, address) {
     const createdUser = await userModel.create({
       name,
       gmail,
@@ -96,6 +108,7 @@ export const register = AsyncHandler(async (req, res) => {
       gender,
       password,
       address,
+      image,
     });
     if (!createdUser) {
       throw new ApiError(500, "Error from server while registering!");
@@ -128,6 +141,7 @@ export const register = AsyncHandler(async (req, res) => {
     mobile,
     password,
     gender,
+    image,
     address,
     rating = 4,
     experience = 12
@@ -137,6 +151,7 @@ export const register = AsyncHandler(async (req, res) => {
       gmail,
       mobile,
       gender,
+      image,
       address,
       password,
       rating,
@@ -253,13 +268,12 @@ export const login = AsyncHandler(async (req, res) => {
   }
 });
 
-export const getCurrentUser = AsyncHandler(async (req, res)=> {
-  return res
-  .status(200)
-  json( new ApiResponse(200,"User successfully fetched",req.user));
-})
+export const getCurrentUser = AsyncHandler(async (req, res) => {
+  return res.status(200);
+  json(new ApiResponse(200, "User successfully fetched", req.user));
+});
 
-export const passwordChange = AsyncHandler( async (req, res)=> {
+export const passwordChange = AsyncHandler(async (req, res) => {
   /*
   if edit route is accessible then this is logged in user
   Hence user - req.user via middleware 
@@ -272,7 +286,4 @@ export const passwordChange = AsyncHandler( async (req, res)=> {
   - update data 
   - all good
   */
-
-  
-
-})
+});
