@@ -11,20 +11,8 @@ function generateTokens(user) {
   const refreshToken = user.generateRefreshToken();
   return { accessToken, refreshToken };
 }
-
-/*
-Register user
-
-read inputs ✅
-validate inputs ✅
-check for user existence with same credetials ✅
-hash the password  :: autometic by the pre save hook of the model ✅
-save the user ✅
-
-send the response with the created user by removing the password and tokens from the user object.✅
-
-
-*/
+  
+//MULTER: SINGLE FILE NAMED IMAGE /////////
 export const register = AsyncHandler(async (req, res) => {
   const {
     name,
@@ -100,7 +88,15 @@ export const register = AsyncHandler(async (req, res) => {
     return;
   }
 
-  async function registerUser(name, gmail, mobile, gender, password, image, address) {
+  async function registerUser(
+    name,
+    gmail,
+    mobile,
+    gender,
+    password,
+    image,
+    address
+  ) {
     const createdUser = await userModel.create({
       name,
       gmail,
@@ -268,22 +264,98 @@ export const login = AsyncHandler(async (req, res) => {
   }
 });
 
+//PROTECTED /////////
 export const getCurrentUser = AsyncHandler(async (req, res) => {
-  return res.status(200);
-  json(new ApiResponse(200, "User successfully fetched", req.user));
+  const user  = req.user;
+  if(!user){
+    res.status(409).redirect('auth/login')
+  }
+  return res.status(200)
+  .json(new ApiResponse(200, "User successfully fetched", user));
 });
 
+//PROTECTED /////////
 export const passwordChange = AsyncHandler(async (req, res) => {
   /*
   if edit route is accessible then this is logged in user
   Hence user - req.user via middleware 
   --- fields must not't be changed
   email, mobile, name
-
   ====
   - get data to update 
   - validat the comming data
   - update data 
   - all good
   */
+
+  // get previous Password, gmail/mobile, newPassword;
+  // check for correction
+  // overwrite the password value with newPassword
+  // return success message
+
+  const { gmail, mobile, prePassword, newPassword } = req.body;
+  if ((!gmail && !mobile) || !prePassword || !newPassword) {
+    throw new ApiError(400, "Please provide required values properly.");
+  }
+  const currentUser = req.user;
+  if (currentUser.gmail !== gmail || currentUser.mobile !== mobile) {
+    throw new ApiError(
+      400,
+      "Bad request, You are not allowed to change password of other's a/c."
+    );
+  }
+  const user = currentUser.isOwner
+    ? await ownerModel.findById(currentUser._id)
+    : await userModel.findById(currentUser._id);
+  if (!user) {
+    throw new ApiError(500, "Faild while changing the password.");
+  }
+  const isPasswordOk = user.checkPassword(prePassword);
+  if (!isPasswordOk) {
+    throw new ApiError(400, "Invalid credentials");
+  }
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Password is changed successfully.", {}));
+});
+
+//PROTECTED /////////
+//MULTER: SINGLE FILE NAMED IMAGE /////////
+export const editUser = AsyncHandler(async (req, res) => {
+  // gmail, mobile, image
+  const { newGmail, newImage, newMobile } = req.body;
+  const user = req.user.isOwner
+    ? await ownerModel.findById(req.user._id)
+    : await userModel.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(500, "Faild while editing.");
+  }
+  if (!(newGmail && newImage && newMobile)) {
+    return res
+      .status(201)
+      .json(
+        new ApiResponse(203, "Successfully saved the same data as previous.")
+      );
+  }
+  newGmail = req.body?.newGmail || user.gmail;
+  newImage = req.file?.path
+    ? await cloudinaryUploader(req.file.path)
+    : user.image;
+  newMobile = req.body?.newMobile || user.mobile;
+  const userUpdate = (user.isOwner
+    ? await ownerModel.findByIdAndUpdate(
+        req.user._id,
+        { gmail: newGmail, mobile: newMobile, image: newImage },
+        { new: true }
+      )
+    : await userModel.findByIdAndUpdate(
+        req.user._id,
+        { gmail: newGmail, mobile: newMobile, image: newImage },
+        { new: true }
+      )).select("-password -refreshToken");
+
+  res.status(202)
+  .json(new ApiResponse(202,`${user.name} successfully updated`,userUpdate))      
 });

@@ -1,6 +1,4 @@
 import AsyncHandler from "../utils/AsyncHandler.js";
-import ApiError from "../utils/ApiError.js";
-import ApiResponse from "../utils/ApiResponse.js";
 import jwt from 'jsonwebtoken'
 import envConfig from "../../Config/envConfig";
 import { User as userModel } from "../models/User.model.js";
