@@ -4,18 +4,19 @@ import bcrypt from "bcrypt"
 import constants from "../constants.js";
 const historySchema = new mongoose.Schema(
   {
-    product: {
+    productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
     },
-    customer: {
+    ownerId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Owner",
     },
   },
   { timestamps: true }
 );
-import {addressSchema} from './schema.js';
+import {addressSchema} from './Schema.js';
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -56,9 +57,13 @@ const userSchema = new mongoose.Schema(
       default: "male",
     },
     address: {
-      type: [
-        addressSchema
-      ]
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"Address"
+    },
+    theme:{
+      type:String,
+      enum:["dark", "light"],
+      default: "light"
     },
     history: {
       type : [
