@@ -5,7 +5,7 @@ import { User as userModel } from "../models/User.model.js";
 import constants from "../constants.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
 import cloudinaryUploader from "../utils/Cloudinary.js";
-import addressModel from "../models/Address.model.js";
+import { Address as addressModel} from "../models/Address.model.js";
 function generateTokens(user) {
   const accessToken = user.generateAccessToken();
   const refreshToken = user.generateRefreshToken();

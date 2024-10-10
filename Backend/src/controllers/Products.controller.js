@@ -7,6 +7,9 @@ import cloudinaryUploader from "../utils/Cloudinary.js";
 //add products
 
 export const addProduct = AsyncHandler(async (req, res) => {
+  if(!(req.user.isOwner)){
+    throw new ApiError(405,"You are not authorized, for this task!")
+  }
   const { name, desc, model, catagory, price, quantity } = req.body;
   const imageLocalPath = await req?.file?.path;
   // for (let value of [name, desc, catagory, price]) {
@@ -53,6 +56,9 @@ export const addProduct = AsyncHandler(async (req, res) => {
 
 // edit product
 export const editProduct = AsyncHandler(async (req, res) => {
+  if(!(req.user.isOwner)){
+    throw new ApiError(405,"You are not authorized, for this task!")
+  }
   const productId = req?.params?.productId;
   if (!productId) {
     throw new ApiError(400, "Please provide product id to edit!");
@@ -126,6 +132,9 @@ export const getProduct = AsyncHandler(async (req, res) => {
 
 // delete Product
 export const deleteProduct = AsyncHandler(async (req, res) => {
+  if(!(req.user.isOwner)){
+    throw new ApiError(405,"You are not authorized, for this task!")
+  }
   const productId = req?.params?.productId;
   if (!productId) {
     throw new ApiError(400, "Please provide product id to delete.");

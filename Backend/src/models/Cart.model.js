@@ -25,6 +25,6 @@ addedDate: {
     type: Date,
     default: Date.now()
 }
-})
+}) 
 
 export const Cart = mongoose.model("Cart",cartSchema)
