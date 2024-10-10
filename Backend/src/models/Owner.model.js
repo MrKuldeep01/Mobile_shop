@@ -41,7 +41,7 @@ const ownerSchema = new mongoose.Schema(
       type: String,
       default: "INR",
     },
-    address: {
+    addressId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Address",
     },

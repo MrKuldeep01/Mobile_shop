@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: "male",
     },
-    address: {
+    addressId: {
       type: mongoose.Schema.Types.ObjectId,
       ref:"Address"
     },

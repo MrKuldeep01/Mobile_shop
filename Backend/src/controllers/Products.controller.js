@@ -7,28 +7,38 @@ import cloudinaryUploader from "../utils/Cloudinary.js";
 //add products
 
 export const addProduct = AsyncHandler(async (req, res) => {
-  const { name, desc, catagory, price } = req.body;
+  const { name, desc, model, catagory, price, quantity } = req.body;
   const imageLocalPath = await req?.file?.path;
-  for (let value of [name, desc, catagory, price]) {
-    if (value.trim() === "") {
-      throw new ApiError("400", `${value} is required to proceed further!`);
-    }
-  }
-  if (!imageLocalPath) {
-    throw new ApiError(400, " 400 Product image is required!");
+  // for (let value of [name, desc, catagory, price]) {
+  //   if (value.trim() === "") {
+  //     throw new ApiError("400", `${value} is required to proceed further!`);
+  //   }
+  // }
+  if (
+    !(name && desc && catagory && price && model && imageLocalPath)
+  ) {
+    throw new ApiError(400, " Product details are not complete!");
   }
 
   const image = await cloudinaryUploader(imageLocalPath);
   if (!image) {
-    throw new ApiError(501, " 501 Product image is required!");
+    throw new ApiError(
+      501,
+      " Process failed to upload image!, error from our side!"
+    );
   }
-
+  quantity = req.body.quantity || 1;
+  catagory = Array.from(catagory.toString().replaceAll(",", "")).filter(
+    (v) => v != " "
+  );
   const createdProduct = await productModel.create({
     name,
     desc,
     catagory,
     price,
     image,
+    model,
+    quantity,
   });
   res
     .status(200)
@@ -56,14 +66,18 @@ export const editProduct = AsyncHandler(async (req, res) => {
     (imageLocalPath && (await cloudinaryUploader(imageLocalPath))) ||
     existingProduct.image;
   // const { name, catagory, price, desc } = req.body;
-
+  if (!image) {
+    throw new ApiError(500, "Problem with Product image");
+  }
   const name = req.body?.name || existingProduct.name;
   const price = req.body?.price || existingProduct.price;
   const desc = req.body?.desc || existingProduct.desc;
+  const model = req.body?.model || existingProduct.model;
+  const quantity = req.body?.quantity || existingProduct.quantity;
   const catagory = req.body?.catagory || existingProduct.catagory;
   const editedProduct = await productModel.findByIdAndUpdate(
     existingProduct._id,
-    { name, desc, price, catagory, image },
+    { name, desc, price, catagory, image, model, quantity },
     {
       new: true,
     }

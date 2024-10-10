@@ -1,24 +1,41 @@
 import { Router } from "express";
-import { addProduct, editProduct, getProducts, getProduct, deleteProduct } from "../controllers/Products.controller.js";
-import {upload} from "../middlewares/multer.middleware.js"
+import {
+  addProduct,
+  editProduct,
+  getProducts,
+  getProduct,
+  deleteProduct,
+} from "../controllers/Products.controller.js";
+import { upload } from "../middlewares/multer.middleware.js";
 const router = Router();
+import { getCurrentUser as authMidd } from "../middlewares/Auth.middleware.js";
 // path is  :   /products
 
-//all products
+//all products ✅
 router.route("/").post(getProducts);
 
-// add or edit product
-// field name must be : image
-router.route("/add").post(upload.single('image'), await addProduct);
+// add product
+// MULTER SINGLE FILE NAMED  : image
+/*
+name, desc, model, catagory, price, quantity  ✅
+*/
+router.route("/add").post(authMidd, upload.single("image"), await addProduct);
 
-// router.route("/add").post(addProduct);
-// edit product 
-router.route("/edit/:productId").post(upload.single('image'), await editProduct);
+// edit product
+/*
+PRODUCT ID IN PARAMS without any name
+MULTER SINGLE FILE NAMED IMAGE
+name, desc, price, catagory, model, quantity ✅
+*/
+router
+  .route("/edit/:productId")
+  .post(upload.single("image"), await editProduct);
 
 // get single product
+// product id in params is requested without any name
 router.route("/:productId").post(getProduct);
 
 // delete single product
+// product id in params is requested without any name
 router.route("/delete/:productId").post(deleteProduct);
 export default router;
- 

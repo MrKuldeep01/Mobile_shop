@@ -5,13 +5,13 @@ import { User as userModel } from "../models/User.model.js";
 import constants from "../constants.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
 import cloudinaryUploader from "../utils/Cloudinary.js";
-
+import addressModel from "../models/Address.model.js";
 function generateTokens(user) {
   const accessToken = user.generateAccessToken();
   const refreshToken = user.generateRefreshToken();
   return { accessToken, refreshToken };
 }
-  
+
 //MULTER: SINGLE FILE NAMED IMAGE /////////
 export const register = AsyncHandler(async (req, res) => {
   const {
@@ -264,17 +264,18 @@ export const login = AsyncHandler(async (req, res) => {
   }
 });
 
-//PROTECTED /////////
+// getCurrentUser PROTECTED /////////
 export const getCurrentUser = AsyncHandler(async (req, res) => {
-  const user  = req.user;
-  if(!user){
-    res.status(409).redirect('auth/login')
+  const user = req.user;
+  if (!user) {
+    res.status(409).redirect("auth/login");
   }
-  return res.status(200)
-  .json(new ApiResponse(200, "User successfully fetched", user));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "User successfully fetched", user));
 });
 
-//PROTECTED /////////
+//  password change  PROTECTED /////////
 export const passwordChange = AsyncHandler(async (req, res) => {
   /*
   if edit route is accessible then this is logged in user
@@ -321,22 +322,71 @@ export const passwordChange = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Password is changed successfully.", {}));
 });
 
-//PROTECTED /////////
+//  editUser  PROTECTED /////////
 //MULTER: SINGLE FILE NAMED IMAGE /////////
+/*
+  userId 
+  ownerId
+  localAddress
+  city
+  postCode
+  state
+*/
 export const editUser = AsyncHandler(async (req, res) => {
   // gmail, mobile, image
-  const { newGmail, newImage, newMobile } = req.body;
+  const {
+    newGmail,
+    newMobile,
+    localAddress,
+    city,
+    postCode,
+    state,
+    experience,
+  } = req.body;
+
   const user = req.user.isOwner
     ? await ownerModel.findById(req.user._id)
     : await userModel.findById(req.user._id);
   if (!user) {
     throw new ApiError(500, "Faild while editing.");
   }
+  let newImage = "";
+  if (!user.addressId) {
+    for (let value of [localAddress, city, postCode, state]) {
+      if (value.trim() === "") {
+        throw new ApiError(
+          400,
+          `You have to fillup your Address's ${value} value`
+        );
+      }
+    }
+    if (user.isOwner) {
+      const address = await addressModel.create({
+        ownerId: user._id,
+        localAddress,
+        city,
+        postCode,
+        state,
+      });
+      user.addressId = address._id;
+      await user.save({ validateBeforeSave: false });
+    } else if (!user.isOwner) {
+      const address = await addressModel.create({
+        userId: user._id,
+        localAddress,
+        city,
+        postCode,
+        state,
+      });
+      user.addressId = address._id;
+      await user.save({ validateBeforeSave: false });
+    }
+  }
   if (!(newGmail && newImage && newMobile)) {
     return res
       .status(201)
       .json(
-        new ApiResponse(203, "Successfully saved the same data as previous.")
+        new ApiResponse(203, "Successfully saved with the same data as previous.")
       );
   }
   newGmail = req.body?.newGmail || user.gmail;
@@ -344,18 +394,28 @@ export const editUser = AsyncHandler(async (req, res) => {
     ? await cloudinaryUploader(req.file.path)
     : user.image;
   newMobile = req.body?.newMobile || user.mobile;
-  const userUpdate = (user.isOwner
-    ? await ownerModel.findByIdAndUpdate(
-        req.user._id,
-        { gmail: newGmail, mobile: newMobile, image: newImage },
-        { new: true }
-      )
-    : await userModel.findByIdAndUpdate(
-        req.user._id,
-        { gmail: newGmail, mobile: newMobile, image: newImage },
-        { new: true }
-      )).select("-password -refreshToken");
 
-  res.status(202)
-  .json(new ApiResponse(202,`${user.name} successfully updated`,userUpdate))      
+  if (user.experience) {
+    experience = req.body.experience || user.experience;
+  }
+
+  const userUpdate = (
+    user.isOwner
+      ? await ownerModel.findByIdAndUpdate(
+          req.user._id,
+          { gmail: newGmail, mobile: newMobile, image: newImage, experience },
+          { new: true }
+        )
+      : await userModel.findByIdAndUpdate(
+          req.user._id,
+          { gmail: newGmail, mobile: newMobile, image: newImage },
+          { new: true }
+        )
+  ).select("-password -refreshToken");
+
+  res
+    .status(202)
+    .json(
+      new ApiResponse(202, `${user.name} successfully updated`, userUpdate)
+    );
 });

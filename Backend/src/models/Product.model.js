@@ -10,6 +10,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    model:{
+      type: String,
+      required: true,
+    },
     desc: {
       type: String,
       required: true,
@@ -18,7 +22,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    quantity: Number,
+    quantity:{
+      type: Number,
+      default : 1
+    },
     catagory: [
       {
         type: String,
