@@ -12,6 +12,8 @@ const router = Router();
 // })
 
 // add product to cart ✅
+// PROTECTED 
+// PRODUCT ID AS AN PARAMS WITHOUT ANY NAME
 router.route("/add/:productId").post(authMidd, addProductToCart);
 
 // remove product from cart ✅

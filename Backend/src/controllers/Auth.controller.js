@@ -334,7 +334,7 @@ export const passwordChange = AsyncHandler(async (req, res) => {
 */
 export const editUser = AsyncHandler(async (req, res) => {
   // gmail, mobile, image
-  const {
+  let {
     newGmail,
     newMobile,
     localAddress,
@@ -347,50 +347,35 @@ export const editUser = AsyncHandler(async (req, res) => {
   const user = req.user.isOwner
     ? await ownerModel.findById(req.user._id)
     : await userModel.findById(req.user._id);
+
   if (!user) {
-    throw new ApiError(500, "Faild while editing.");
+    throw new ApiError(500, "Failed while editing user.");
   }
-  let newImage = "";
+
+  // Validate address if the user doesn't have one yet
   if (!user.addressId) {
-    for (let value of [localAddress, city, postCode, state]) {
+    const addressFields = { localAddress, city, postCode, state };
+    for (let [field, value] of Object.entries(addressFields)) {
       if (value.trim() === "") {
-        throw new ApiError(
-          400,
-          `You have to fillup your Address's ${value} value`
-        );
+        throw new ApiError(400, `You must provide a valid ${field}.`);
       }
     }
-    if (user.isOwner) {
-      const address = await addressModel.create({
-        ownerId: user._id,
-        localAddress,
-        city,
-        postCode,
-        state,
-      });
-      user.addressId = address._id;
-      await user.save({ validateBeforeSave: false });
-    } else if (!user.isOwner) {
-      const address = await addressModel.create({
-        userId: user._id,
-        localAddress,
-        city,
-        postCode,
-        state,
-      });
-      user.addressId = address._id;
-      await user.save({ validateBeforeSave: false });
-    }
+
+    // Create a new address entry
+    const address = await addressModel.create({
+      [`${user.isOwner ? "ownerId" : "userId"}`]: user._id,
+      localAddress,
+      city,
+      postCode,
+      state,
+    });
+    user.addressId = address._id;
+    await user.save({ validateBeforeSave: false });
   }
-  if (!(newGmail && newImage && newMobile)) {
-    return res
-      .status(201)
-      .json(
-        new ApiResponse(203, "Successfully saved with the same data as previous.")
-      );
-  }
+
+  // Update new values only if provided
   newGmail = req.body?.newGmail || user.gmail;
-  newImage = req.file?.path
+  let newImage = req.file?.path
     ? await cloudinaryUploader(req.file.path)
     : user.image;
   newMobile = req.body?.newMobile || user.mobile;
@@ -399,23 +384,23 @@ export const editUser = AsyncHandler(async (req, res) => {
     experience = req.body.experience || user.experience;
   }
 
-  const userUpdate = (
-    user.isOwner
-      ? await ownerModel.findByIdAndUpdate(
-          req.user._id,
-          { gmail: newGmail, mobile: newMobile, image: newImage, experience },
-          { new: true }
-        )
-      : await userModel.findByIdAndUpdate(
-          req.user._id,
-          { gmail: newGmail, mobile: newMobile, image: newImage },
-          { new: true }
-        )
+  // Update user details
+  const userUpdate = await (user.isOwner
+    ? ownerModel.findByIdAndUpdate(
+        req.user._id,
+        { gmail: newGmail, mobile: newMobile, image: newImage, experience },
+        { new: true }
+      )
+    : userModel.findByIdAndUpdate(
+        req.user._id,
+        { gmail: newGmail, mobile: newMobile, image: newImage },
+        { new: true }
+      )
   ).select("-password -refreshToken");
 
-  res
-    .status(202)
+  return res
+    .status(200)
     .json(
-      new ApiResponse(202, `${user.name} successfully updated`, userUpdate)
+      new ApiResponse(200, `${user.name} successfully updated.`, userUpdate)
     );
 });

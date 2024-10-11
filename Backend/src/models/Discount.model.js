@@ -4,20 +4,26 @@ discount_percentage
 start_date
 end_date
 */
-
 import mongoose from "mongoose";
 
-const orderSchema = new mongoose.Schema({
+const discountSchema = new mongoose.Schema({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
+    required: true
   },
-  discountPercent: Number,
+  discountPercent: {
+    type: Number,
+    required: true
+  },
   startDate: {
     type: Date,
+    required: true
   },
   endDate: {
     type: Date,
-  },
+    required: true
+  }
 });
-export const Order = mongoose.model("Order", orderSchema);
+
+export const Discount = mongoose.model("Discount", discountSchema);
