@@ -8,7 +8,7 @@ import cloudinaryUploader from "../utils/Cloudinary.js";
 
 export const addProduct = AsyncHandler(async (req, res) => {
   if(!(req.user.isOwner)){
-    throw new ApiError(405,"You are not authorized, for this task!")
+    throw new ApiError(400,"You are not authorized, for this task!")
   }
   const { name, desc, model, catagory, price, quantity } = req.body;
   const imageLocalPath = await req?.file?.path;

@@ -201,7 +201,8 @@ export const login = AsyncHandler(async (req, res) => {
   );
   if (!(password && (gmail || mobile))) {
     console.log("bhai required fields to bhro phle!");
-    throw new ApiError(405, "You have missed some fields!");
+    throw new ApiError(406, "You have missed some fields!");
+    // 406 for unacceptable 
   }
   if (Boolean(isOwner) === true || isOwner == "true") {
     const owner = await ownerModel.findOne({
@@ -209,12 +210,13 @@ export const login = AsyncHandler(async (req, res) => {
     });
 
     if (!owner) {
-      throw new ApiError(409, "Not a valid Owner, please register first!");
+      throw new ApiError(401, "Not a valid Owner, please register first!");
     }
 
     const isPasswordOk = await owner.checkPassword(password);
     if (!isPasswordOk) {
-      throw new ApiError(409, "Invalid credentials, fill it carefully1");
+      throw new ApiError(401, "Invalid credentials, fill it carefully1");
+      // 401 for unauthorized
     }
     const { accessToken, refreshToken } = generateTokens(owner);
     owner.refreshToken = refreshToken;
@@ -268,7 +270,7 @@ export const login = AsyncHandler(async (req, res) => {
 export const getCurrentUser = AsyncHandler(async (req, res) => {
   const user = req.user;
   if (!user) {
-    res.status(409).redirect("auth/login");
+    res.status(401).redirect("/auth/login");
   }
   return res
     .status(200)
@@ -296,7 +298,7 @@ export const passwordChange = AsyncHandler(async (req, res) => {
 
   const { gmail, mobile, prePassword, newPassword } = req.body;
   if ((!gmail && !mobile) || !prePassword || !newPassword) {
-    throw new ApiError(400, "Please provide required values properly.");
+    throw new ApiError(406, "Please provide required values properly.");
   }
   const currentUser = req.user;
   if (currentUser.gmail !== gmail || currentUser.mobile !== mobile) {
@@ -310,10 +312,11 @@ export const passwordChange = AsyncHandler(async (req, res) => {
     : await userModel.findById(currentUser._id);
   if (!user) {
     throw new ApiError(500, "Faild while changing the password.");
+    // 500 for internal server error
   }
   const isPasswordOk = user.checkPassword(prePassword);
   if (!isPasswordOk) {
-    throw new ApiError(400, "Invalid credentials");
+    throw new ApiError(401, "Invalid credentials");
   }
   user.password = newPassword;
   await user.save({ validateBeforeSave: false });
@@ -349,7 +352,7 @@ export const editUser = AsyncHandler(async (req, res) => {
     : await userModel.findById(req.user._id);
 
   if (!user) {
-    throw new ApiError(500, "Failed while editing user.");
+    throw new ApiError(401, "Unautorized request!");
   }
 
   // Validate address if the user doesn't have one yet

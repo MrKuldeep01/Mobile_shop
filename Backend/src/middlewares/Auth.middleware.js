@@ -1,19 +1,22 @@
 import AsyncHandler from "../utils/AsyncHandler.js";
 import jwt from 'jsonwebtoken'
-import envConfig from "../../Config/envConfig";
+import envConfig from "../../Config/envConfig.js";
 import { User as userModel } from "../models/User.model.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
 import constants from "../constants.js";
 export const getCurrentUser = AsyncHandler(async (req, res, next)=>{
     const accessToken = req.cookies?.accessToken;
+    console.log("fetching user's details...")
     if(!accessToken){
-        return res.redirect(`${constants.baseUrl}auth/login`)
+    console.log(`redirecting unauthorized user to login page: ${constants.baseUrl}/auth/login`)
+        return res.redirect(`${constants.baseUrl}/auth/login`)
     }
 
     const payload = jwt.verify(accessToken,envConfig.accessTokenSecretKey)
     console.log(`if data available then payload =  ${payload}`);
     if(!payload){
-        return res.redirect(`${constants.baseUrl}auth/login`)
+    console.log(`redirecting unauthorized user to login page: ${constants.baseUrl}/auth/login`)
+        return res.redirect(`${constants.baseUrl}/auth/login`)
     }
     let currentUser={};
     if(payload?.isOwner || payload?.isOwner=='true'){

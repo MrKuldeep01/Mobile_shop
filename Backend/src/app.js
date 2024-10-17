@@ -1,7 +1,7 @@
 import express from "express";
 import envConfig from "../Config/envConfig.js";
 import cookieParser from "cookie-parser";
-import cors from "cors"
+import cors from "cors";
 import constants from "./constants.js";
 const app = express();
 app.use(cors({ origin: envConfig.allowed_Origin}))

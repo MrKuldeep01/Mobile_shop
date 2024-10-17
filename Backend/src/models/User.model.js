@@ -15,7 +15,6 @@ const historySchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-import {addressSchema} from './Schema.js';
 
 const userSchema = new mongoose.Schema(
   {

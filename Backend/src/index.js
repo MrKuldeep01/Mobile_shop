@@ -6,7 +6,7 @@ dotenv.config();
 
 connection()
   .then(() => {
-    console.log("trying to connect with database...");
+    console.log("connection established.");
     app.on("error", (error) => {
       // process.exit(1);
       console.log(
@@ -17,11 +17,11 @@ connection()
     const port = 3000 || process.env.PORT;
     app.listen(port, () => {
       console.log(
-        "app is listening on the port : ",
+        "app is live on: ",
         "http://localhost:" + port+ constants.baseUrl
       );
     });
   })
   .catch((err) => {
-    console.log("connection is faild with :: ", err);
+    console.log("connection is faild due to following Error: \n ", err);
   });
