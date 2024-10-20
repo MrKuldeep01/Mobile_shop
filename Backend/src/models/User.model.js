@@ -36,7 +36,6 @@ const userSchema = new mongoose.Schema(
     mobile: {
       type: Number,
       unique: true,
-      required: true,
     },
     isOwner : {
       type: Boolean,
@@ -48,12 +47,14 @@ const userSchema = new mongoose.Schema(
       default:
         "https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-512.png",
     },
-    refreshToken: String,
+    refreshToken:{
+      type: String,
+      required: true,
+    },
     gender: {
       type: String,
       enum: ["male", "female"],
       required: true,
-      default: "male",
     },
     addressId: {
       type: mongoose.Schema.Types.ObjectId,

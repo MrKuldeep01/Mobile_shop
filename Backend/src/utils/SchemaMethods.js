@@ -21,7 +21,7 @@ const generateRefreshToken = async function(){
     envConfig.refreshTokenSecretKey,
     { expiresIn: envConfig.refreshTokenExpiry }
   );
-  console.log("Done : refresh token generating.");
+  console.log("Done : refresh token generating.",refreshToken);
   
   return refreshToken;
 }; 
@@ -39,7 +39,7 @@ const generateAccessToken = async function (){
     envConfig.accessTokenSecretKey,
     { expiresIn: envConfig.accessTokenExpiry }
 );
-console.log("Done : access token generating.");
+console.log("Done : access token generating.",accessToken);
   return accessToken;
 };
 

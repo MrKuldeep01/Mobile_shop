@@ -7,8 +7,9 @@ import { Owner as ownerModel } from "../models/Owner.model.js";
 import cloudinaryUploader from "../utils/Cloudinary.js";
 import { Address as addressModel} from "../models/Address.model.js";
 function generateTokens(user) {
-  const accessToken = user.generateAccessToken();
-  const refreshToken = user.generateRefreshToken();
+  console.log("generating tokens...");
+  const accessToken = user.methods.generateAccessToken();
+  const refreshToken = user.methods.generateRefreshToken();
   return { accessToken, refreshToken };
 }
 
@@ -110,6 +111,7 @@ export const register = AsyncHandler(async (req, res) => {
       throw new ApiError(500, "Error from server while registering!");
     }
     const { accessToken, refreshToken } = generateTokens(createdUser);
+    console.log("Tokens : ",accessToken,"\t",refreshToken) 
     createdUser.refreshToken = refreshToken;
     await createdUser.save({ validateBeforeSave: false });
     const newUser = await userModel
@@ -139,9 +141,13 @@ export const register = AsyncHandler(async (req, res) => {
     gender,
     image,
     address,
-    rating = 4,
-    experience = 12
+    rating,
+    experience
   ) {
+    // const isAnyOwner = await ownerModel.find()
+    // if(isAnyOwner.length >= 1){
+    //   throw new ApiError(406,"Owner already available, please contect with real Owner or Dev. Mr kuldeep.")
+    // }
     const createdOwner = await ownerModel.create({
       name,
       gmail,
@@ -150,8 +156,8 @@ export const register = AsyncHandler(async (req, res) => {
       image,
       address,
       password,
-      rating,
-      experience,
+      rating: [rating ? rating : 1],
+      experience: [experience ? experience : 1],
     });
 
     if (!createdOwner) {
