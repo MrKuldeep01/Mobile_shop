@@ -49,7 +49,6 @@ const userSchema = new mongoose.Schema(
     },
     refreshToken:{
       type: String,
-      required: true,
     },
     gender: {
       type: String,
@@ -90,11 +89,34 @@ userSchema.methods.checkPassword = async function (passwordString){
   }
 userSchema.methods.generateAccessToken = function () {
   // generate Access Token
-  return schemaMethods.generateAccessToken();
+  // return schemaMethods.generateAccessToken();
+  const accessToken = jwt.sign(
+    { 
+        _id: this._id,
+        name: this.name,
+        gmail: this.gmail,
+        mobile: this.mobile,
+        gender: this.gender,
+        isOwner: this.isOwner
+    },
+envConfig.accessTokenSecretKey,
+{ expiresIn: envConfig.accessTokenExpiry }
+);
+// console.log("Done : access token generating.",accessToken);
+console.log(`{_id: ${this._id}, name: ${this.name}, gmail: ${this.gmail}, mobile: ${this.mobile}, gender: ${this.gender} }: access token generated ${accessToken}`);
+return accessToken;
 };
 userSchema.methods.generateRefreshToken = function () {
   // generate refresh Token
-  return schemaMethods.generateRefreshToken();
+  // return schemaMethods.generateRefreshToken();
+  const refreshToken = jwt.sign(
+    { _id: this._id },
+    envConfig.refreshTokenSecretKey,
+    { expiresIn: envConfig.refreshTokenExpiry }
+  );
+  console.log(`{_id: ${this._id}}: refresh token generated ${refreshToken}`);
+  
+  return refreshToken;
 };
 
 export const User = mongoose.model("User", userSchema);

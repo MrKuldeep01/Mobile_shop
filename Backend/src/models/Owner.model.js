@@ -45,7 +45,7 @@ const ownerSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Address",
     },
-    shopName:String,
+    shopName: String,
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
     image: {
       type: String,
@@ -69,15 +69,15 @@ const ownerSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    theme:{
-      type:String,
-      enum:["dark", "light"],
-      default: "light"
+    theme: {
+      type: String,
+      enum: ["dark", "light"],
+      default: "light",
     },
     rating: {
       type: Number,
-      min:[1,"Rating must be vary from 1 - 5"],
-      max:[5,"Rating must be vary from 1 - 5"],
+      min: [1, "Rating must be vary from 1 - 5"],
+      max: [5, "Rating must be vary from 1 - 5"],
       default: 1,
     },
     history: {
@@ -102,10 +102,35 @@ ownerSchema.methods.checkPassword = async function (passwordString) {
 };
 ownerSchema.methods.generateAccessToken = function () {
   // generate Access Token
-  return schemaMethods.generateAccessToken();
+  // return schemaMethods.generateAccessToken();
+  const accessToken = jwt.sign(
+    {
+      _id: this._id,
+      name: this.name,
+      gmail: this.gmail,
+      mobile: this.mobile,
+      gender: this.gender,
+      isOwner: this.isOwner,
+    },
+    envConfig.accessTokenSecretKey,
+    { expiresIn: envConfig.accessTokenExpiry }
+  );
+  // console.log("Done : access token generating.",accessToken);
+  console.log(
+    `{_id: ${this._id}, name: ${this.name}, gmail: ${this.gmail}, mobile: ${this.mobile}, gender: ${this.gender} }: access token generated ${accessToken}`
+  );
+  return accessToken;
 };
 ownerSchema.methods.generateRefreshToken = function () {
   // generate refresh Token
-  return schemaMethods.generateRefreshToken();
+  // return schemaMethods.generateRefreshToken();
+  const refreshToken = jwt.sign(
+    { _id: this._id },
+    envConfig.refreshTokenSecretKey,
+    { expiresIn: envConfig.refreshTokenExpiry }
+  );
+  console.log(`{_id: ${this._id}}: refresh token generated ${refreshToken}`);
+
+  return refreshToken;
 };
 export const Owner = mongoose.model("Owner", ownerSchema);

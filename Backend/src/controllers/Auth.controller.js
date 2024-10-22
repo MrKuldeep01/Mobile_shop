@@ -6,10 +6,10 @@ import constants from "../constants.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
 import cloudinaryUploader from "../utils/Cloudinary.js";
 import { Address as addressModel} from "../models/Address.model.js";
-function generateTokens(user) {
+async function generateTokens(user) {
   console.log("generating tokens...");
-  const accessToken = user.methods.generateAccessToken();
-  const refreshToken = user.methods.generateRefreshToken();
+  const accessToken = await user.generateAccessToken();
+  const refreshToken = await user.generateRefreshToken();
   return { accessToken, refreshToken };
 }
 
@@ -26,26 +26,8 @@ export const register = AsyncHandler(async (req, res) => {
     experience,
     isOwner,
   } = req.body;
-  console.log(
-    "name ",
-    name,
-    "gmail ",
-    gmail,
-    "mobile ",
-    mobile,
-    "gender ",
-    gender,
-    "password ",
-    password,
-    "address ",
-    address,
-    "rating ",
-    rating,
-    "experience ",
-    experience,
-    "isOwner ",
-    isOwner
-  );
+ 
+  console.log( "name ", name, "gmail ", gmail, "mobile ", mobile, "gender ", gender, "password ", password, "address ", address, "rating ", rating, "experience ", experience, "isOwner ", isOwner);
 
   const requiredField = { name, gmail, mobile, gender, password };
   for (const [key, val] of Object.entries(requiredField)) {
@@ -111,7 +93,7 @@ export const register = AsyncHandler(async (req, res) => {
       throw new ApiError(500, "Error from server while registering!");
     }
     const { accessToken, refreshToken } = generateTokens(createdUser);
-    console.log("Tokens : ",accessToken,"\t",refreshToken) 
+    console.log("Tokens : ",accessToken,"\t",refreshToken) /////------------------->
     createdUser.refreshToken = refreshToken;
     await createdUser.save({ validateBeforeSave: false });
     const newUser = await userModel

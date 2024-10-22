@@ -6,7 +6,7 @@ dotenv.config();
 
 connection()
   .then(() => {
-    console.log("connection established.");
+    console.log("Let's start...");
     app.on("error", (error) => {
       // process.exit(1);
       console.log(
