@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
-import schemaMethods from "../utils/SchemaMethods.js";
 import constants from "../constants.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
+import envConfig from "../../Config/envConfig.js";
 
 const historySchema = new mongoose.Schema(
   {
@@ -116,9 +117,7 @@ ownerSchema.methods.generateAccessToken = function () {
     { expiresIn: envConfig.accessTokenExpiry }
   );
   // console.log("Done : access token generating.",accessToken);
-  console.log(
-    `{_id: ${this._id}, name: ${this.name}, gmail: ${this.gmail}, mobile: ${this.mobile}, gender: ${this.gender} }: access token generated ${accessToken}`
-  );
+  console.log("done: access token generated");
   return accessToken;
 };
 ownerSchema.methods.generateRefreshToken = function () {
@@ -129,7 +128,7 @@ ownerSchema.methods.generateRefreshToken = function () {
     envConfig.refreshTokenSecretKey,
     { expiresIn: envConfig.refreshTokenExpiry }
   );
-  console.log(`{_id: ${this._id}}: refresh token generated ${refreshToken}`);
+  console.log("Done: refresh token generated");
 
   return refreshToken;
 };

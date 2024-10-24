@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
-import schemaMethods from "../utils/SchemaMethods.js";
 import bcrypt from "bcrypt"
 import constants from "../constants.js";
+import jwt from "jsonwebtoken"
+import envConfig from "../../Config/envConfig.js";
 const historySchema = new mongoose.Schema(
   {
     productId: {
@@ -81,6 +82,7 @@ userSchema.pre("save", async function(next){
     console.log("done, hash pass is ready");
     next();
 });
+
 // hash the given password and save to the user
 
 userSchema.methods.checkPassword = async function (passwordString){
@@ -103,7 +105,7 @@ envConfig.accessTokenSecretKey,
 { expiresIn: envConfig.accessTokenExpiry }
 );
 // console.log("Done : access token generating.",accessToken);
-console.log(`{_id: ${this._id}, name: ${this.name}, gmail: ${this.gmail}, mobile: ${this.mobile}, gender: ${this.gender} }: access token generated ${accessToken}`);
+console.log("done : access token generated");
 return accessToken;
 };
 userSchema.methods.generateRefreshToken = function () {
@@ -114,7 +116,7 @@ userSchema.methods.generateRefreshToken = function () {
     envConfig.refreshTokenSecretKey,
     { expiresIn: envConfig.refreshTokenExpiry }
   );
-  console.log(`{_id: ${this._id}}: refresh token generated ${refreshToken}`);
+  console.log("done: refresh token generated");
   
   return refreshToken;
 };

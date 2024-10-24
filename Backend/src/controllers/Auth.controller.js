@@ -11,8 +11,8 @@ async function generateTokens(user) {
   const accessToken = await user.generateAccessToken();
   const refreshToken = await user.generateRefreshToken();
   return { accessToken, refreshToken };
-}
-
+} 
+ 
 //MULTER: SINGLE FILE NAMED IMAGE /////////
 export const register = AsyncHandler(async (req, res) => {
   const {
@@ -92,7 +92,7 @@ export const register = AsyncHandler(async (req, res) => {
     if (!createdUser) {
       throw new ApiError(500, "Error from server while registering!");
     }
-    const { accessToken, refreshToken } = generateTokens(createdUser);
+    const { accessToken, refreshToken } = await generateTokens(createdUser);
     console.log("Tokens : ",accessToken,"\t",refreshToken) /////------------------->
     createdUser.refreshToken = refreshToken;
     await createdUser.save({ validateBeforeSave: false });
@@ -103,7 +103,7 @@ export const register = AsyncHandler(async (req, res) => {
       throw new ApiError(500, "Error from server while registering!");
     }
     return res
-      .status(200)
+      .status(201)
       .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
       .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
       .json(
@@ -130,6 +130,9 @@ export const register = AsyncHandler(async (req, res) => {
     // if(isAnyOwner.length >= 1){
     //   throw new ApiError(406,"Owner already available, please contect with real Owner or Dev. Mr kuldeep.")
     // }
+    rating = rating ? parseInt(rating) : 1
+    experience = experience ? parseInt(experience) : 1
+    console.log(rating, typeof(rating),"\n",experience, typeof(experience));
     const createdOwner = await ownerModel.create({
       name,
       gmail,
@@ -138,15 +141,15 @@ export const register = AsyncHandler(async (req, res) => {
       image,
       address,
       password,
-      rating: [rating ? rating : 1],
-      experience: [experience ? experience : 1],
+      rating,
+      experience
     });
 
     if (!createdOwner) {
       throw new ApiError(409, "Error in owner's regesteration!");
     }
 
-    const { accessToken, refreshToken } = generateTokens(createdOwner);
+    const { accessToken, refreshToken } = await generateTokens(createdOwner);
     createdOwner.refreshToken = refreshToken;
     await createdOwner.save({ validateBeforeSave: false });
     const newOwner = await ownerModel
@@ -395,3 +398,32 @@ export const editUser = AsyncHandler(async (req, res) => {
       new ApiResponse(200, `${user.name} successfully updated.`, userUpdate)
     );
 });
+
+// Protected Logout
+/*
+  req.user get user credetials 
+  check 
+  user from database
+  remove refresh token
+  clear req.cookies- accessToken & refreshToken
+
+*/
+export const logout = AsyncHandler(async(req, res)=>{
+const userCheck = req.user;
+if(!userCheck){
+  throw new ApiError(400, "Bad request, You are not authorized!")
+}
+const dbUser = await (
+  userCheck.isOwner ? ownerModel.findById(userCheck._id) 
+  : userModel.findById(userCheck._id)
+)
+console.log(dbUser)
+dbUser.refreshToken = null
+await dbUser.save({validateBeforeSave: false})
+return res.status(200)
+.clearCookie("accessToken")
+.clearCookie("refreshToken")
+.json(new ApiResponse(200,"You are logged out now."))
+})
+
+
