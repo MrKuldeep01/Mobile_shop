@@ -5,13 +5,17 @@ import {
   getCurrentUser,
   passwordChange,
 } from "../controllers/Auth.controller.js";
+import { upload } from "../middlewares/multer.middleware.js";
 import { getCurrentUser as authMidd } from "../middlewares/Auth.middleware.js";
 
-// getCurrentUser PROTECTED /////////
-router.route("/profile/currentOwner").post(authMidd, getCurrentUser);
+// getCurrentUser PROTECTED /////////✅
+router.route("/currentUser").post(authMidd, getCurrentUser);
 
-//  password change  PROTECTED /////////
-router.route("/profile/passwordChange").post(authMidd, passwordChange);
+//  password change  PROTECTED /////////✅
+/*
+gmail || mobile, prePassword, newPassword 
+*/
+router.route("/password-change").post(authMidd, passwordChange);
 
 //  editUser  PROTECTED /////////
 //MULTER: SINGLE FILE NAMED IMAGE /////////
@@ -24,6 +28,6 @@ router.route("/profile/passwordChange").post(authMidd, passwordChange);
     state,
     experience,
 */
-router.route("/profile/editDetails").post(authMidd, upload.Single('image'), editUser );
+router.route("/editDetails").post(authMidd, upload.single('image'), editUser);
 
 export default router;

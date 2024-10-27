@@ -13,7 +13,7 @@ async function generateTokens(user) {
   return { accessToken, refreshToken };
 } 
  
-//MULTER: SINGLE FILE NAMED IMAGE /////////
+//MULTER: SINGLE FILE NAMED IMAGE ///////// ✅
 export const register = AsyncHandler(async (req, res) => {
   const {
     name,
@@ -171,7 +171,7 @@ export const register = AsyncHandler(async (req, res) => {
       );
   }
 });
-
+// Login✅
 export const login = AsyncHandler(async (req, res) => {
   // login steps
   /*
@@ -189,7 +189,7 @@ export const login = AsyncHandler(async (req, res) => {
     password,
     mobile,
     isOwner
-  );
+  ); 
   if (!(password && (gmail || mobile))) {
     console.log("bhai required fields to bhro phle!");
     throw new ApiError(406, "You have missed some fields!");
@@ -257,7 +257,10 @@ export const login = AsyncHandler(async (req, res) => {
   }
 });
 
-// getCurrentUser PROTECTED /////////
+
+//_______________________ Profile ______________________//
+
+// getCurrentUser PROTECTED ///////// ✅
 export const getCurrentUser = AsyncHandler(async (req, res) => {
   const user = req.user;
   if (!user) {
@@ -268,13 +271,12 @@ export const getCurrentUser = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "User successfully fetched", user));
 });
 
-//  password change  PROTECTED /////////
+//  password change  PROTECTED /////////✅
 export const passwordChange = AsyncHandler(async (req, res) => {
   /*
   if edit route is accessible then this is logged in user
   Hence user - req.user via middleware 
   --- fields must not't be changed
-  email, mobile, name
   ====
   - get data to update 
   - validat the comming data
@@ -292,12 +294,6 @@ export const passwordChange = AsyncHandler(async (req, res) => {
     throw new ApiError(406, "Please provide required values properly.");
   }
   const currentUser = req.user;
-  if (currentUser.gmail !== gmail || currentUser.mobile !== mobile) {
-    throw new ApiError(
-      400,
-      "Bad request, You are not allowed to change password of other's a/c."
-    );
-  }
   const user = currentUser.isOwner
     ? await ownerModel.findById(currentUser._id)
     : await userModel.findById(currentUser._id);
@@ -311,6 +307,7 @@ export const passwordChange = AsyncHandler(async (req, res) => {
   }
   user.password = newPassword;
   await user.save({ validateBeforeSave: false });
+  console.log('password is changed for ',user.name)
   return res
     .status(200)
     .json(new ApiResponse(200, "Password is changed successfully.", {}));
