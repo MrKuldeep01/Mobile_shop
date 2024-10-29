@@ -4,7 +4,7 @@ import {
     editUser,
   getCurrentUser,
   passwordChange,
-} from "../controllers/Auth.controller.js";
+} from "../controllers/Profile.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { getCurrentUser as authMidd } from "../middlewares/Auth.middleware.js";
 

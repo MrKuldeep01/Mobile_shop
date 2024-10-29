@@ -3,9 +3,11 @@ import React from "react";
 function Header() {
   return (
     <>
-      <div className="header w-full h-[200px] bg-gray-500 text-semibold text-pink-600">
-        <h2> !! this is Header !!</h2>
-      </div>
+      <header className="header w-full h-[100px]  bg-gray-500/50 text-semibold text-[var(--fontPrimaryColor)] flex ">
+        <div className="logo bg-rose-400 w-14 h-14  ">
+          <img src="mobileShop.png" alt="Mobile Shop logo" className="overflow-hidden w-auto h-auto"/>
+        </div>
+      </header>
     </>
   );
 }

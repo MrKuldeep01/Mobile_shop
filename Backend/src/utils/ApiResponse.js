@@ -3,7 +3,6 @@ class ApiResponse {
     statusCode = 200,
     message = "Success is achived in the process.",
     data = {},
-    success = "true",
   ) {
     this.statusCode = statusCode;
     this.message = message;

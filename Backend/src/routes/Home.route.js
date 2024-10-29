@@ -8,11 +8,11 @@ const router = Router();
 // },(_,res)=>{
 //   res.send("hello sir this is working...");
 // })
- 
+
 //second
 router.route("/").get((_, res) => {
-    res.send(
-      `<center>
+  res.send(
+    `<center>
         <b>
           <h1>Hello, everything is good this side </h1>
         </b>
@@ -30,7 +30,6 @@ router.route("/").get((_, res) => {
           <li>user's details updation provider - /api/v1/profile/user/edit/:userId </li> <br/>
         </ul>
       </center>`
-    );
-  }
-);
+  );
+});
 export default router;

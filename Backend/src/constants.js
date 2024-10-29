@@ -14,7 +14,7 @@ const ATOptionsForCookies = {
   maxAge: accessTokenExpiry * 1000, // Convert seconds to milliseconds
   httpOnly: true, // Not accessible via JavaScript
   secure: true, // Only sent over HTTPS
-  sameSite: 'strict', // Prevent CSRF
+  sameSite: "strict", // Prevent CSRF
 };
 
 // Cookie options for refresh token
@@ -22,7 +22,7 @@ const RTOptionsForCookies = {
   maxAge: refreshTokenExpiry * 1000, // Convert seconds to milliseconds
   httpOnly: true, // Not accessible via JavaScript
   secure: true, // Only sent over HTTPS
-  sameSite: 'strict', // Prevent CSRF
+  sameSite: "strict", // Prevent CSRF
 };
 
 const baseUrl = "/api/v1"; // Base URL for API routes
