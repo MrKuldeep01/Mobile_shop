@@ -313,3 +313,8 @@ Open Source Initiative (OSI) - MIT License
 Choose a License – A helpful guide to understanding and selecting licenses for your projects.
 By choosing the MIT License, you're promoting openness and collaboration while maintaining the rights to your original work. If you have any more questions about licensing or need further assistance, feel free to ask!
 --------(-|-)-----------
+if you commit wrong message 
+```git
+   git commit --amend -m "new message "
+   git push origin main --force
+ ```

@@ -2,9 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
-    --fontPrimaryColor: black;
-    
+:root {
+  --fontPrimaryColor: rgba(0, 0, 0, 0.071);
 }
 * {
   margin: 0;
