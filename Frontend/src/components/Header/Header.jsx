@@ -3,7 +3,7 @@ import Logo from "../Logo.jsx"
 function Header() {
   return (
     <>
-      <header className="header w-full backdrop:blur-md h-[100px] py-4 sm:py-6 px-8 sm:px-12  bg-gray-400/40 text-semibold text-[var(--fontPrimaryColor)/50] flex items-center justify-between ">
+      <header className="header w-full backdrop-blur-sm h-[100px] py-4 sm:py-6 px-8 sm:px-12  bg-gray-400/40 text-semibold text-[var(--fontPrimaryColor)/50] flex items-center justify-between sticky top-0 left-0">
         {/* <div className="logo left w-16 h-16 rounded-2xl flex items-center justify-center p-0.5 mx-2 mr-2 ">
           <img src="mobileShop.png" alt="Mobile Shop logo" className="overflow-hidden w-auto h-auto"/>
         </div> */}
