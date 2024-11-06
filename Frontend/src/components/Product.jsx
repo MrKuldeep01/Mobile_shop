@@ -2,7 +2,7 @@ import React from "react";
 
 const Product = () => {
   return (
-    <div className="flex p-6 font-mono">
+    <div className="flex p-6 font-mono ">
       <div className="flex-none w-48 mb-10 relative z-10 before:absolute before:top-1 before:left-1 before:w-full before:h-full before:bg-teal-400">
         <img
           src="/retro-shoe.jpg"

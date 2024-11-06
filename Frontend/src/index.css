@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --fontPrimaryColor: rgba(0, 0, 0, 0.071);
+  --fontPrimaryColor: rgba(0, 0, 0);
 }
 * {
   margin: 0;
@@ -13,3 +13,24 @@
 body {
   width: 100%;
 }
+
+.bubble {
+  clip-path: circle(50%); /* Creates a circle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* .bubble:after {
+  content: '';
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  filter: blur(20px); 
+} */
