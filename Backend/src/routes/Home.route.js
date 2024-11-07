@@ -15,7 +15,7 @@ router.route("/").get((_, res) => {
           `<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 200px; height: 80vh; width: 100vw; ">
 
           <h1 style="font-size: 44px; font-weight: bold; color: #333; text-align: center; margin: 20px">
-          <a href="https://github.com/mrkuldeep01/MobileShop.git">
+          <a href="https://github.com/mrkuldeep01/Mobile_shop.git">
           Congretulation!🎊👨‍💻🚀 </a> 
           </h1>
 

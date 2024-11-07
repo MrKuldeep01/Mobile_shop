@@ -1,8 +1,8 @@
 import React from "react";
-const Logo = ({ className = "", iconPath }) => {
+const Logo = ({ className = "", iconPath ="mobileShop.png" }) => {
   return (
     <div
-      className={`overflow-hidden size-16 sm:size-18 bg-white/20 rounded-full ${className}`}
+      className={`overflow-hidden size-16 sm:size-18 bg-white/10 rounded-full ${className}`}
     >
       <img
         src={iconPath}
