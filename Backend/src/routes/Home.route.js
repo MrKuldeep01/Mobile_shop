@@ -12,24 +12,18 @@ const router = Router();
 //second
 router.route("/").get((_, res) => {
   res.send(
-    `<center>
-        <b>
-          <h1>Hello, everything is good this side </h1>
-        </b>
-        <br />
-        <ul>
-          <li>login provider - /api/v1/auth/login </li> <br/>
-          <li>register provider - /api/v1/auth/register </li> <br/>
-          <li>all items provider - /api/v1/product/ </li> <br/>
-          <li>item provider - /api/v1/product/:productId </li> <br/>
-          <li>item edit or add provider - /api/v1/product/add/:productId </li> <br/>
-          <li>owner details provider & setter to cookies - /api/v1/profile/owner </li> <br/>
-          <li>owner's details updation provider - /api/v1/profile/owner/edit </li> <br/>
-          
-          <li>user details provider & setter to cookies - /api/v1/profile/user </li> <br/>
-          <li>user's details updation provider - /api/v1/profile/user/edit/:userId </li> <br/>
-        </ul>
-      </center>`
+          `<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 200px; height: 80vh; width: 100vw; ">
+
+          <h1 style="font-size: 44px; font-weight: bold; color: #333; text-align: center; margin: 20px">
+          <a href="https://github.com/mrkuldeep01/MobileShop.git">
+          Congretulation!🎊👨‍💻🚀 </a> 
+          </h1>
+
+          <p style="font-size: 16px; line-height: 1.5; color: #555;">
+             Every thing is looking great, Now please read documantion to gain the knowledge about routing.🔗😎 for this project.
+          </p>
+      </body>
+      `
   );
 });
 export default router;

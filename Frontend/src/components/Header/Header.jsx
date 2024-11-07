@@ -1,5 +1,6 @@
 import React from "react";
-import Logo from "../Logo.jsx"
+import  Logo from "../Logo.jsx"
+
 function Header() {
   return (
     <>

@@ -1,5 +1,6 @@
 import React from 'react'
-import Product from './Product.jsx'
+import Product from "./Product.jsx"
+
 const Products = () => {
   return (
     <>

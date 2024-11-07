@@ -1,18 +1,14 @@
 import "./index.css";
-import Header from "./components/Header/Header.jsx";
-import Footer from "./components/Footer/Footer.jsx";
-import Login from "./components/Login.jsx";
-import Register from "./components/Register.jsx";
-import ProductBanner from "./components/ProductBanner.jsx"
+import { Header, Footer, Login, Register, ProductBanner} from "./components/index.js"
 function App() {
   return (
     <>
-      <Header />
+      <Header/>
       {/* <Login /> */}
       {/* <Register/> */}
         {/* <Product/> --*/}
         <ProductBanner productImgPath={'mobileShop.png'}/>
-      {/* <Footer /> */}
+      <Footer/>
     </>
   );
 }

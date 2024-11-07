@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from "./Button.jsx"
+
 const ProductBanner = ({catagoryName="Lorem ipsum dolor sit.", categoryDescription="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatem quidem voluptates eum.", productImgPath, stickerText="18%"}) => {
   return (
     <section className='w-full p-4 flex flex-col gap-6 h-[90vh]  '>
