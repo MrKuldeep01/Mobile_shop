@@ -1,13 +1,15 @@
 import "./index.css";
-import { Header, Footer, Login, Register, ProductBanner} from "./components/index.js"
-function App() {
+import { Header, Footer, Login, Home, Register, ProductBanner, Product} from "./components/index.js"
+function App({outlet}) {
   return (
     <>
       <Header/>
-      {/* <Login /> */}
+      <Login />
       {/* <Register/> */}
-        {/* <Product/> --*/}
-        <ProductBanner productImgPath={'mobileShop.png'}/>
+        {/* <Product/>  */}
+        {/* <ProductBanner productImgPath={'mobileShop.png'}/> */}
+        {/* {outlet} */}
+        {/* <Home/> */}
       <Footer/>
     </>
   );

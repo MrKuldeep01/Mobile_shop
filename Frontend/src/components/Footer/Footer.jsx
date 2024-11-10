@@ -44,8 +44,7 @@ function Footer() {
                 <li className="mb-4">
                   <address
                     className=" text-base sm:text-base  font-semibold text-gray-900 hover:text-gray-700">
-                    <i className="ri-crosshair-2-line"></i> Rohtak, HARYANA (INDIA)
-                    
+                    <i className="ri-crosshair-2-line"></i> Rohtak, HARYANA (INDIA)            
                   </address>
                 </li>
               </ul>

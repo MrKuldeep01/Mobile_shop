@@ -60,7 +60,7 @@ const ownerSchema = new mongoose.Schema(
     refreshToken: String,
     gender: {
       type: String,
-      enum: ["male", "female"],
+      enum: ["male", "female", "other"],
     },
     experience: {
       type: Number,
