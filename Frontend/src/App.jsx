@@ -6,8 +6,8 @@ function App({outlet}) {
   return (
     <Provider store={authStore}>
       <Header/>
-      <Login />
-      {/* <Register/> */}
+      {/* <Login /> */}
+      <Register/>
         {/* <Product/>  */}
         {/* <ProductBanner productImgPath={'mobileShop.png'}/> */}
         {/* {outlet} */}

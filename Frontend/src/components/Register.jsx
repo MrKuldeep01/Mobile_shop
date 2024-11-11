@@ -3,10 +3,43 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 // =================
 function Register() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+  } = useForm();
+  const [error, setError] = useState(null);
 
-  const submitHandler = (data) => console.log(data);
-  // register ✅
+  const submitHandler = async (data) => {
+    try {
+      const image = data.image[0];
+      if (!image) {
+        setError("please upload the image file to proceed further!");
+      }
+      const formData = new FormData();
+      for (let key in data) {
+        if (data.hasOwnProperty(key)) {
+          if (key === "image") {
+            formData["image"] = image;
+          }
+          formData[key] = data[key];
+          console.log("key: ", key, "\tvalue: ", data[key]);
+        }
+      }
+      console.log(formData);    /////////////////// step up for forms
+      // const response = await fetch(
+      //   "http://localhost:3000/api/v1/auth/register",
+      //   {
+      //     method: "POST",
+      //     body: formData,
+      //   }
+      // );
+      // const result = await response.json();
+      // console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   /*
 name,
     gmail,
@@ -18,6 +51,8 @@ name,
     experience,
     isOwner,
     image from file with name 'image'
+
+    uri: http://localhost:3000/api/v1/auth/register
     */
 
   return (
@@ -27,7 +62,12 @@ name,
           <div className="text-center my-8 sm:mt-6">
             <h1 className="font-thin text-4xl text-amber-950">Register</h1>
           </div>
-          <form action="#" method="post" onSubmit={handleSubmit(submitHandler)}>
+          <form
+            action="#"
+            method="post"
+            encType="multipart/form-data"
+            onSubmit={handleSubmit(submitHandler)}
+          >
             <div className="name mt-5">
               <input
                 type="text"
@@ -42,7 +82,7 @@ name,
                 type="email"
                 placeholder="Email"
                 id="Email"
-                {...register("gmail", { required: true })}               
+                {...register("gmail", { required: true })}
                 className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
               />
             </div>
@@ -51,12 +91,12 @@ name,
                 type="number"
                 placeholder="Phone no."
                 id="Mobile"
-                {...register("mobile", { min: 18, max: 99, required: true })}             
+                {...register("mobile", { min: 18, max: 99, required: true })}
                 className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
               />
             </div>
             <div className=" gender mt-5 w-full flex items-center justify-start gap-2">
-              <select {...register("gender")}  className="font-semibold text-sm">
+              <select {...register("gender")} className="font-semibold text-sm">
                 <option defaultValue="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
@@ -64,7 +104,10 @@ name,
             </div>
 
             <div className="isOwner mt-5 w-full flex items-center justify-start gap-2">
-              <select {...register("isOwner")} className="font-semibold text-sm">
+              <select
+                {...register("isOwner")}
+                className="font-semibold text-sm"
+              >
                 <option value="no"> User </option>
                 <option value="yes"> Owner </option>
               </select>
@@ -81,7 +124,6 @@ name,
                   {...register("image", { required: true })}
                   id="image"
                   className="ml-0 invisible"
-                  
                 />
               </label>
             </div>
@@ -91,14 +133,15 @@ name,
                 placeholder="Password with length: 6-10"
                 id="Password"
                 {...register("password", { required: true, min: 6, max: 10 })}
-                
                 className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
               />
             </div>
-            {errors.exampleRequired && (
-              <span className="font-semibold text-sm text-red-600 bg-white/70 px-2 py-1 my-2 rounded-md">
-                {" "}
-                please check every field properly!
+            {error && (
+              <span
+                role="alert"
+                className="font-semibold text-sm text-red-600 bg-white/70 px-2 py-1 my-2 rounded-md"
+              >
+                {error}
               </span>
             )}
             <div className="submit button mt-5">
@@ -106,7 +149,7 @@ name,
                 type="submit"
                 className="border-2 border-white bg-black text-white py-2 w-full rounded-xl active:bg-white active:text-black font-semibold active:scale-[1.02]"
               >
-                Register 
+                Register
               </button>
             </div>
 
