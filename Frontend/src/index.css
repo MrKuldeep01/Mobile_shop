@@ -12,14 +12,7 @@
 }
 body {
   width: 100%;
-}
-
-.bubble {
-  clip-path: circle(50%); /* Creates a circle */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(45deg, #aa8a8a77,#8d463a6e);
 }
 
 /* .bubble:after {

@@ -27,7 +27,7 @@ export const register = AsyncHandler(async (req, res) => {
     isOwner,
   } = req.body;
  
-  console.log( "name ", name, "gmail ", gmail, "mobile ", mobile, "gender ", gender, "password ", password, "address ", address, "rating ", rating, "experience ", experience, "isOwner ", isOwner);
+  console.log( "At register: \nname ", name, "gmail ", gmail, "mobile ", mobile, "gender ", gender, "password ", password, "address ", address, "rating ", rating, "experience ", experience, "isOwner ", isOwner);
 
   const requiredField = { name, gmail, mobile, gender, password };
   for (const [key, val] of Object.entries(requiredField)) {
@@ -93,7 +93,7 @@ export const register = AsyncHandler(async (req, res) => {
       throw new ApiError(500, "Error from server while registering!");
     }
     const { accessToken, refreshToken } = await generateTokens(createdUser);
-    console.log("Tokens : ",accessToken,"\t",refreshToken) /////------------------->
+    console.log("Tokens : available ") /////------------------->
     createdUser.refreshToken = refreshToken;
     await createdUser.save({ validateBeforeSave: false });
     const newUser = await userModel
@@ -132,7 +132,6 @@ export const register = AsyncHandler(async (req, res) => {
     // }
     rating = rating ? parseInt(rating) : 1
     experience = experience ? parseInt(experience) : 1
-    console.log(rating, typeof(rating),"\n",experience, typeof(experience));
     const createdOwner = await ownerModel.create({
       name,
       gmail,
@@ -183,13 +182,13 @@ export const login = AsyncHandler(async (req, res) => {
 
   const { gmail, password, mobile, isOwner } = req.body;
   // isOwner = true/false;
-  console.log(
-    "gmail, password, mobile, isOwner :: ",
-    gmail,
-    password,
-    mobile,
-    isOwner
-  ); 
+  // console.log(
+  //   "gmail, password, mobile, isOwner :: ",
+  //   gmail,
+  //   password,
+  //   mobile,
+  //   isOwner
+  // ); 
   if (!(password && (gmail || mobile))) {
     console.log("bhai required fields to bhro phle!");
     throw new ApiError(406, "You have missed some fields!");
@@ -275,7 +274,7 @@ const dbUser = await (
   userCheck.isOwner ? ownerModel.findById(userCheck._id) 
   : userModel.findById(userCheck._id)
 )
-console.log(dbUser)
+console.log(dbUser , " is logged out.")
 dbUser.refreshToken = null
 await dbUser.save({validateBeforeSave: false})
 return res.status(200)
