@@ -41,7 +41,24 @@ class Profile {
     return null;
   }
   async editDetails(data={}){
-    
+    // it would be look like : {newGmail, newMobile, localAddress, city, postCode, state, experience }
+    try {
+      const url = `${envConfig.serverBaseURI}/profile/edit-details`;
+      const responseData = await fetchData(url, data);
+      console.log("edited details status : "+responseData);
+      // here we can work further
+
+    } catch (error) {
+      console.log(
+        "Error during editing details :: profile services.js :: services :- " +
+          error
+      );
+      throw new Error(
+        "Error during editing details :: profile services.js :: services :- " +
+          error
+      );
+    }
+    return null;
   }
 }
 const profile = new Profile();

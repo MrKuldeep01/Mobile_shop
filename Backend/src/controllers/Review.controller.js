@@ -5,7 +5,7 @@ import { Review as reviewModel } from "../models/Review.model.js";
 import { User as userModel } from "../models/User.model.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
 
-/**
+/*
     **Review model** for products only
         - creation :
             - validate request ✔
@@ -41,6 +41,8 @@ import { Owner as ownerModel } from "../models/Owner.model.js";
             - update the review document
 */
 ///// Protected
+
+//  rating , reviewText  and productid in parameters
 export const createProductReview = AsyncHandler(async (req, res) => {
   if (!req?.user) {
     throw new ApiError(405, "Unauthorized user, please login first!");
@@ -112,6 +114,7 @@ export const createProductReview = AsyncHandler(async (req, res) => {
 });
 
 //// Protected
+// reviewId in parameters
 export const removeProductReview = AsyncHandler(async (req, res) => {
   const user = req?.user;
   if (!user) {
@@ -136,7 +139,7 @@ export const removeProductReview = AsyncHandler(async (req, res) => {
       "Unauthorized request, you are not creater of this review! "
     );
   }
-  reviewModel.deleteOne({ _id: reviewId });
+  await reviewModel.deleteOne({ _id: reviewId });
   console.log("review is deleted successfully");
   return res
     .status(200)
