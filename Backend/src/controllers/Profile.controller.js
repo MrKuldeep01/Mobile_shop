@@ -16,17 +16,14 @@ export const getCurrentUser = AsyncHandler(async (req, res) => {
 });
 
 //  password change  PROTECTED /////////✅
+/*
+  ====
+  - get data to update :  gmail, mobile, prePassword, newPassword 
+  - validat the comming data
+  - update data 
+  - all good
+  */
 export const passwordChange = AsyncHandler(async (req, res) => {
-  /*
-    if edit route is accessible then this is logged in user
-    Hence user - req.user via middleware 
-    --- fields must not't be changed
-    ====
-    - get data to update 
-    - validat the comming data
-    - update data 
-    - all good
-    */
 
   // get previous Password, gmail/mobile, newPassword;
   // check for correction
@@ -60,15 +57,10 @@ export const passwordChange = AsyncHandler(async (req, res) => {
 //  editUser  PROTECTED /////////
 //MULTER: SINGLE FILE NAMED IMAGE /////////
 /*
-    userId 
-    ownerId
-    localAddress
-    city
-    postCode
-    state
-  */
+ newGmail, newMobile, localAddress, city, postCode, state, experience 
+*/
 export const editUser = AsyncHandler(async (req, res) => {
-  // gmail, mobile, image
+  // newGmail, newMobile, localAddress, city, postCode, state, experience 
   let { newGmail, newMobile, localAddress, city, postCode, state, experience } =
     req.body;
 

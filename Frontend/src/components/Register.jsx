@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux"
+import auth from "../servicies/Auth.services.js"
 // =================
-function Register() {
+async function Register() {
   const [res, setRes] = useState({});
   const [error, setErr] = useState("");
   const [loading, setLoad] = useState(false);
@@ -13,7 +15,7 @@ function Register() {
     formData.set(key, value);
     console.log("Updated FormData:", Array.from(formData.entries()));
   };
-
+  
   /*
 name,
     gmail,
@@ -29,32 +31,32 @@ name,
   const submitHandler = (e) => {
     e.preventDefault();
     console.log("getting...");
-
     setLoad(true);
-
-    fetch(url, {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setErr("Network response was not ok");
-          throw new Error("Error occurred");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setRes(data);
-      })
-      .catch((error) => {
-        console.log(error);
-        setErr("An error occurred: " + error);
-      })
-      .finally(() => {
-        setLoad(false);
-        console.log("Loading is set to: ", loading);
-      });
+// validate formData before sending to server
+  // await auth.register(formData)
+    // fetch(url, {
+    //   method: "POST",
+    //   body: formData,
+    // })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       setErr("Network response was not ok");
+    //       throw new Error("Error occurred");
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     console.log(data);
+    //     setRes(data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     setErr("An error occurred: " + error);
+    //   })
+    //   .finally(() => {
+    //     setLoad(false);
+    //     console.log("Loading is set to: ", loading);
+    //   });
   };
 
   return (
