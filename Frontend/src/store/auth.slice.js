@@ -8,9 +8,8 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-
-      state.userData = action.payload;
       state.authStatus = true;
+      state.userData = action.payload;
     },
     logout: (state, action) => {
       // const userId = state.userData?._id

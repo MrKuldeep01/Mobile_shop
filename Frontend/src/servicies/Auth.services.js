@@ -47,7 +47,6 @@ class Auth {
     }
     return null;
   }
- 
   async logout() {
     try {
       const url = `${envConfig.serverBaseURI}/auth/logout`;

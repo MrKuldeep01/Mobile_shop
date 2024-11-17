@@ -105,14 +105,22 @@ export const editProduct = AsyncHandler(async (req, res) => {
 
 // all products OK-TESTED
 export const getProducts = AsyncHandler(async (req, res) => {
-  const products = await productModel.find();
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12; // items per page
+  const skip = (page - 1) * limit;
+
+  const totalProducts = await productModel.countDocuments();
+  const products = await productModel.find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
   console.log("getting product list...");
   if (!products) {
     throw new ApiError("503", `Faild to load products data`);
   }
   return res
     .status(201)
-    .json(new ApiResponse(200, "Product list successfully found", products));
+    .json(new ApiResponse(200, "Product list successfully found",{ products, currentPage: page, totalPages: Math.ceil(totalProducts / limit), totalProducts}));
 });
 
 // specific product
