@@ -18,7 +18,7 @@ class Auth {
       const url = `${envConfig.serverBaseURI}/auth/register`;
       const userData = await fetchData(url, data);
       console.log("registered userData  :-  ", userData);
-
+      return userData;
       // setting details to local storage or something else;
     } catch (error) {
       console.log(
@@ -35,7 +35,7 @@ class Auth {
       const url = `${envConfig.serverBaseURI}/auth/login`;
       const loginUserData = await fetchData(url, formData, "POST");
       console.log("logged in data is : ", loginUserData);
-
+      return loginUserData;
       // further processing as per requirement
     } catch (error) {
       console.log(
@@ -52,7 +52,7 @@ class Auth {
       const url = `${envConfig.serverBaseURI}/auth/logout`;
       const status = await fetchData(url);
       console.log("your logout status is : " + status);
-
+      return status;    
       // future working will be here ...
       
     } catch (error) {

@@ -7,6 +7,7 @@ class CartServices{
             const url = `${envConfig.serverBaseURI}/cart/add/${productId}`;
             const responseData = await fetchData(url,{},"POST");
             console.log("product added to cart status : "+responseData);   
+            return responseData;
         } catch (error) {
             console.log("Error while adding product to cart :: cart services.js :: services :- "+error);
             throw new Error("Error while adding product to cart :: cart services.js :: services :- "+error);
@@ -38,7 +39,8 @@ class CartServices{
         try {
             const url = `${envConfig.serverBaseURI}/cart/remove/${productId}`;
             const responseData = await fetchData(url,{},"DELETE");
-            console.log("product removed from cart status : "+responseData);   
+                console.log("product removed from cart status : "+responseData);   
+            return responseData;
         } catch (error) {
             console.log("Error while removing product from cart :: cart services.js :: services :- "+error);
             throw new Error("Error while removing product from cart :: cart services.js :: services :- "+error);

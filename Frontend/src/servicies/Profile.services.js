@@ -6,7 +6,7 @@ class Profile {
       const url = `${envConfig.serverBaseURI}/profile/currentUser`;
       const currentUser = await fetchData(url);
       console.log("currentUser is : " + currentUser);
-
+      return currentUser;
       // further actions as per your requirement
     } catch (error) {
       console.log(
@@ -27,6 +27,7 @@ class Profile {
       const responseData = await fetchData(url, data);
       console.log("password change status : "+responseData);
       // here we can work further
+      return responseData;
 
     } catch (error) {
       console.log(
@@ -46,7 +47,7 @@ class Profile {
       const url = `${envConfig.serverBaseURI}/profile/edit-details`;
       const responseData = await fetchData(url, data);
       console.log("edited details status : "+responseData);
-      // here we can work further
+      return responseData;
 
     } catch (error) {
       console.log(

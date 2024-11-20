@@ -1,6 +1,7 @@
 import fetchData from "../utils/FetchData.js";
 import envConfig from "../Config/envConfig.js";
 class Review {
+    
     async createProductReview(data={},productId){
         try {
             // data will look like : {rating, reviewText}
@@ -8,6 +9,8 @@ class Review {
             const responseData = await fetchData(url,data);
             console.log("product review creation status : "+ responseData);
             // more work will be here 
+            return responseData;
+
         } catch (error) {
             console.log(
                 "Error while creating product review data :: review services.js :: services :- " +
@@ -27,7 +30,7 @@ class Review {
             const responseData = await fetchData(url);
             console.log("product review deletion status : " + responseData);
             // more work will be here 
-
+            return responseData;    
         } catch (error) {
             console.log(
                 "Error while deleting product review data :: review services.js :: services :- " +
@@ -47,6 +50,7 @@ class Review {
             const responseData = await fetchData(url,data);
             console.log("product review update status : "+responseData);
             // more work will be here 
+            return responseData;
         } catch (error) {
             console.log(
                 "Error while updating product review data :: review services.js :: services :- " +

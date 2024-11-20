@@ -6,7 +6,7 @@ class Product {
             const url = `${envConfig.serverBaseURI}/products`;
             const responseData = await fetchData(url);
             console.log("product list status : "+responseData);
-    
+            return responseData;
             // more work will be here 
         } catch (error) {
             console.log(
@@ -27,7 +27,7 @@ class Product {
         const responseData = await fetchData(url, data);    
         console.log("add product status : "+responseData);
         // more work will be here 
-
+        return responseData;
 
        } catch (error) {
             console.log(
@@ -47,7 +47,7 @@ class Product {
             const url = `${envConfig.serverBaseURI}/products/edit/${productId}`;
             const responseData = await fetchData(url, data);    
             console.log("edit product status : "+responseData);
-    
+            return responseData;    
         }catch(error){
             console.log(
               "Error while editing product data :: product services.js :: services :- " +
@@ -65,6 +65,7 @@ class Product {
             const url = `${envConfig.serverBaseURI}/products/${productId}`;
             const responseData = await fetchData(url);
             console.log("get product details are : "+responseData);
+            return responseData;
             // more work will be here 
 
         } catch (error) {
@@ -84,6 +85,7 @@ class Product {
             const url = `${envConfig.serverBaseURI}/products/delete/${productId}`;
             const responseData = await fetchData(url);
             console.log("delete product status : "+responseData);   
+            return responseData;
         } catch (error) {
             console.log(
               "Error while deleting product data :: product services.js :: services :- " +
