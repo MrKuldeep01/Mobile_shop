@@ -62,8 +62,7 @@ class Review {
               );
         }
         return null;
-    }
-    
+    }    
 }       
 const review = new Review();
 export default review;

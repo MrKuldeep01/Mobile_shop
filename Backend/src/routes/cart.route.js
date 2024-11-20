@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addProductToCart, removeProductFromCart, updateCartItemQuantity } from "../controllers/Cart.controller.js";
+import { addProductToCart, removeProductFromCart, updateCartQuantity } from "../controllers/Cart.controller.js";
 import { getCurrentUser as authMidd } from "../middlewares/Auth.middleware.js";
 const router = Router();
 
@@ -16,7 +16,7 @@ const router = Router();
 // PRODUCT ID AS AN PARAMS WITHOUT ANY NAME
 router.route("/add/:productId").post(authMidd, addProductToCart);
 
-router.route("/update/:productId").patch(authMidd, updateCartItemQuantity);
+router.route("/update/:productId").patch(authMidd, updateCartQuantity);
 
 // remove product from cart ✅
 router.route("/remove/:productId").post(authMidd, removeProductFromCart);

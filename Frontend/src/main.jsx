@@ -5,7 +5,7 @@ import './index.css'
 import {Login, Register, Product, Products, } from "./components/index.js"
 import {createBrowserRouter, RouterProvider} from "react-router-dom"
 import { Provider } from "react-redux"
-import authStore from "./store/Store.js"
+import store from "./store/Store.js"
 const router = createBrowserRouter([
   {
     path:'/',
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
 ])
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <Provider store={authStore}>
+  <Provider store={store}>
     <RouterProvider router={router}/>
   </Provider>
   </StrictMode>

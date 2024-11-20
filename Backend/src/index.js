@@ -18,7 +18,7 @@ connection()
     app.listen(port, () => {
       console.log(
         "app is live on: ",
-        "http://localhost:" + port + constants.baseUrl
+        port + constants.baseUrl
       );
     });
   })

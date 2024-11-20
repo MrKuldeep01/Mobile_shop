@@ -43,21 +43,11 @@ function App({outlet}) {
     <Header/>
       <Container>
         {/* {outlet} */}
+        <Login/>
       </Container>
     <Footer/>
   </div>
 </div>
  )
 }
-  // )
-  //     <Header/>
-  //     {/* <Login /> */}
-  //     <Register/>
-  //     {/* <Test/> */}
-  //       {/* <Product/>  */}
-  //       {/* <ProductBanner productImgPath={'mobileShop.png'}/> */}
-  //       {/* {outlet} */}
-  //       {/* <Home/> */}
- 
-
 export default App;

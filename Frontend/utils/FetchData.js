@@ -6,7 +6,7 @@ async function fetchData(url, data, method = "POST") {
     if (data) {
       options.body = data;
     }
-    console.log("options : " + options);
+    console.log(options);
     const response = await fetch(url, options);
     if (!response.ok) {
       throw new Error("Error occurred in fetch call!");
