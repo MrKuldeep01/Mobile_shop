@@ -20,6 +20,7 @@ class Profile {
     }
     return null;
   }
+  
   async passwordChange(data = {}) {
     try {
       // { gmail, mobile, prePassword, newPassword }
@@ -41,6 +42,7 @@ class Profile {
     }
     return null;
   }
+
   async editDetails(data={}){
     // it would be look like : {newGmail, newMobile, localAddress, city, postCode, state, experience }
     try {

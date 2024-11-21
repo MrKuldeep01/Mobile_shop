@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux"
 import auth from "../servicies/Auth.services.js"
+import envConfig from "../../Config/envConfig.js";
 // =================
+
 async function Register() {
   const [res, setRes] = useState({});
   const [error, setErr] = useState("");
   const [loading, setLoad] = useState(false);
-  const formData = new FormData();
-  const url = "http://localhost:3000/api/v1/auth/register";
+  const [formData] = useState(new FormData()); // Move FormData to state
+  
+  const url = `${envConfig.serverBaseURI}/auth/register`;
   const changeHandler = (e) => {
     const key = e.target.name;
     const value = e.target.type === "file" ? e.target.files[0] : e.target.value;
@@ -28,12 +31,62 @@ name,
 
     uri: http://localhost:3000/api/v1/auth/register
     */
-  const submitHandler = (e) => {
-    e.preventDefault();
-    console.log("getting...");
-    setLoad(true);
+    const submitHandler = (e) => {
+      e.preventDefault();
+      setLoad(true);
+      setErr("");
 // validate formData before sending to server
-  // await auth.register(formData)
+    // Validate required fields
+    const requiredFields = ['name', 'gmail', 'mobile', 'gender', 'password'];
+    for (const field of requiredFields) {
+      if (!formData.get(field)) {
+        setErr(`${field} is required`);
+        setLoad(false);
+        return;
+      }
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.get('gmail'))) {
+      setErr('Invalid email format');
+      setLoad(false);
+      return;
+    }
+
+    // Validate mobile number (10 digits)
+    const mobileRegex = /^\d{10}$/;
+    if (!mobileRegex.test(formData.get('mobile'))) {
+      setErr('Mobile number must be 10 digits');
+      setLoad(false);
+      return;
+    }
+
+    // Validate password (min 6 chars)
+    if (formData.get('password').length < 6) {
+      setErr('Password must be at least 6 characters');
+      setLoad(false);
+      return;
+    }
+
+    auth.register(formData)
+    .then(data => {
+      setRes(data);
+      // Redirect or show success message
+      if (data.success) {
+        // You can add react-router navigation here
+        alert("Registration successful! Please login.");
+        window.location.href = '/login';
+      } else {
+        setErr(data.message || "Registration failed");
+      }
+    })
+    .catch(error => {
+      setErr(error.response?.data?.message || error.message || "Registration failed");
+    })
+    .finally(() => {
+      setLoad(false);
+    })
     // fetch(url, {
     //   method: "POST",
     //   body: formData,
