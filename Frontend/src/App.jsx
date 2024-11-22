@@ -11,29 +11,32 @@ function App({outlet}) {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 // get current user
-  useEffect(()=>{
-    ProfileService.getCurrentUser()
-    .then(userData=>{
-    if(userData){
-      dispatch(login(userData));
-    }else{
-        dispatch(logout());
-      }
-    })
-    .catch(error=>{
-      console.log("Error while getting current user :: app.jsx :: useEffect :- "+error);
-    }).finally(()=>{
-      setLoading(false);
-    })
-  },[])
+  // useEffect(()=>{
+  //   ProfileService.getCurrentUser()
+  //   .then(userData=>{
+  //   if(userData){
+  //     dispatch(login(userData));
+  //   }else{
+  //       dispatch(logout());
+  //      }
+  //   })
+  //   .catch(error=>{
+  //     console.log("Error while getting current user :: app.jsx :: useEffect :- "+error);
+  //   }).finally(()=>{
+  //     setLoading(false);
+  //   })
+  // },[])
 // get all products
   useEffect(()=>{
     ProductService.getProductList()
     .then(products=>{
-      console.log("products : "+products);
+      console.log("products : ");
+      console.log(products);
     })
     .catch(error=>{
-      console.log("Error while getting all products :: app.jsx :: useEffect :- " + error);
+      console.log("Error while getting all products :: app.jsx :: useEffect :- \n" + error);
+    }).finally(()=>{
+      setLoading(false);
     })
   },[])
 
@@ -43,7 +46,8 @@ function App({outlet}) {
     <Header/>
       <Container>
         {/* {outlet} */}
-        <Login/>
+        {/* <Login/> */}
+        <h1 className="text-4xl font-bold text-center"> hello world </h1>
       </Container>
     <Footer/>
   </div>

@@ -1,14 +1,97 @@
-import React,{useState} from "react";
-import {useForm} from "react-hook-form"
-
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import onChageHandler from "../../utils/changeHandler.js";
 function Login() {
-  const {register, handleSubmit} = useForm()
-  const [file, setFile] = useState({})
-  const submithandler = data => {
-    setFile(data.image)
-    console.log(file);
-    console.log(data);
+  const { register, handleSubmit } = useForm();
+  const [file, setFile] = useState({});
+  const [loading, setLoad] = useState(false);
+  const [err, setErr] = useState("");
+  const url = `${envConfig.serverBaseURI}/auth/login`;
+  // const changeHandler = (e) => {
+  //   const key = e.target.name;
+  //   const value = e.target.type === "file" ? e.target.files[0] : e.target.value;
+  //   formData.set(key, value);
+  //   console.log("Updated FormData:", Array.from(formData.entries()));
+  // };
+  const changeHandler = async (e) => {
+    const { key, value } = await onChageHandler(e);
+    FormData.set(key, value);
+    console.log("Updated FormData:", Array.from(formData.entries()));
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setLoad(true);
+    setErr("");
+// validate formData before sending to server
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData.get('email'))) {
+    setErr('Invalid email format');
+    setLoad(false);
+    return;
   }
+
+  // Validate mobile number (10 digits)
+  const mobileRegex = /^\d{10}$/;
+  if (!mobileRegex.test(formData.get('mobile'))) {
+    setErr('Mobile number must be 10 digits');
+    setLoad(false);
+    return;
+  }
+
+  // Validate password (min 6 chars)
+  if (formData.get('password').length < 6) {
+    setErr('Password must be at least 6 characters');
+    setLoad(false);
+    return;
+  }
+
+  auth.register(formData)
+  .then(data => {
+    setRes(data);
+    // Redirect or show success message
+    if (data.success) {
+      // You can add react-router navigation here
+      alert("Registration successful! Please login.");
+      window.location.href = '/login';
+    } else {
+      setErr(data.message || "Registration failed");
+    }
+  })
+  .catch(error => {
+    setErr(error.response?.data?.message || error.message || "Registration failed");
+  })
+  .finally(() => {
+    setLoad(false);
+  })
+  // fetch(url, {
+  //   method: "POST",
+  //   body: formData,
+  // })
+  //   .then((response) => {
+  //     if (!response.ok) {
+  //       setErr("Network response was not ok");
+  //       throw new Error("Error occurred");
+  //     }
+  //     return response.json();
+  //   })
+  //   .then((data) => {
+  //     console.log(data);
+  //     setRes(data);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //     setErr("An error occurred: " + error);
+  //   })
+  //   .finally(() => {
+  //     setLoad(false);
+  //     console.log("Loading is set to: ", loading);
+  //   });
+};
+  /*
+  fields are : password, mobile, email
+  */
   return (
     <>
       <div className="container max-w-md mx-auto w-full md:w-3/4 lg:w-1/3">
@@ -16,7 +99,11 @@ function Login() {
           <div className="text-center my-8 sm:mt-6">
             <h1 className="font-thin text-4xl text-amber-950">Login</h1>
           </div>
-          <form action="#"onSubmit={handleSubmit(submithandler)}>
+          <form
+            encType="multipart/form-data"
+            // onSubmit={handleSubmit(submitHandler)}
+            onSubmit={submitHandler}
+          >
             <div className="mt-5">
               <input
                 type="email"
@@ -35,14 +122,6 @@ function Login() {
             </div>
             <div className="mt-5">
               <input
-                type="file"
-                placeholder="image"
-                {...register("image")}
-                className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
-              />
-            </div>
-            <div className="mt-5">
-              <input
                 type="password"
                 placeholder="Password"
                 {...register("password")}
@@ -53,12 +132,15 @@ function Login() {
               <input
                 type="submit"
                 className="border-2 border-white bg-[#c1dd42] text-white py-2 w-full rounded-xl active:bg-[#acc92b] hover:text-white-700 font-semibold active:scale-[1.02]"
-                value = "login"
+                value="login"
               />
             </div>
             <div className="mt-3 flex justify-between items-center">
               <div className="w-full flex items-center justify-between">
-                <a href="#" className="text-rose-600/80 text-sm font-semibold underline">
+                <a
+                  href="#"
+                  className="text-rose-600/80 text-sm font-semibold underline"
+                >
                   New User?
                 </a>
                 {/* <a href="#" className="text-rose-600/40 text-sm font-semibold underline">

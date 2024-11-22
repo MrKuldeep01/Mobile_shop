@@ -3,20 +3,14 @@ import envConfig from "../../Config/envConfig.js";
 class Product {
     async getProductList(){
         try {
-            const url = `${envConfig.serverBaseURI}/products`;
-            const responseData = await fetchData(url);
-            console.log("product list status : "+responseData);
+            const url = `${envConfig.serverBaseURI}/products/`;
+            let responseData = await fetchData(url,{},"get");
+            console.log("response data : ");
+            console.log(responseData);
             return responseData;
             // more work will be here 
         } catch (error) {
-            console.log(
-              "Error while fetching product list data :: product services.js :: services :- " +
-                error
-            );
-            throw new Error(
-              "Error while fetching product list data :: product services.js :: services :- " +
-                error
-            );
+            throw new Error(error);
           }
           return null;
     }
@@ -24,16 +18,13 @@ class Product {
         try {
         // name, desc, model, catagory, price, quantity 
         const url = `${envConfig.serverBaseURI}/products/add`;
+        console.log(url)
         const responseData = await fetchData(url, data);    
         console.log("add product status : "+responseData);
         // more work will be here 
         return responseData;
 
-       } catch (error) {
-            console.log(
-              "Error while adding product data :: product services.js :: services :- " +
-                error
-            );
+       } catch (error) {        
             throw new Error(
               "Error while adding product data :: product services.js :: services :- " +
                 error
