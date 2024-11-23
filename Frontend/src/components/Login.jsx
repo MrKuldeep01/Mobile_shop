@@ -1,32 +1,30 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import onChageHandler from "../../utils/changeHandler.js";
+import envConfig from "../../config/envConfig.js";
 function Login() {
-  const { register, handleSubmit } = useForm();
-  const [file, setFile] = useState({});
   const [loading, setLoad] = useState(false);
+  const [res, setRes] = useState(null);
   const [err, setErr] = useState("");
-  const url = `${envConfig.serverBaseURI}/auth/login`;
+  const [formData, setFormData] = useState({});
+  // const url = `${envConfig.serverBaseURI}/auth/login`;
+
   // const changeHandler = (e) => {
-  //   const key = e.target.name;
-  //   const value = e.target.type === "file" ? e.target.files[0] : e.target.value;
-  //   formData.set(key, value);
+  //   const key = e.ta[name;]  //   const value = e.ta[type ]== "file" ? e.ta[files[]] : e.ta[value;]  //   formData.set(key, value);
   //   console.log("Updated FormData:", Array.from(formData.entries()));
   // };
   const changeHandler = async (e) => {
-    const { key, value } = await onChageHandler(e);
-    FormData.set(key, value);
-    console.log("Updated FormData:", Array.from(formData.entries()));
+    const { key, value } = onChageHandler(e);  
+    setFormData({...formData, [key]: value});  
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
     setLoad(true);
-    setErr("");
+    console.log("submitting");
 // validate formData before sending to server
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(formData.get('email'))) {
+  if (!emailRegex.test(formData['email'])) {
     setErr('Invalid email format');
     setLoad(false);
     return;
@@ -34,37 +32,44 @@ function Login() {
 
   // Validate mobile number (10 digits)
   const mobileRegex = /^\d{10}$/;
-  if (!mobileRegex.test(formData.get('mobile'))) {
+  if (!mobileRegex.test(formData['mobile'])) {
     setErr('Mobile number must be 10 digits');
     setLoad(false);
     return;
   }
 
   // Validate password (min 6 chars)
-  if (formData.get('password').length < 6) {
+  if (formData['password'].length < 6) {
     setErr('Password must be at least 6 characters');
     setLoad(false);
     return;
   }
 
-  auth.register(formData)
+  console.log(formData);
+  // setLoad(false);
+  // setErr("");
+
+  auth.login(formData)
   .then(data => {
-    setRes(data);
-    // Redirect or show success message
+    // setRes(data);
+    console.log("everything is looking good")
+    console.log(data);
     if (data.success) {
       // You can add react-router navigation here
-      alert("Registration successful! Please login.");
-      window.location.href = '/login';
+      alert("Login successful.");
+      window.location.href = '/';
     } else {
-      setErr(data.message || "Registration failed");
+      setErr(data.message || "Login failed");
     }
   })
   .catch(error => {
-    setErr(error.response?.data?.message || error.message || "Registration failed");
+    setErr(error.response?.data?.message || error.message || "Login failed");
   })
   .finally(() => {
     setLoad(false);
   })
+
+
   // fetch(url, {
   //   method: "POST",
   //   body: formData,
@@ -100,7 +105,7 @@ function Login() {
             <h1 className="font-thin text-4xl text-amber-950">Login</h1>
           </div>
           <form
-            encType="multipart/form-data"
+            // encType="multipart/form-data"
             // onSubmit={handleSubmit(submitHandler)}
             onSubmit={submitHandler}
           >
@@ -108,7 +113,8 @@ function Login() {
               <input
                 type="email"
                 placeholder="Email"
-                {...register("email")}
+                name= "email"
+                onChange={changeHandler}
                 className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
               />
             </div>
@@ -116,7 +122,9 @@ function Login() {
               <input
                 type="number"
                 placeholder="Phone no."
-                {...register("mobile")}
+                name= "mobile"
+                minLength={10}
+                onChange={changeHandler}
                 className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
               />
             </div>
@@ -124,9 +132,16 @@ function Login() {
               <input
                 type="password"
                 placeholder="Password"
-                {...register("password")}
+                name= "password"
+                onChange={changeHandler}
+                required
                 className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
               />
+            </div>
+            <div className="mt-5">
+              {err && <p className="text-red-500">{err}</p>}
+              {loading && <p className="text-red-500">Loading...</p>}
+              
             </div>
             <div className="mt-5">
               <input
@@ -144,8 +159,7 @@ function Login() {
                   New User?
                 </a>
                 {/* <a href="#" className="text-rose-600/40 text-sm font-semibold underline">
-                  Forget Password?
-                </a> */}
+                  Fo[Password?]                </a> */}
               </div>
             </div>
           </form>

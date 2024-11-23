@@ -1,7 +1,9 @@
 import React from "react";
 import Logo from "../Logo.jsx";
 import Li from "../Li.jsx";
+import { useSelector } from "react-redux";
 function Header() {
+  const {login} = useSelector(state => state.auth);
   return (
     <>
       <header className="header w-full backdrop-blur-sm h-[100px] py-4 sm:py-6 px-8 sm:px-12  bg-gray-400/40 text-semibold text-[var(--fontPrimaryColor)/50] flex items-center justify-between sticky top-0 left-0 z-50">
@@ -36,7 +38,8 @@ function Header() {
               <i className="ri-search-2-line"></i>
             </li>
 
-            <Li title="you ❤" to="/profile" classes="" activeClasses="" text='' icon={(<i className="ri-user-6-line"></i>)} /> 
+            {login ?  <Li title="you ❤" to="/profile" classes="" activeClasses="" text='' icon={(<i className="ri-user-6-fill"></i>)} /> 
+            : <Li title="login" to="/login" classes="" activeClasses="" text='' icon={(<i className="ri-user-6-line"></i>)} /> }
 
             <Li title="cart 🛒" to="/cart" classes="" activeClasses="" text='' icon={(<i className="ri-shopping-cart-fill"></i>)} />         
            
