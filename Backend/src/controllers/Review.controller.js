@@ -143,7 +143,7 @@ export const removeProductReview = AsyncHandler(async (req, res) => {
   console.log("review is deleted successfully");
   return res
     .status(200)
-    .json(new ApiResponse(200, "Review is removed successfully"));
+    .json(new ApiResponse(200, "Review is removed successfully."));
 });
 
 export const updateProductReview = AsyncHandler(async (req, res) => {

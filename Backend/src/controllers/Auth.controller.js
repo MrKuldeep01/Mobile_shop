@@ -109,7 +109,7 @@ export const register = AsyncHandler(async (req, res) => {
       .json(
         new ApiResponse(
           201,
-          `Registeration for ${newUser.name} is completed successfuly`,
+          `Registeration for ${newUser.name} is completed successfuly.`,
           newUser
         )
       );
@@ -251,7 +251,7 @@ export const login = AsyncHandler(async (req, res) => {
       .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
       .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
       .json(
-        new ApiResponse(201, "User logged in Successfully", authenticatedUser)
+        new ApiResponse(201, "User logged in Successfully.", authenticatedUser)
       );
   }
 });

@@ -1,6 +1,6 @@
 async function fetchData(url, data, method = "POST") {
   try {
-    const options = {
+    let options = {
       method,
     };
     if (data) {

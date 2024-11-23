@@ -86,7 +86,7 @@ export const updateCartQuantity = AsyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        "Cart quantity updated successfully",
+        "Cart quantity updated successfully.",
         updatedProduct
       )
     );
@@ -101,7 +101,7 @@ export const removeProductFromCart = AsyncHandler(async (req, res) => {
   }
   const productId = req.params?.productId;
   if (!productId) {
-    throw new ApiError(400, "bad request, provide product id properly");
+    throw new ApiError(400, "bad request, provide product id properly!");
   }
   const productInCart = await cartModel.findOne({ 
     userId: user._id,

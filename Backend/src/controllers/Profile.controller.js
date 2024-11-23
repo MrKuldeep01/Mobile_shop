@@ -12,7 +12,7 @@ export const getCurrentUser = AsyncHandler(async (req, res) => {
   }
   return res
     .status(200)
-    .json(new ApiResponse(200, "User successfully fetched", user));
+    .json(new ApiResponse(200, "User successfully fetched.", user));
 });
 
 //  password change  PROTECTED /////////✅
@@ -39,12 +39,12 @@ export const passwordChange = AsyncHandler(async (req, res) => {
     ? await ownerModel.findById(currentUser._id)
     : await userModel.findById(currentUser._id);
   if (!user) {
-    throw new ApiError(500, "Faild while changing the password.");
+    throw new ApiError(500, "Faild while changing the password!");
     // 500 for internal server error
   }
   const isPasswordOk = user.checkPassword(prePassword);
   if (!isPasswordOk) {
-    throw new ApiError(401, "Invalid credentials");
+    throw new ApiError(401, "Invalid credentials!");
   }
   user.password = newPassword;
   await user.save({ validateBeforeSave: false });

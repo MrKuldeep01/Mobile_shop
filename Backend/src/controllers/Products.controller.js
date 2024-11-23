@@ -97,7 +97,7 @@ export const editProduct = AsyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        ` ${name} Product edited successfully`,
+        `${name} Product edited successfully.`,
         editedProduct
       )
     );
@@ -116,11 +116,11 @@ export const getProducts = AsyncHandler(async (req, res) => {
       .sort({ createdAt: -1 });
   console.log("getting product list...");
   if (!products) {
-    throw new ApiError("503", `Faild to load products data`);
+    throw new ApiError("503", `Faild to load products data!`);
   }
   return res
     .status(201)
-    .json(new ApiResponse(200, "Product list successfully found",{ products, currentPage: page, totalPages: Math.ceil(totalProducts / limit), totalProducts}));
+    .json(new ApiResponse(200, "Product list successfully found.",{ products, currentPage: page, totalPages: Math.ceil(totalProducts / limit), totalProducts}));
 });
 
 // specific product
@@ -135,7 +135,7 @@ export const getProduct = AsyncHandler(async (req, res) => {
   }
   return res
     .status(201)
-    .json(new ApiResponse(200, "Product found successfully", product));
+    .json(new ApiResponse(200, "Product found successfully.", product));
 });
 
 // delete Product
@@ -150,10 +150,10 @@ export const deleteProduct = AsyncHandler(async (req, res) => {
   console.log(`finding the product ${productId} to delete`);
   const deletedProduct = await productModel.deleteOne({ _id: productId });
   if (!deleteProduct) {
-    throw new ApiError(500, "failed to delete product ", productId);
+    throw new ApiError(500, "failed to delete product!", productId);
   }
   res
     .status(204)
-    .json(new ApiResponse(200, "Product deleted successfully", deletedProduct));
+    .json(new ApiResponse(200, "Product deleted successfully.", deletedProduct));
 });
 // ----------------------------------------------------------------

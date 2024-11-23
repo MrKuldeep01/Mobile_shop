@@ -4,9 +4,8 @@ class Product {
     async getProductList(){
         try {
             const url = `${envConfig.serverBaseURI}/products/`;
-            let responseData = await fetchData(url,{},"get");
-            console.log("response data : ");
-            console.log(responseData);
+            const responseData = await fetchData(url, {},"get");
+            if(responseData){console.log("response data : "+ responseData.success);}
             return responseData;
             // more work will be here 
         } catch (error) {
