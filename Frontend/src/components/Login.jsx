@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import onChageHandler from "../../utils/changeHandler.js";
 import envConfig from "../../config/envConfig.js";
+import { useDispatch } from "react-redux"
+import {login, logout} from "../store/Auth.slice.js"
 function Login() {
   const [loading, setLoad] = useState(false);
-  const [res, setRes] = useState(null);
   const [err, setErr] = useState("");
   const [formData, setFormData] = useState({});
+  const dispatch = useDispatch()
+
   // const url = `${envConfig.serverBaseURI}/auth/login`;
 
   // const changeHandler = (e) => {
@@ -56,6 +59,7 @@ function Login() {
     console.log(data);
     if (data.success) {
       // You can add react-router navigation here
+      dispatch(login(data.data))
       alert("Login successful.");
       window.location.href = '/';
     } else {
@@ -105,8 +109,6 @@ function Login() {
             <h1 className="font-thin text-4xl text-amber-950">Login</h1>
           </div>
           <form
-            // encType="multipart/form-data"
-            // onSubmit={handleSubmit(submitHandler)}
             onSubmit={submitHandler}
           >
             <div className="mt-5">

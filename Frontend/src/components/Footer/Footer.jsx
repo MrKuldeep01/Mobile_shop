@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import  Logo from "../Logo.jsx"
-
-
 function Footer() {
   return (
     <footer className="relative overflow-hidden px-2 py-30 w-full bg-gray-400/10 border border-t-2 border-t-black flex items-center justify-center text-amber-950/80 ">

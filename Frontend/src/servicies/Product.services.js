@@ -1,5 +1,5 @@
 import fetchData from "../../utils/FetchData.js";
-import envConfig from "../../Config/envConfig.js";
+import envConfig from "../../config/envConfig.js";
 class Product {
     async getProductList(){
         try {
@@ -15,7 +15,7 @@ class Product {
     }
     async addProduct(data={}){
         try {
-        // name, desc, model, catagory, price, quantity 
+        // name, desc, model, catagory, price, quantity, image
         const url = `${envConfig.serverBaseURI}/products/add`;
         console.log(url)
         const responseData = await fetchData(url, data);    

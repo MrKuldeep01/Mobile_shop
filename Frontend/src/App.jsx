@@ -2,7 +2,7 @@ import "./index.css";
 import { useDispatch, useSelector} from "react-redux"
 import { useEffect, useState } from "react";
 import { Header,
-  Footer, Login, Home, Register, ProductBanner, Product} from "./components"
+  Footer, AddProduct} from "./components"
 import ProfileService from "./servicies/Profile.services.js";
 import ProductService from "./servicies/Product.services.js";
 import { login, logout } from "./store/Auth.slice.js";
@@ -47,7 +47,8 @@ function App({outlet}) {
       <Container>
         {/* {outlet} */}
         <h1 className="text-4xl font-bold text-center"> Welcome to our website </h1>
-        <Login/>
+        {/* <Login/> */}
+        <AddProduct/>
       </Container>
     <Footer/>
   </div>
