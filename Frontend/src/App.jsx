@@ -1,16 +1,15 @@
 import "./index.css";
-import { useDispatch, useSelector} from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Header,
-  Footer, AddProduct} from "./components"
+import { Header, Footer, AddProducts } from "./components";
 import ProfileService from "./servicies/Profile.services.js";
 import ProductService from "./servicies/Product.services.js";
 import { login, logout } from "./store/Auth.slice.js";
 import Container from "./components/container/Container.jsx";
-function App({outlet}) {
+function App({ outlet }) {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-// get current user
+  // get current user
   // useEffect(()=>{
   //   ProfileService.getCurrentUser()
   //   .then(userData=>{
@@ -27,7 +26,7 @@ function App({outlet}) {
   //   })
   // },[])
 
-// get all products
+  // get all products
   // useEffect(()=>{
   //   ProductService.getProductList()
   //   .then(products=>{
@@ -40,19 +39,24 @@ function App({outlet}) {
   //   })
   // },[])
 
-  return loading ? (<div>Loading...</div>) : (
-<div className="min-h-screen flex flex-wrap content-center">
-  <div className="w-full block">
-    <Header/>
-      <Container>
-        {/* {outlet} */}
-        <h1 className="text-4xl font-bold text-center"> Welcome to our website </h1>
-        {/* <Login/> */}
-        <AddProduct/>
-      </Container>
-    <Footer/>
-  </div>
-</div>
- )
+  return loading ? (
+    <div>Loading...</div>
+  ) : (
+    <div className="min-h-screen flex flex-wrap content-center">
+      <div className="w-full block">
+        <Header />
+        <Container>
+          {/* {outlet} */}
+          <h1 className="text-4xl font-bold text-center">
+            {" "}
+            Welcome to our website{" "}
+          </h1>
+          {/* <Login/> */}
+          <AddProducts/>
+        </Container>
+        <Footer />
+      </div>
+    </div>
+  );
 }
 export default App;

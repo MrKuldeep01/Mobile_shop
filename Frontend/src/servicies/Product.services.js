@@ -54,17 +54,17 @@ class Product {
         try {
             const url = `${envConfig.serverBaseURI}/products/${productId}`;
             const responseData = await fetchData(url);
-            console.log("get product details are : "+responseData);
+            console.log("get product details are : "+ responseData);
             return responseData;
             // more work will be here 
 
         } catch (error) {
             console.log(
-              "Error while fetching product details data :: product services.js :: services :- " +
+              "Error while fetching product details :: product services.js :: services :- " +
                 error
             );
             throw new Error(
-              "Error while fetching product details data :: product services.js :: services :- " +
+              "Error while fetching product details :: product services.js :: services :- " +
                 error
             );
         }
