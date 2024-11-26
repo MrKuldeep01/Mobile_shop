@@ -2,23 +2,21 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux"
 import auth from "../servicies/Auth.services.js"
-import envConfig from "../../Config/envConfig.js";
+import onChangeHandler from "../../utils/changeHandler.js";
 // =================
 
 async function Register() {
-  const [res, setRes] = useState({});
-  const [error, setErr] = useState("");
+  const [err , setErr] = useState("");
   const [loading, setLoad] = useState(false);
   const [formData] = useState(new FormData()); // Move FormData to state
-  
-  const url = `${envConfig.serverBaseURI}/auth/register`;
+  const dispatch = useDispatch();
   const changeHandler = (e) => {
-    const key = e.target.name;
-    const value = e.target.type === "file" ? e.target.files[0] : e.target.value;
+    const {key, value} = onChangeHandler(e);
     formData.set(key, value);
     console.log("Updated FormData:", Array.from(formData.entries()));
   };
   
+  // const url = `${envConfig.serverBaseURI}/auth/register`;
   /*
 name,
     gmail,
@@ -40,7 +38,7 @@ name,
     const requiredFields = ['name', 'gmail', 'mobile', 'gender', 'password'];
     for (const field of requiredFields) {
       if (!formData.get(field)) {
-        setErr(`${field} is required`);
+        setErr(`${field} is required!`);
         setLoad(false);
         return;
       }
@@ -68,24 +66,29 @@ name,
       setLoad(false);
       return;
     }
-
+    // calling services to move further
     auth.register(formData)
-    .then(data => {
-      setRes(data);
+    .then(res => {
+      // setRes(res);      
       // Redirect or show success message
-      if (data.success) {
-        // You can add react-router navigation here
-        alert("Registration successful! Please login.");
-        window.location.href = '/login';
+      console.log(res)
+      if (res.success) {
+        // You can add react-router navigation here        
+        // alert("Registration successful! Please login.");
+        dispatch(login(res.data))
+        // window.location.href = '/login';
+        window.location.href = '/';  // redirection to the home or profile page
+
       } else {
-        setErr(data.message || "Registration failed");
+        setErr(res.message || "Registration failed");
       }
     })
     .catch(error => {
-      setErr(error.response?.data?.message || error.message || "Registration failed");
+      setErr( error.message || "Registration failed");
     })
     .finally(() => {
       setLoad(false);
+      setErr("")
     })
     // fetch(url, {
     //   method: "POST",
@@ -212,14 +215,13 @@ name,
                 className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
               />
             </div>
-            {error && (
-              <p
+            { err && <p
                 role="alert"
                 className="py-2 px-4 bg-white/70 text-red-700 font-semibold text-base my-2 rounded-md"
               >
-                {error}
+                {err}
               </p>
-            )}
+            }
             <div className="submit button mt-5">
               {/* <button
                 type="submit"

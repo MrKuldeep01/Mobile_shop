@@ -16,7 +16,7 @@ const router = createBrowserRouter([
         element: <Login/>
       },
       {
-        path:"regiser",
+        path:"register",
         element: <Register/>
       },
       {
@@ -30,6 +30,7 @@ const router = createBrowserRouter([
     ]
   }
 ])
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
   <Provider store={store}>

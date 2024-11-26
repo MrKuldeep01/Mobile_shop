@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import onChageHandler from "../../utils/changeHandler.js";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux"
 import {login, logout} from "../store/Auth.slice.js"
+
 function Login() {
   const [loading, setLoad] = useState(false);
   const [err, setErr] = useState("");
@@ -153,12 +155,12 @@ function Login() {
             </div>
             <div className="mt-3 flex justify-between items-center">
               <div className="w-full flex items-center justify-between">
-                <a
-                  href="#"
+                <Link
+                  to="/register"
                   className="text-rose-600/80 text-sm font-semibold underline"
                 >
                   New User?
-                </a>
+                </Link>
                 {/* <a href="#" className="text-rose-600/40 text-sm font-semibold underline">
                   Fo[Password?]                </a> */}
               </div>

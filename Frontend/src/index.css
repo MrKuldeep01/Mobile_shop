@@ -14,16 +14,32 @@ body {
   width: 100%;
   background: linear-gradient(45deg, #aa8a8a77,#8d463a6e);
 }
+/* LoadingSpinner.css */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full viewport height */
+}
 
-/* .bubble:after {
-  content: '';
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.5);
+.spinner {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
   border-radius: 50%;
-  width: 100px;
-  height: 100px;
-  position: absolute;
-  top: 20%;
-  left: 20%;
-  filter: blur(20px); 
-} */
+  width: 60px; /* Spinner size */
+  height: 60px; /* Spinner size */
+  animation: spin 1s linear infinite;
+}
+
+p {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #555; /* A soft grey for the text */
+}
+
+/* Animation for the spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

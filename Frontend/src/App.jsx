@@ -1,12 +1,13 @@
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
+import { Outlet } from "react-router-dom"
 import { useEffect, useState } from "react";
-import { Header, Footer, AddProducts } from "./components";
+import { Header, Footer, Register } from "./components";
 import ProfileService from "./servicies/Profile.services.js";
 import ProductService from "./servicies/Product.services.js";
 import { login, logout } from "./store/Auth.slice.js";
 import Container from "./components/container/Container.jsx";
-function App({ outlet }) {
+function App() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   // get current user
@@ -45,14 +46,8 @@ function App({ outlet }) {
     <div className="min-h-screen flex flex-wrap content-center">
       <div className="w-full block">
         <Header />
-        <Container>
-          {/* {outlet} */}
-          <h1 className="text-4xl font-bold text-center">
-            {" "}
-            Welcome to our website{" "}
-          </h1>
-          {/* <Login/> */}
-          <AddProducts/>
+        <Container >
+          <Outlet />
         </Container>
         <Footer />
       </div>
