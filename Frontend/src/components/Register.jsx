@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux"
+import { login } from "../store/Auth.slice.js" 
 import auth from "../servicies/Auth.services.js"
 import onChangeHandler from "../../utils/changeHandler.js";
 // =================
 
-async function Register() {
+function Register() {
   const [err , setErr] = useState("");
   const [loading, setLoad] = useState(false);
-  const [formData] = useState(new FormData()); // Move FormData to state
+  const [formData, setFormData] = useState(new FormData()); 
   const dispatch = useDispatch();
   const changeHandler = (e) => {
     const {key, value} = onChangeHandler(e);
     formData.set(key, value);
     console.log("Updated FormData:", Array.from(formData.entries()));
   };
+  
   
   // const url = `${envConfig.serverBaseURI}/auth/register`;
   /*
@@ -77,10 +79,10 @@ name,
         // alert("Registration successful! Please login.");
         dispatch(login(res.data))
         // window.location.href = '/login';
-        window.location.href = '/';  // redirection to the home or profile page
+        window.location.href = '/me';  // redirection to the home or profile page
 
       } else {
-        setErr(res.message || "Registration failed");
+        setErr(res.message || "Registration failed");        
       }
     })
     .catch(error => {
@@ -135,7 +137,7 @@ name,
                 name="name"
                 required
                 onChange={changeHandler}
-                className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
+                className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibold text-amber-900"
               />
             </div>
             <div className="gmail mt-5">
@@ -145,7 +147,7 @@ name,
                 id="Email"
                 name="gmail"
                 onChange={changeHandler}
-                className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
+                className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibold text-amber-900"
               />
             </div>
             <div className="mobile mt-5">
@@ -155,7 +157,7 @@ name,
                 id="Mobile"
                 name="mobile"
                 onChange={changeHandler}
-                className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
+                className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibold text-amber-900"
               />
             </div>
             <div className=" gender mt-5 w-full flex items-center justify-start gap-2 ">
@@ -212,7 +214,7 @@ name,
                 id="Password"
                 name="password"
                 onChange={changeHandler}
-                className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
+                className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibold text-amber-900"
               />
             </div>
             { err && <p
@@ -238,6 +240,7 @@ name,
               <input
                 type="submit"
                 value="Register"
+                disabled={loading}
                 className="border-2 border-white bg-black text-white py-2 w-full rounded-xl active:bg-white active:text-black font-semibold active:scale-[1.02]"
               />
             </div>

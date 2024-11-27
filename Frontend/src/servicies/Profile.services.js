@@ -1,4 +1,4 @@
-import envConfig from "../../Config/envConfig.js";
+import envConfig from "../../config/envConfig.js"
 import fetchData from "../../utils/FetchData.js";
 class Profile {
   async getCurrentUser() {
@@ -8,14 +8,9 @@ class Profile {
       console.log("currentUser is : " + currentUser);
       return currentUser;
       // further actions as per your requirement
-    } catch (error) {
-      console.log(
-        "Error during getting current user:: profile services.js :: services :- " +
-          error
-      );
+    } catch (error) {     
       throw new Error(
-        "Error during getting current user:: profile services.js :: services :- " +
-          error
+        error
       );
     }
     return null;
@@ -31,10 +26,6 @@ class Profile {
       return responseData;
 
     } catch (error) {
-      console.log(
-        "Error during changing password :: profile services.js :: services :- " +
-          error
-      );
       throw new Error(
         "Error during changing password :: profile services.js :: services :- " +
           error
@@ -52,10 +43,6 @@ class Profile {
       return responseData;
 
     } catch (error) {
-      console.log(
-        "Error during editing details :: profile services.js :: services :- " +
-          error
-      );
       throw new Error(
         "Error during editing details :: profile services.js :: services :- " +
           error

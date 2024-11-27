@@ -10,7 +10,7 @@ import ProductBanner from "./ProductBanner.jsx"
 import Register from "./Register.jsx";
 import EditUser from "./EditUser.jsx";
 import Logo from "./Logo.jsx";
-
+import Profile from "./Profile.jsx"
 
 export {
   Header,
@@ -24,5 +24,6 @@ export {
   Products,
   ProductBanner,
   Register,
-  EditUser
+  EditUser,
+  Profile
 };

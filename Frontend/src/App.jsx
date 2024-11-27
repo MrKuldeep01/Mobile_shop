@@ -11,21 +11,21 @@ function App() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   // get current user
-  // useEffect(()=>{
-  //   ProfileService.getCurrentUser()
-  //   .then(userData=>{
-  //   if(userData){
-  //     dispatch(login(userData));
-  //   }else{
-  //       dispatch(logout());
-  //      }
-  //   })
-  //   .catch(error=>{
-  //     console.log("Error while getting current user :: app.jsx :: useEffect :- "+error);
-  //   }).finally(()=>{
-  //     setLoading(false);
-  //   })
-  // },[])
+  useEffect(()=>{
+    ProfileService.getCurrentUser()
+    .then(response=>{
+    if(response){
+      dispatch(login(response.data));
+    }else{
+        dispatch(logout());
+       }
+    })
+    .catch(error=>{
+      console.log(error);
+    }).finally(()=>{
+      setLoading(false);
+    })
+  },[])
 
   // get all products
   // useEffect(()=>{
