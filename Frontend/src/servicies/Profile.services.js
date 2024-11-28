@@ -1,4 +1,4 @@
-import envConfig from "../../config/envConfig.js"
+import envConfig from "../../config/envConfig.js";
 import fetchData from "../../utils/FetchData.js";
 class Profile {
   async getCurrentUser() {

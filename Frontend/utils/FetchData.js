@@ -23,3 +23,5 @@ async function fetchData(url, data, method = "POST") {
   }
 }
 export default fetchData;
+
+

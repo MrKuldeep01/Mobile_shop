@@ -6,11 +6,9 @@ import { Owner as ownerModel } from "../models/Owner.model.js";
 import constants from "../constants.js";
 export const getCurrentUser = AsyncHandler(async (req, res, next) => {
   const accessToken = await req.cookies?.accessToken;
-  console.log(
-    "fetching user's details...\nAccess is available: ",
-    accessToken.length,
-    "\nSecret is available: ",
-    envConfig.accessTokenSecretKey.length
+  console.log("accessToken : " + accessToken == true,
+    "\nSecret : ",
+    envConfig.accessTokenSecretKey.length 
   );
 
   if (!accessToken) {

@@ -3,7 +3,7 @@ import onChageHandler from "../../utils/changeHandler.js";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux"
 import {login, logout} from "../store/Auth.slice.js"
-
+import auth from "../servicies/Auth.services.js";
 function Login() {
   const [loading, setLoad] = useState(false);
   const [err, setErr] = useState("");
@@ -26,25 +26,53 @@ function Login() {
     setLoad(true);
     console.log("submitting");
 // validate formData before sending to server
+
+    
+
+// Check if either email or mobile is provided
+if (!formData['email'] && !formData['mobile']) {
+  setErr('Either Email or Mobile number is required!');
+  setLoad(false);
+  return;
+}
+
   // Validate email format
+  if(formData['email']){
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(formData['email'])) {
     setErr('Invalid email format');
     setLoad(false);
     return;
   }
-
+  if(formData['mobile']){
+    setErr("No need to fill both email and mobile no.!")
+    setLoad(false)
+    return;
+  }
+}
   // Validate mobile number (10 digits)
+  if(formData['mobile']){
   const mobileRegex = /^\d{10}$/;
   if (!mobileRegex.test(formData['mobile'])) {
     setErr('Mobile number must be 10 digits');
     setLoad(false);
     return;
   }
-
+  if(formData["email"]){
+    setErr("No need to fill both email and mobile no.!")
+    setLoad(false)
+    return;
+  }
+  }
   // Validate password (min 6 chars)
-  if (formData['password'].length < 6) {
-    setErr('Password must be at least 6 characters');
+  if (!formData['password']) {
+    setErr('Password is required!');
+    setLoad(false);
+    return;
+  }
+  
+  if (formData['password'].length < 6 || formData['password'].length > 8) {
+    setErr('Password must be between 6 - 8 characters');
     setLoad(false);
     return;
   }
@@ -62,7 +90,7 @@ function Login() {
       // You can add react-router navigation here
       dispatch(login(data.data))
       alert("Login successful.");
-      window.location.href = '/';
+      window.location.href = '/me';
     } else {
       setErr(data.message || "Login failed");
     }

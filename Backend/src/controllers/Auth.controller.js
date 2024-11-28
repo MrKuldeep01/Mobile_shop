@@ -191,7 +191,7 @@ export const login = AsyncHandler(async (req, res) => {
   // ); 
   if (!(password && (gmail || mobile))) {
     console.log("bhai required fields to bhro phle!");
-    throw new ApiError(406, "You have missed some fields!");
+    throw new ApiError(406, "You have missed required fields!");
     // 406 for unacceptable 
   }
   if (Boolean(isOwner) === true || isOwner == "true") {

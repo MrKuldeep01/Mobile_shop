@@ -20,13 +20,8 @@ class Auth {
       console.log("registered userData  :-  ", userData);
       return userData;
       // setting details to local storage or something else;
-    } catch (error) {
-      console.log(
-        "Error during registeration  :: authServices.js :: services :- " + error
-      );
-      throw new Error(
-        "Error during registeration  :: authServices.js :: services :- " + error
-      );
+    } catch (error) {    
+      throw new Error(error);
     }
     return null;
   }
@@ -37,13 +32,8 @@ class Auth {
       console.log("logged in data is : ", loginUserData);
       return loginUserData;
       // further processing as per requirement
-    } catch (error) {
-      console.log(
-        "Error during login :: authServices.js :: services :- " + error
-      );
-      throw new Error(
-        "Error during login :: authServices.js :: services :- " + error
-      );
+    } catch (error) {    
+      throw new Error(error);
     }
     return null;
   }
@@ -55,13 +45,8 @@ class Auth {
       return status;    
       // future working will be here ...
       
-    } catch (error) {
-      console.log(
-        "Error during logout :: authServices.js :: services :- " + error
-      );
-      throw new Error(
-        "Error during logout :: authServices.js :: services :- " + error
-      );
+    } catch (error) {    
+      throw new Error(error);
     }
     return null;
   }
