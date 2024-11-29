@@ -5,14 +5,14 @@ import { User as userModel } from "../models/User.model.js";
 import constants from "../constants.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
 import cloudinaryUploader from "../utils/Cloudinary.js";
-import { Address as addressModel} from "../models/Address.model.js";
+import { Address as addressModel } from "../models/Address.model.js";
 async function generateTokens(user) {
   console.log("generating tokens...");
   const accessToken = await user.generateAccessToken();
   const refreshToken = await user.generateRefreshToken();
   return { accessToken, refreshToken };
-} 
- 
+}
+
 //MULTER: SINGLE FILE NAMED IMAGE ///////// ✅
 export const register = AsyncHandler(async (req, res) => {
   const {
@@ -26,8 +26,27 @@ export const register = AsyncHandler(async (req, res) => {
     experience,
     isOwner,
   } = req.body;
- 
-  console.log( "At register: \nname ", name, "gmail ", gmail, "mobile ", mobile, "gender ", gender, "password ", password, "address ", address, "rating ", rating, "experience ", experience, "isOwner ", isOwner);
+
+  console.log(
+    "At register: \nname ",
+    name,
+    "gmail ",
+    gmail,
+    "mobile ",
+    mobile,
+    "gender ",
+    gender,
+    "password ",
+    password,
+    "address ",
+    address,
+    "rating ",
+    rating,
+    "experience ",
+    experience,
+    "isOwner ",
+    isOwner
+  );
 
   const requiredField = { name, gmail, mobile, gender, password };
   for (const [key, val] of Object.entries(requiredField)) {
@@ -93,7 +112,7 @@ export const register = AsyncHandler(async (req, res) => {
       throw new ApiError(500, "Error from server while registering!");
     }
     const { accessToken, refreshToken } = await generateTokens(createdUser);
-    console.log("Tokens : available ") /////------------------->
+    console.log("Tokens : available "); /////------------------->
     createdUser.refreshToken = refreshToken;
     await createdUser.save({ validateBeforeSave: false });
     const newUser = await userModel
@@ -130,8 +149,8 @@ export const register = AsyncHandler(async (req, res) => {
     // if(isAnyOwner.length >= 1){
     //   throw new ApiError(406,"Owner already available, please contect with real Owner or Dev. Mr kuldeep.")
     // }
-    rating = rating ? parseInt(rating) : 1
-    experience = experience ? parseInt(experience) : 1
+    rating = rating ? parseInt(rating) : 1;
+    experience = experience ? parseInt(experience) : 1;
     const createdOwner = await ownerModel.create({
       name,
       gmail,
@@ -141,7 +160,7 @@ export const register = AsyncHandler(async (req, res) => {
       address,
       password,
       rating,
-      experience
+      experience,
     });
 
     if (!createdOwner) {
@@ -180,7 +199,13 @@ export const login = AsyncHandler(async (req, res) => {
     assign cookies
   */
 
-  const { gmail, password, mobile, isOwner } = req.body;
+  let { gmail, password, mobile, isOwner } = req.body;
+
+  gmail = gmail ? gmail.trim() : "";
+  password = password ? password.trim() : "";
+  mobile = mobile ? mobile.trim() : "";
+  isOwner = typeof isOwner === "boolean" ? isOwner : isOwner === "true";  
+
   // isOwner = true/false;
   // console.log(
   //   "gmail, password, mobile, isOwner :: ",
@@ -188,14 +213,14 @@ export const login = AsyncHandler(async (req, res) => {
   //   password,
   //   mobile,
   //   isOwner
-  // ); 
-  if (!(password && (gmail || mobile))) {
-    console.log("bhai required fields to bhro phle!");
+  // );
+  if (!password && !(gmail || mobile)) {
     throw new ApiError(406, "You have missed required fields!");
-    // 406 for unacceptable 
+    // 406 for unacceptable
   }
+  const owner = undefined;
   if (Boolean(isOwner) === true || isOwner == "true") {
-    const owner = await ownerModel.findOne({
+    owner = await ownerModel.findOne({
       $or: [{ gmail }, { mobile }],
     });
 
@@ -265,22 +290,20 @@ export const login = AsyncHandler(async (req, res) => {
   clear req.cookies- accessToken & refreshToken
 
 */
-export const logout = AsyncHandler(async(req, res)=>{
-const userCheck = req.user;
-if(!userCheck){
-  throw new ApiError(400, "Bad request, You are not authorized!")
-}
-const dbUser = await (
-  userCheck.isOwner ? ownerModel.findById(userCheck._id) 
-  : userModel.findById(userCheck._id)
-)
-console.log(dbUser , " is logged out.")
-dbUser.refreshToken = null
-await dbUser.save({validateBeforeSave: false})
-return res.status(200)
-.clearCookie("accessToken")
-.clearCookie("refreshToken")
-.json(new ApiResponse(200,"You are logged out now."))
-})
-
-
+export const logout = AsyncHandler(async (req, res) => {
+  const userCheck = req.user;
+  if (!userCheck) {
+    throw new ApiError(400, "Bad request, You are not authorized!");
+  }
+  const dbUser = await (userCheck.isOwner
+    ? ownerModel.findById(userCheck._id)
+    : userModel.findById(userCheck._id));
+  console.log(dbUser, " is logged out.");
+  dbUser.refreshToken = null;
+  await dbUser.save({ validateBeforeSave: false });
+  return res
+    .status(200)
+    .clearCookie("accessToken")
+    .clearCookie("refreshToken")
+    .json(new ApiResponse(200, "You are logged out now."));
+});

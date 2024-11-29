@@ -1,6 +1,7 @@
 import AsyncHandler from "../utils/AsyncHandler.js";
 import { User as userModel } from "../models/User.model.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
+import ApiError from "../utils/ApiError.js";
 
 //_______________________ Profile ______________________//
 
@@ -8,7 +9,7 @@ import { Owner as ownerModel } from "../models/Owner.model.js";
 export const getCurrentUser = AsyncHandler(async (req, res) => {
   const user = req.user;
   if (!user) {
-    res.status(401).redirect("/auth/login");
+    throw new ApiError(401, "Current user not found!");
   }
   return res
     .status(200)
@@ -24,7 +25,6 @@ export const getCurrentUser = AsyncHandler(async (req, res) => {
   - all good
   */
 export const passwordChange = AsyncHandler(async (req, res) => {
-
   // get previous Password, gmail/mobile, newPassword;
   // check for correction
   // overwrite the password value with newPassword
@@ -60,7 +60,7 @@ export const passwordChange = AsyncHandler(async (req, res) => {
  newGmail, newMobile, localAddress, city, postCode, state, experience 
 */
 export const editUser = AsyncHandler(async (req, res) => {
-  // newGmail, newMobile, localAddress, city, postCode, state, experience 
+  // newGmail, newMobile, localAddress, city, postCode, state, experience
   let { newGmail, newMobile, localAddress, city, postCode, state, experience } =
     req.body;
 

@@ -1,27 +1,21 @@
-async function fetchData(url, data, method = "POST") {
+async function fetchData(url, data = null, method = "POST") {
   try {
     let options = {
-      method,
+      method: method.toUpperCase(),
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
-    if (data) {
-      options.body = data;
+    if (data && method.toUpperCase() !== "GET") {
+      options.body = JSON.stringify(data);
     }
-    if(method === "get"){
-      options={};
+    let res = await fetch(url, options);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
     }
-    // console.log(options);
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    const responseData = await response.json();
-    console.log(responseData);
-    return responseData;
-  } catch (error) {
-    // console.log(error);
-    throw new Error("Error occurred in fetch call!" + error);
+    return await res.json();
+  } catch (error) {  
+    throw new Error("Error in fetch call: " + error.message);
   }
 }
 export default fetchData;
-
-

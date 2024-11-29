@@ -3,25 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom"
 import { useEffect, useState } from "react";
 import { Header, Footer, Register } from "./components";
-import ProfileService from "./servicies/Profile.services.js";
+import Profile from "./servicies/Profile.services.js";
 import ProductService from "./servicies/Product.services.js";
+import Loading from "./components/Loading.jsx"
 import { login, logout } from "./store/Auth.slice.js";
 import Container from "./components/container/Container.jsx";
 function App() {
   const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState('')
   const dispatch = useDispatch();
   // get current user
   useEffect(()=>{
-    ProfileService.getCurrentUser()
+    setLoading(true)
+    Profile.getCurrentUser()
     .then(response=>{
-    if(response){
+    if(response?.success){
       dispatch(login(response.data));
     }else{
         dispatch(logout());
        }
     })
     .catch(error=>{
-      console.log(error);
+      setErr(err)
     }).finally(()=>{
       setLoading(false);
     })
@@ -39,9 +42,9 @@ function App() {
   //     setLoading(false);
   //   })
   // },[])
-
+  
   return loading ? (
-    <div>Loading...</div>
+    <Loading/>
   ) : (
     <div className="min-h-screen flex flex-wrap content-center">
       <div className="w-full block">

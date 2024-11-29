@@ -1,4 +1,4 @@
-import envConfig from "../../Config/envConfig.js";
+import envConfig from "../../config/envConfig.js";
 import fetchData from "../../utils/FetchData.js";
 class Auth {
   async register(formData = {}) {
@@ -26,9 +26,10 @@ class Auth {
     return null;
   }
   async login(formData = {}) {
+    // gmail || mobile, password
     try {
       const url = `${envConfig.serverBaseURI}/auth/login`;
-      const loginUserData = await fetchData(url, formData, "POST");
+      const loginUserData = await fetchData(url, formData);
       console.log("logged in data is : ", loginUserData);
       return loginUserData;
       // further processing as per requirement
