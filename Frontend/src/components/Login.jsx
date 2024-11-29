@@ -27,23 +27,23 @@ function Login() {
     console.log("submitting");
     // validate formData before sending to server
 
-    // Check if either email or mobile is provided
-    if (!formData["email"] && !formData["mobile"]) {
-      setErr("Either Email or Mobile number is required!");
+    // Check if either gmail or mobile is provided
+    if (!formData["gmail"] && !formData["mobile"]) {
+      setErr("Either Gmail or Mobile number is required!");
       setLoad(false);
       return;
     }
 
     // Validate email format
-    if (formData["email"]) {
+    if (formData["gmail"]) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData["email"])) {
-        setErr("Invalid email format");
+      if (!emailRegex.test(formData["gmail"])) {
+        setErr("Invalid gmail format");
         setLoad(false);
         return;
       }
       if (formData["mobile"]) {
-        setErr("No need to fill both email and mobile no.!");
+        setErr("No need to fill both gmail and mobile no.!");
         setLoad(false);
         return;
       }
@@ -56,8 +56,8 @@ function Login() {
         setLoad(false);
         return;
       }
-      if (formData["email"]) {
-        setErr("No need to fill both email and mobile no.!");
+      if (formData["gmail"]) {
+        setErr("No need to fill both gmail and mobile no.!");
         setLoad(false);
         return;
       }
@@ -91,14 +91,15 @@ function Login() {
           alert("Login successful.");
           window.location.href = "/me";
         } else {
-          setErr(data.message || "Login failed");
+          setErr(data.message || "Login failed!");
         }
       })
       .catch((error) => {
-        throw error;
+        setErr(error.message || "Login failed!")
       })
       .finally(() => {
         setLoad(false);
+        setErr("")
       });
 
     // fetch(url, {
@@ -126,7 +127,7 @@ function Login() {
     //   });
   };
   /*
-  fields are : password, mobile, email
+  fields are : password, mobile, gmail
   */
   return (
     <>
@@ -140,7 +141,7 @@ function Login() {
               <input
                 type="email"
                 placeholder="Email"
-                name="email"
+                name="gmail"
                 onChange={changeHandler}
                 className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
               />
@@ -170,6 +171,7 @@ function Login() {
                 name="isOwner"
                 id="isOwner"
                 className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibool text-amber-900"
+                onChange={changeHandler}
               >
                 <option>select your profile :-</option>
                 <option value="no">user</option>
@@ -181,11 +183,12 @@ function Login() {
               {loading && <p className="text-red-500">Loading...</p>}
             </div>
             <div className="mt-5">
-              <input
-                type="submit"
-                className="border-2 border-white bg-[#c1dd42] text-white py-2 w-full rounded-xl active:bg-[#acc92b] hover:text-white-700 font-semibold active:scale-[1.02]"
-                value="login"
-              />
+            <input
+            type="submit"
+            className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
+            value={"Loading"}
+          />
+           
             </div>
             <div className="mt-3 flex justify-between items-center">
               <div className="w-full flex items-center justify-between">

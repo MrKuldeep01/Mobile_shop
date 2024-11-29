@@ -27,27 +27,6 @@ export const register = AsyncHandler(async (req, res) => {
     isOwner,
   } = req.body;
 
-  console.log(
-    "At register: \nname ",
-    name,
-    "gmail ",
-    gmail,
-    "mobile ",
-    mobile,
-    "gender ",
-    gender,
-    "password ",
-    password,
-    "address ",
-    address,
-    "rating ",
-    rating,
-    "experience ",
-    experience,
-    "isOwner ",
-    isOwner
-  );
-
   const requiredField = { name, gmail, mobile, gender, password };
   for (const [key, val] of Object.entries(requiredField)) {
     if (key?.val?.trim() === "") {
@@ -111,8 +90,7 @@ export const register = AsyncHandler(async (req, res) => {
     if (!createdUser) {
       throw new ApiError(500, "Error from server while registering!");
     }
-    const { accessToken, refreshToken } = await generateTokens(createdUser);
-    console.log("Tokens : available "); /////------------------->
+    const { accessToken, refreshToken } = await generateTokens(createdUser);   
     createdUser.refreshToken = refreshToken;
     await createdUser.save({ validateBeforeSave: false });
     const newUser = await userModel
@@ -200,20 +178,12 @@ export const login = AsyncHandler(async (req, res) => {
   */
 
   let { gmail, password, mobile, isOwner } = req.body;
-
   gmail = gmail ? gmail.trim() : "";
   password = password ? password.trim() : "";
   mobile = mobile ? mobile.trim() : "";
   isOwner = typeof isOwner === "boolean" ? isOwner : isOwner === "true";  
-
   // isOwner = true/false;
-  // console.log(
-  //   "gmail, password, mobile, isOwner :: ",
-  //   gmail,
-  //   password,
-  //   mobile,
-  //   isOwner
-  // );
+  
   if (!password && !(gmail || mobile)) {
     throw new ApiError(406, "You have missed required fields!");
     // 406 for unacceptable
@@ -253,7 +223,7 @@ export const login = AsyncHandler(async (req, res) => {
       );
   } else {
     const user = await userModel.findOne({
-      $or: [{ gmail }, { mobile }],
+      $or: [{mobile},{ gmail }],
     });
     if (!user) {
       throw new ApiError(401, "you are not valid user, please register first!");
@@ -267,10 +237,10 @@ export const login = AsyncHandler(async (req, res) => {
     const { accessToken, refreshToken } = await generateTokens(user);
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
+
     const authenticatedUser = await userModel
       .findById(user._id)
-      .select(" -password -refreshToken ");
-
+      .select(" -password -refreshToken ");  
     return res
       .status(200)
       .cookie("accessToken", accessToken, constants.ATOptionsForCookies)

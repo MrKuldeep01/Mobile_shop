@@ -7,10 +7,7 @@ import constants from "../constants.js";
 // import ApiError from "../utils/ApiError.js";
 export const getCurrentUser = AsyncHandler(async (req, res, next) => {
   const accessToken = await req.cookies?.accessToken;
-  console.log(accessToken)
   if (!accessToken) {
-    console.log("access Token is not available");
-    // throw new ApiError(401,"Current user not found!")
     return res.status(401).json({
       success: false,
       message: "Unauthorized access. Please login first.",
