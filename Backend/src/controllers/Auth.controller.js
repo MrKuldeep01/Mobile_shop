@@ -90,7 +90,7 @@ export const register = AsyncHandler(async (req, res) => {
     if (!createdUser) {
       throw new ApiError(500, "Error from server while registering!");
     }
-    const { accessToken, refreshToken } = await generateTokens(createdUser);   
+    const { accessToken, refreshToken } = await generateTokens(createdUser);
     createdUser.refreshToken = refreshToken;
     await createdUser.save({ validateBeforeSave: false });
     const newUser = await userModel
@@ -180,10 +180,10 @@ export const login = AsyncHandler(async (req, res) => {
   let { gmail, password, mobile, isOwner } = req.body;
   gmail = gmail ? gmail.trim() : "";
   password = password ? password.trim() : "";
-  mobile = mobile ? mobile.trim() : "";
-  isOwner = typeof isOwner === "boolean" ? isOwner : isOwner === "true";  
+  mobile = mobile ? Number(mobile.trim()) : "";
+  isOwner = typeof isOwner === "boolean" ? isOwner : isOwner === "true";
   // isOwner = true/false;
-  
+
   if (!password && !(gmail || mobile)) {
     throw new ApiError(406, "You have missed required fields!");
     // 406 for unacceptable
@@ -223,14 +223,14 @@ export const login = AsyncHandler(async (req, res) => {
       );
   } else {
     const user = await userModel.findOne({
-      $or: [{mobile},{ gmail }],
+      $or: [{ mobile }, { gmail }],
     });
     if (!user) {
       throw new ApiError(401, "you are not valid user, please register first!");
     }
     const isPasswordOk = await user.checkPassword(password);
     console.log("entered password is : ", isPasswordOk);
-    if (!isPasswordOk) {
+    if (!isPasswordOk) { 
       throw new ApiError(402, "Check the fields and fill with care!");
     }
 
@@ -240,13 +240,14 @@ export const login = AsyncHandler(async (req, res) => {
 
     const authenticatedUser = await userModel
       .findById(user._id)
-      .select(" -password -refreshToken ");  
+      .select(" -password -refreshToken ");
+    console.log(authenticatedUser);
     return res
       .status(200)
       .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
       .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
       .json(
-        new ApiResponse(201, "User logged in Successfully.", authenticatedUser)
+        new ApiResponse(201, `User ${authenticatedUser.name} is Loged in now.`, authenticatedUser)
       );
   }
 });

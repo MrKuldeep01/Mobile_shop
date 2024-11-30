@@ -9,11 +9,11 @@ address,
 image
 */
 function Profile() {
-  const userData = useSelector((state) => state.userData);
+  const userData = useSelector((state) => state);
+ 
   // const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
-  
-  if (!userData) {
+    if (!userData) {
     setErr("You are fake !");
     console.log("You are fake! user data not found");
     // window.location.href = "/"

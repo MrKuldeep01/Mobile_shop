@@ -4,10 +4,11 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import constants from "./constants.js";
 const app = express();
-app.use(cors({ origin: envConfig.allowed_Origin }));
+// app.use(cors({ origin: envConfig.allowed_Origin }));
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.urlencoded({ extended: true, limit: "32kb" }));
 app.use(express.static("public"));
 
 import homeRouter from "./routes/Home.route.js";

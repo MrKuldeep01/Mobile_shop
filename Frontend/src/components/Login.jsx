@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import onChageHandler from "../../utils/changeHandler.js";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { login, logout } from "../store/Auth.slice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../store/Auth.slice.js";
 import auth from "../servicies/Auth.services.js";
 function Login() {
   const [loading, setLoad] = useState(false);
   const [err, setErr] = useState("");
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
-
+  const userDataFromSlice = useSelector((state) => state.auth.userData);
   // const url = `${envConfig.serverBaseURI}/auth/login`;
-
   // const changeHandler = (e) => {
   //   const key = e.ta[name;]  //   const value = e.ta[type ]== "file" ? e.ta[files[]] : e.ta[value;]  //   formData.set(key, value);
   //   console.log("Updated FormData:", Array.from(formData.entries()));
@@ -25,16 +24,11 @@ function Login() {
     e.preventDefault();
     setLoad(true);
     console.log("submitting");
-    // validate formData before sending to server
-
-    // Check if either gmail or mobile is provided
     if (!formData["gmail"] && !formData["mobile"]) {
       setErr("Either Gmail or Mobile number is required!");
       setLoad(false);
       return;
     }
-
-    // Validate email format
     if (formData["gmail"]) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formData["gmail"])) {
@@ -48,7 +42,6 @@ function Login() {
         return;
       }
     }
-    // Validate mobile number (10 digits)
     if (formData["mobile"]) {
       const mobileRegex = /^\d{10}$/;
       if (!mobileRegex.test(formData["mobile"])) {
@@ -62,13 +55,11 @@ function Login() {
         return;
       }
     }
-    // Validate password (min 6 chars)
     if (!formData["password"]) {
       setErr("Password is required!");
       setLoad(false);
       return;
     }
-
     if (formData["password"].length < 6 || formData["password"].length > 8) {
       setErr("Password must be between 6 - 8 characters");
       setLoad(false);
@@ -78,28 +69,28 @@ function Login() {
     console.log(formData);
     // setLoad(false);
     // setErr("");
-
     auth
       .login(formData)
-      .then((data) => {
-        // setRes(data);
+      .then((res) => {
+        // setRes(res);
         console.log("everything is looking good");
-        console.log(data);
-        if (data.success) {
-          // You can add react-router navigation here
-          dispatch(login(data.data));
+        console.log(res);
+
+        if (res.success) {
+          dispatch(login(res.data));
           alert("Login successful.");
-          window.location.href = "/me";
+          // window.location.href = "/me";
+          console.log(userDataFromSlice);
         } else {
           setErr(data.message || "Login failed!");
         }
       })
       .catch((error) => {
-        setErr(error.message || "Login failed!")
+        setErr(error.message || "Login failed!");
       })
       .finally(() => {
         setLoad(false);
-        setErr("")
+        setErr("");
       });
 
     // fetch(url, {
@@ -183,12 +174,11 @@ function Login() {
               {loading && <p className="text-red-500">Loading...</p>}
             </div>
             <div className="mt-5">
-            <input
-            type="submit"
-            className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
-            value={"Loading"}
-          />
-           
+              <input
+                type="submit"
+                className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
+                value={"Loading"}
+              />
             </div>
             <div className="mt-3 flex justify-between items-center">
               <div className="w-full flex items-center justify-between">
