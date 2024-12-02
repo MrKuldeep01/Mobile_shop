@@ -4,8 +4,11 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import constants from "./constants.js";
 const app = express();
-// app.use(cors({ origin: envConfig.allowed_Origin }));
-app.use(cors());
+app.use(cors({ 
+    origin: envConfig.allowed_Origin,
+    credentials: true, // Allow cookies to be sent
+ }));
+// app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "32kb" }));

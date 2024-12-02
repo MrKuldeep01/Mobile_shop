@@ -2,6 +2,7 @@ async function fetchData(url, data = null, method = "POST") {
   try {
     let options = {
       method: method.toUpperCase(),
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -14,7 +15,7 @@ async function fetchData(url, data = null, method = "POST") {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
     return await res.json();
-  } catch (error) {  
+  } catch (error) {
     throw new Error("Error in fetch call: " + error.message);
   }
 }

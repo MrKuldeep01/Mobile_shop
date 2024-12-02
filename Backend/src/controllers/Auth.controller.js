@@ -241,7 +241,7 @@ export const login = AsyncHandler(async (req, res) => {
     const authenticatedUser = await userModel
       .findById(user._id)
       .select(" -password -refreshToken ");
-    console.log(authenticatedUser);
+
     return res
       .status(200)
       .cookie("accessToken", accessToken, constants.ATOptionsForCookies)

@@ -8,10 +8,12 @@ import ProductService from "./servicies/Product.services.js";
 import Loading from "./components/Loading.jsx"
 import { login, logout } from "./store/Auth.slice.js";
 import Container from "./components/container/Container.jsx";
+import { useNavigate } from "react-router-dom";
 function App() {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState('')
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // get current user
   useEffect(()=>{
     setLoading(true)
@@ -19,14 +21,20 @@ function App() {
     .then(response=>{
     if(response?.success){
       dispatch(login(response.data));
+      console.log("authenticated")
+      navigate('/me')
+
     }else{
-        dispatch(logout());
+      dispatch(logout());
+      console.log("not authenticated")
+      navigate('/')
        }
     })
-    .catch(error=>{
+    .catch(err=>{
       setErr(err)
     }).finally(()=>{
       setLoading(false);
+      console.log(err);
     })
   },[])
 

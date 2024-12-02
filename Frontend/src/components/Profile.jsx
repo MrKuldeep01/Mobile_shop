@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-
+import { Link } from "react-router-dom";
+import Loading from "./Loading.jsx";
+import { useNavigate } from "react-router-dom";
+import profile from "../servicies/Profile.services.js";
 /*name,
 gmail,
 mobile,
@@ -9,21 +12,42 @@ address,
 image
 */
 function Profile() {
-  const userData = useSelector((state) => state);
- 
-  // const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const userData = useSelector((state) => state.auth.userData);
+  const [load, setLoading] = useState(false);
   const [err, setErr] = useState("");
-    if (!userData) {
-    setErr("You are fake !");
-    console.log("You are fake! user data not found");
-    // window.location.href = "/"
+  useEffect(()=>{
+    setLoading(true)
+    Profile.getCurrentUser()
+    .then(response=>{
+    if(response?.success){
+      dispatch(login(response.data));
+      console.log("now available!")
+    }else{
+      dispatch(logout());
+      console.log("not authenticated at all!")
+      navigate('/')
+       }
+    })
+    .catch(err=>{
+      setErr(err)
+    }).finally(()=>{
+      setLoading(false);
+      console.log(err);
+    })
+  },[])
+  if (!userData) {
+    setErr("Not authenticated!");
+    setLoading(false);
+    
   } else {
-    console.log(userData);
+    console.log("user data status : ",userData && true);
+    setLoading(false);
   }
-  return err ? (
-    <div className="text-center my-8 sm:mt-6">
-      <h1 className="font-semibold m-40 text-6xl text-amber-950"> {err} </h1>
-    </div>
+
+
+  return load ? (
+    <Loading />
   ) : (
     <div className="container max-w-md mx-auto w-full md:w-3/4 lg:w-1/3">
       <div className="hero max-w-[90%] justify-center items-center mx-auto my-6 bg-zinc-300/10 px-8 sm:px-14 py-4 sm:py-8 md:py-14 rounded-3xl shadow-2xl">
@@ -33,9 +57,9 @@ function Profile() {
 
         <div className="profile-image mb-8 flex justify-center">
           <img
-            src={userData.image}
+            src={userData?.image}
             alt="Profile"
-            className="w-32 h-32 rounded-full border-4 border-amber-900"
+            className="size-32 rounded-full border-4 border-amber-900"
           />
         </div>
         {err && (
@@ -50,41 +74,42 @@ function Profile() {
           <div className="detail-item">
             <label className="text-amber-900 font-semibold">Name:</label>
             <p className="p-2 rounded-md bg-white/70 font-semibold text-amber-900">
-              {userData.name}
+              {userData?.name}
             </p>
           </div>
 
           <div className="detail-item">
             <label className="text-amber-900 font-semibold">Email:</label>
             <p className="p-2 rounded-md bg-white/70 font-semibold text-amber-900">
-              {userData.gmail}
+              {userData?.gmail}
             </p>
           </div>
 
           <div className="detail-item">
             <label className="text-amber-900 font-semibold">Phone:</label>
             <p className="p-2 rounded-md bg-white/70 font-semibold text-amber-900">
-              {userData.mobile}
+              {userData?.mobile}
             </p>
           </div>
-
-          <div className="detail-item">
-            <label className="text-amber-900 font-semibold">Gender:</label>
-            <p className="p-2 rounded-md bg-white/70 font-semibold text-amber-900">
-              {userData.gender}
-            </p>
-          </div>
-
-          {/* <div className="detail-item">
+          {/* <div className="detail-item"> // address
             <label className="text-amber-900 font-semibold">Address:</label>
             <p className="p-2 rounded-md bg-white/70 font-semibold text-amber-900">123 Main St, Anytown, USA</p>
           </div> */}
+          <div className="detail-item">
+            <label className="text-amber-900 font-semibold">Gender:</label>
+            <p className="p-2 rounded-md bg-white/70 font-semibold text-amber-900">
+              {userData?.gender}
+            </p>
+          </div>
         </div>
 
         <div className="mt-8">
-          <button className="border-2 border-white bg-black text-white py-2 w-full rounded-xl active:bg-white active:text-black font-semibold active:scale-[1.02]">
+          <Link
+            to="me/edit"
+            className="border-2 block border-white bg-black text-white py-2 w-full rounded-xl active:bg-white active:text-black font-semibold active:scale-[1.02]"
+          >
             Edit Profile
-          </button>
+          </Link>
         </div>
       </div>
     </div>

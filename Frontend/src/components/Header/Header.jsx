@@ -1,9 +1,12 @@
 import React from "react";
 import Logo from "../Logo.jsx";
 import Li from "../Li.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../store/Auth.slice.js";
 function Header() {
-  const login = useSelector((state) => state.authStatus);
+  const login = useSelector((state) => state.auth.authStatus);
+  const dispatch = useDispatch();
+
   return (
     <>
       <header className="header w-full backdrop-blur-sm h-[100px] py-4 sm:py-6 px-8 sm:px-12  bg-gray-400/40 text-semibold text-[var(--fontPrimaryColor)/50] flex items-center justify-between sticky top-0 left-0 z-50">
@@ -59,9 +62,12 @@ function Header() {
 
             {login ? (
               <Li
-                title="you ❤"
-                to="/me"
+                title="logout"
+                to="/exit"
                 icon={<i className="ri-user-6-fill"></i>}
+                onClick={(e)=>{
+                  dispatch(logout())
+                }}
               />
             ) : (
               <Li

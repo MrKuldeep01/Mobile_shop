@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import onChageHandler from "../../utils/changeHandler.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/Auth.slice.js";
 import auth from "../servicies/Auth.services.js";
@@ -9,6 +9,7 @@ function Login() {
   const [err, setErr] = useState("");
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userDataFromSlice = useSelector((state) => state.auth.userData);
   // const url = `${envConfig.serverBaseURI}/auth/login`;
   // const changeHandler = (e) => {
@@ -78,9 +79,9 @@ function Login() {
 
         if (res.success) {
           dispatch(login(res.data));
-          alert("Login successful.");
-          // window.location.href = "/me";
           console.log(userDataFromSlice);
+          alert("Login successful. state is printed in console.");
+          navigate("/me");
         } else {
           setErr(data.message || "Login failed!");
         }
@@ -177,7 +178,7 @@ function Login() {
               <input
                 type="submit"
                 className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
-                value={"Loading"}
+                value={"Login"}
               />
             </div>
             <div className="mt-3 flex justify-between items-center">
