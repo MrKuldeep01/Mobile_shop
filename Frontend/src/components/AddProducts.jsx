@@ -3,7 +3,7 @@ import onChangeHandler from "../../utils/changeHandler.js";
 import product from "../servicies/Product.services.js";
 import { useDispatch } from "react-redux";
 import { setProduct } from "../store/Product.slice.js";
-
+import Loading from "./Loading.jsx"
 const AddProducts = ({ productId = undefined }) => {
   // name, desc, model, catagory, price, quantity
   const [loading, setLoad] = useState(false);
@@ -192,7 +192,7 @@ const AddProducts = ({ productId = undefined }) => {
       </div>
     </div>
   ) : (
-    <div className="loading">Loading...</div>
+    <Loading/>
   );
 };
 

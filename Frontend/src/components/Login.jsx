@@ -10,7 +10,6 @@ function Login() {
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userDataFromSlice = useSelector((state) => state.auth.userData);
   // const url = `${envConfig.serverBaseURI}/auth/login`;
   // const changeHandler = (e) => {
   //   const key = e.ta[name;]  //   const value = e.ta[type ]== "file" ? e.ta[files[]] : e.ta[value;]  //   formData.set(key, value);
@@ -24,7 +23,7 @@ function Login() {
   const submitHandler = (e) => {
     e.preventDefault();
     setLoad(true);
-    console.log("submitting");
+    console.log("submitting...");
     if (!formData["gmail"] && !formData["mobile"]) {
       setErr("Either Gmail or Mobile number is required!");
       setLoad(false);
@@ -66,7 +65,6 @@ function Login() {
       setLoad(false);
       return;
     }
-
     console.log(formData);
     // setLoad(false);
     // setErr("");
@@ -74,12 +72,8 @@ function Login() {
       .login(formData)
       .then((res) => {
         // setRes(res);
-        console.log("everything is looking good");
-        console.log(res);
-
         if (res.success) {
           dispatch(login(res.data));
-          console.log(userDataFromSlice);
           alert("Login successful. state is printed in console.");
           navigate("/me");
         } else {

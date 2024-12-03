@@ -1,6 +1,6 @@
 const dataBaseName = "MobileShop";
-const accessTokenExpiry = 24 * 60 * 60; 
-const refreshTokenExpiry = 24 * 60 * 60 * 10;
+const accessTokenExpiry = 24 * 60 * 60 * 14; 
+const refreshTokenExpiry = 24 * 60 * 60 * 30;
 const bcryptRound = 12;
 const ATOptionsForCookies = {
   maxAge: accessTokenExpiry * 1000,

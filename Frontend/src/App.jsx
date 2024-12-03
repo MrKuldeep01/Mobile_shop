@@ -34,7 +34,6 @@ function App() {
       setErr(err)
     }).finally(()=>{
       setLoading(false);
-      console.log(err);
     })
   },[])
 

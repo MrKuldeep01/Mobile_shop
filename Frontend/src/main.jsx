@@ -21,12 +21,15 @@ const router = createBrowserRouter([
       },
       {
         path:"me",
-        element: <Profile/>,
         children:[
+          {
+            path:"",
+            element:<Profile/>
+          },
           {
             path:"edit",
             element:<EditProfile/>
-          }
+          },
         ]
 
       },

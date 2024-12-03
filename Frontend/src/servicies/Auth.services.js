@@ -30,7 +30,6 @@ class Auth {
     try {
       const url = `${envConfig.serverBaseURI}/auth/login`;
       const loginUserData = await fetchData(url, formData);
-      console.log("logged in data is : ", loginUserData);
       return loginUserData;
       // further processing as per requirement
     } catch (error) {    
@@ -42,7 +41,7 @@ class Auth {
     try {
       const url = `${envConfig.serverBaseURI}/auth/logout`;
       const status = await fetchData(url);
-      console.log("your logout status is : " + status);
+      console.log("your logout status is : " + status.message);
       return status;    
       // future working will be here ...
       
