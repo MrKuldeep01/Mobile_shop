@@ -56,9 +56,8 @@ const userSchema = new mongoose.Schema(
       enum: ["male", "female", "other"],
       required: true,
     },
-    addressId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref:"Address"
+    address: {
+      type: String,
     },
     theme:{
       type:String,

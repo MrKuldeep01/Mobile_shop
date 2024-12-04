@@ -4,8 +4,11 @@ import product from "../servicies/Product.services.js";
 import { useDispatch } from "react-redux";
 import { setProduct } from "../store/Product.slice.js";
 import Loading from "./Loading.jsx"
-const AddProducts = ({ productId = undefined }) => {
+import { useParams } from "react-router-dom";
+const AddProducts = () => {
   // name, desc, model, catagory, price, quantity
+  // give me product id if you wanna use me as edit component
+  const {productId} = useParams() ;
   const [loading, setLoad] = useState(false);
   const [err, setErr] = useState("");
   const [formData, setFormData] = useState({});
@@ -39,7 +42,7 @@ const AddProducts = ({ productId = undefined }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     // validations
-    if (!formData.name && !formData.desc) {
+    if (!formData.name && !formData.desc && !formData.image) {
       setErr("Please provide required information!");
     }
     (productId

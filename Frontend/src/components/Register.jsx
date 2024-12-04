@@ -1,24 +1,24 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux"
 import { login } from "../store/Auth.slice.js" 
 import auth from "../servicies/Auth.services.js"
+
 import onChangeHandler from "../../utils/changeHandler.js";
 // =================
 
 function Register() {
   const [err , setErr] = useState("");
   const [loading, setLoad] = useState(false);
-  const [formData, setFormData] = useState(new FormData()); 
+  // const [formData, setFormData] = useState(new FormData()); 
+  const [formData, setFormData] = useState({}); 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const changeHandler = (e) => {
     const {key, value} = onChangeHandler(e);
-    formData.set(key, value);
-    console.log("Updated FormData:", Array.from(formData.entries()));
-  };
-  
-  
-  // const url = `${envConfig.serverBaseURI}/auth/register`;
+    // formData.set(key, value);
+    setFormData({...formData,[key]:value})
+  };  
   /*
 name,
     gmail,
@@ -39,7 +39,7 @@ name,
     // Validate required fields
     const requiredFields = ['name', 'gmail', 'mobile', 'gender', 'password'];
     for (const field of requiredFields) {
-      if (!formData.get(field)) {
+      if (!formData[field]) {
         setErr(`${field} is required!`);
         setLoad(false);
         return;
@@ -48,7 +48,7 @@ name,
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.get('gmail'))) {
+    if (!emailRegex.test(formData['gmail'])) {
       setErr('Invalid email format');
       setLoad(false);
       return;
@@ -56,30 +56,30 @@ name,
 
     // Validate mobile number (10 digits)
     const mobileRegex = /^\d{10}$/;
-    if (!mobileRegex.test(formData.get('mobile'))) {
+    if (!mobileRegex.test(formData['mobile'])) {
       setErr('Mobile number must be 10 digits');
       setLoad(false);
       return;
     }
 
     // Validate password (min 6 chars)
-    if (formData.get('password').length < 6) {
+    if (formData['password'].length < 6) {
       setErr('Password must be at least 6 characters');
       setLoad(false);
       return;
     }
+    console.log(formData) // testing 
     // calling services to move further
     auth.register(formData)
     .then(res => {
       // setRes(res);      
       // Redirect or show success message
-      console.log(res)
       if (res.success) {
         // You can add react-router navigation here        
         // alert("Registration successful! Please login.");
         dispatch(login(res.data))
         // window.location.href = '/login';
-        window.location.href = '/me';  // redirection to the home or profile page
+        navigate('/me');  // redirection to the home or profile page
 
       } else {
         setErr(res.message || "Registration failed");        
@@ -92,6 +92,7 @@ name,
       setLoad(false);
       setErr("")
     })
+
     // fetch(url, {
     //   method: "POST",
     //   body: formData,
@@ -209,6 +210,16 @@ name,
             </div>
             <div className="password mt-5">
               <input
+                type="text"
+                placeholder="Address"
+                id="Address"
+                name="address"
+                onChange={changeHandler}
+                className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibold text-amber-900"
+              />
+            </div>
+            <div className="password mt-5">
+              <input
                 type="password"
                 placeholder="Password with length: 6-10"
                 id="Password"
@@ -219,7 +230,8 @@ name,
             </div>
             { err && <p
                 role="alert"
-                className="py-2 px-4 bg-white/70 text-red-700 font-semibold text-base my-2 rounded-md"
+                autoFocus
+                className="py-2 px-4 bg-white/20 text-red-700 font-semibold text-base my-2 rounded border-red-600 border-2 "
               >
                 {err}
               </p>
@@ -232,7 +244,7 @@ name,
                 Register
               </button> */}
               {loading && (
-                <p className="py-2 px-4 text-center bg-white/70 text-rose-700 font-semibold text-base  my-2 rounded-md">
+                <p className="py-2 px-4 text-center bg-white/20 text-rose-700 font-semibold text-base my-2 rounded-md border-red-600">
                   Loading...
                 </p>
               )}

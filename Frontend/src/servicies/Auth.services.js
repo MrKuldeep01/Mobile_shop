@@ -1,9 +1,8 @@
 import envConfig from "../../config/envConfig.js";
 import fetchData from "../../utils/FetchData.js";
 class Auth {
-  async register(formData = {}) {
+  async register(formData) {
     try {
-      const data = formData;
       /* it would look like : 
             {
         name,
@@ -15,37 +14,40 @@ class Auth {
         image
         }
             */
+      if (!formData) {
+        throw new Error("please provide data for registeration!");
+      }
       const url = `${envConfig.serverBaseURI}/auth/register`;
-      const userData = await fetchData(url, data);
+      const userData = await fetchData(url, formData);
       console.log("registered userData  :-  ", userData);
       return userData;
       // setting details to local storage or something else;
-    } catch (error) {    
+    } catch (error) {
       throw new Error(error);
     }
-    return null;
   }
-  async login(formData = {}) {
+  async login(formData) {
     // gmail || mobile, password
     try {
+      if (!formData) {
+        throw new Error("please provide data for Login!");
+      }
       const url = `${envConfig.serverBaseURI}/auth/login`;
       const loginUserData = await fetchData(url, formData);
       return loginUserData;
       // further processing as per requirement
-    } catch (error) {    
+    } catch (error) {
       throw new Error(error);
     }
-    return null;
   }
   async logout() {
     try {
       const url = `${envConfig.serverBaseURI}/auth/logout`;
       const status = await fetchData(url);
       console.log("your logout status is : " + status.message);
-      return status;    
+      return status;
       // future working will be here ...
-      
-    } catch (error) {    
+    } catch (error) {
       throw new Error(error);
     }
     return null;

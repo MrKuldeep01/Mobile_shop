@@ -60,10 +60,9 @@ export const passwordChange = AsyncHandler(async (req, res) => {
  newGmail, newMobile, localAddress, city, postCode, state, experience 
 */
 export const editUser = AsyncHandler(async (req, res) => {
-  // newGmail, newMobile, localAddress, city, postCode, state, experience
-  let { newGmail, newMobile, localAddress, city, postCode, state, experience } =
+  // newGmail, newMobile, newAddress, experience
+  let { newGmail, newMobile, newAddress, experience } =
     req.body;
-
   const user = req.user.isOwner
     ? await ownerModel.findById(req.user._id)
     : await userModel.findById(req.user._id);
@@ -73,28 +72,29 @@ export const editUser = AsyncHandler(async (req, res) => {
   }
 
   // Validate address if the user doesn't have one yet
-  if (!user.addressId) {
-    const addressFields = { localAddress, city, postCode, state };
-    for (let [field, value] of Object.entries(addressFields)) {
-      if (value.trim() === "") {
-        throw new ApiError(400, `You must provide a valid ${field}.`);
-      }
-    }
+  // if (!user.addressId) {
+  //   const addressFields = { localAddress, city, postCode, state };
+  //   for (let [field, value] of Object.entries(addressFields)) {
+  //     if (value.trim() === "") {
+  //       throw new ApiError(400, `You must provide a valid ${field}.`);
+  //     }
+  //   }
 
     // Create a new address entry
-    const address = await addressModel.create({
-      [`${user.isOwner ? "ownerId" : "userId"}`]: user._id,
-      localAddress,
-      city,
-      postCode,
-      state,
-    });
-    user.addressId = address._id;
-    await user.save({ validateBeforeSave: false });
-  }
+  //   const address = await addressModel.create({
+  //     [`${user.isOwner ? "ownerId" : "userId"}`]: user._id,
+  //     localAddress,
+  //     city,
+  //     postCode,
+  //     state,
+  //   });
+  //   user.addressId = address._id;
+  //   await user.save({ validateBeforeSave: false });
+  // }
 
   // Update new values only if provided
-  newGmail = req.body?.newGmail || user.gmail;
+  newGmail = req.body?.newGmail.trim() || user.gmail;
+  newAddress = req.body?.newAddress.trim() || user.address;
   let newImage = req.file?.path
     ? await cloudinaryUploader(req.file.path)
     : user.image;

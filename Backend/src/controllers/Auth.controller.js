@@ -5,7 +5,7 @@ import { User as userModel } from "../models/User.model.js";
 import constants from "../constants.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
 import cloudinaryUploader from "../utils/Cloudinary.js";
-import { Address as addressModel } from "../models/Address.model.js";
+// import { Address as addressModel } from "../models/Address.model.js";
 async function generateTokens(user) {
   console.log("generating tokens...");
   const accessToken = await user.generateAccessToken();
@@ -21,12 +21,11 @@ export const register = AsyncHandler(async (req, res) => {
     mobile,
     gender,
     password,
-    address,
-    rating,
-    experience,
     isOwner,
+    address,
   } = req.body;
-
+  // rating,
+  // experience,
   const requiredField = { name, gmail, mobile, gender, password };
   for (const [key, val] of Object.entries(requiredField)) {
     if (key?.val?.trim() === "") {
@@ -59,7 +58,7 @@ export const register = AsyncHandler(async (req, res) => {
       address,
       rating,
       experience
-    );
+    ); 
     return;
   } else {
     image = imageLocalPath

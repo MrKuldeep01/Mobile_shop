@@ -42,9 +42,8 @@ const ownerSchema = new mongoose.Schema(
       type: String,
       default: "INR",
     },
-    addressId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Address",
+    address: {
+      type:String,
     },
     shopName: String,
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
