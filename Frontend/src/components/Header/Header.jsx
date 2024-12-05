@@ -26,7 +26,7 @@ function Header() {
             {/* function Li({title="Products 🎁", to="/", classes="", activeClasses="", text='All', icon=(<i className="ri-layout-masonry-fill"></i>)}) {} */}
             <Li
               title="Products 🎁"
-              to="/"
+              to="/Products"
               text="All"
               icon={<i className="ri-layout-masonry-fill"></i>}
             />
@@ -62,17 +62,14 @@ function Header() {
 
             {login ? (
               <Li
-                title="logout"
-                to="/exit"
-                icon={<i className="ri-user-6-fill"></i>}
-                onClick={(e)=>{
-                  dispatch(logout())
-                }}
+                title="Profile"
+                to="/me"
+                icon={<i className="ri-user-6-fill"></i>}               
               />
             ) : (
               <Li
                 title="login"
-                to="/login"
+                to="/"
                 icon={<i className="ri-user-6-line"></i>}
               />
             )}

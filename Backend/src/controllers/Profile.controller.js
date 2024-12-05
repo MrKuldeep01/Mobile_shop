@@ -2,7 +2,7 @@ import AsyncHandler from "../utils/AsyncHandler.js";
 import { User as userModel } from "../models/User.model.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
 import ApiError from "../utils/ApiError.js";
-import ApiResponse from "../utils/ApiResponse.js"
+import ApiResponse from "../utils/ApiResponse.js";
 //_______________________ Profile ______________________//
 
 // getCurrentUser PROTECTED ///////// ✅
@@ -57,12 +57,11 @@ export const passwordChange = AsyncHandler(async (req, res) => {
 //  editUser  PROTECTED /////////
 //MULTER: SINGLE FILE NAMED IMAGE /////////
 /*
- newGmail, newMobile, localAddress, city, postCode, state, experience 
+ newGmail, newMobile, newAddress, experience 
 */
 export const editUser = AsyncHandler(async (req, res) => {
   // newGmail, newMobile, newAddress, experience
-  let { newGmail, newMobile, newAddress, experience } =
-    req.body;
+  let { newGmail, newMobile, newAddress, newName, experience } = req.body;
   const user = req.user.isOwner
     ? await ownerModel.findById(req.user._id)
     : await userModel.findById(req.user._id);
@@ -80,7 +79,7 @@ export const editUser = AsyncHandler(async (req, res) => {
   //     }
   //   }
 
-    // Create a new address entry
+  // Create a new address entry
   //   const address = await addressModel.create({
   //     [`${user.isOwner ? "ownerId" : "userId"}`]: user._id,
   //     localAddress,
@@ -93,13 +92,13 @@ export const editUser = AsyncHandler(async (req, res) => {
   // }
 
   // Update new values only if provided
-  newGmail = req.body?.newGmail.trim() || user.gmail;
-  newAddress = req.body?.newAddress.trim() || user.address;
+  newGmail = req.body?.newGmail || user.gmail;
+  newName = req.body?.newName || user.name;
+  newAddress = req.body?.newAddress || user.address;
   let newImage = req.file?.path
     ? await cloudinaryUploader(req.file.path)
     : user.image;
   newMobile = req.body?.newMobile || user.mobile;
-
   if (user.experience) {
     experience = req.body.experience || user.experience;
   }
@@ -108,12 +107,25 @@ export const editUser = AsyncHandler(async (req, res) => {
   const userUpdate = await (user.isOwner
     ? ownerModel.findByIdAndUpdate(
         req.user._id,
-        { gmail: newGmail, mobile: newMobile, image: newImage, experience },
+        {
+          gmail: newGmail,
+          mobile: newMobile,
+          image: newImage,
+          experience,
+          address: newAddress,
+          name: newName,
+        },
         { new: true }
       )
     : userModel.findByIdAndUpdate(
         req.user._id,
-        { gmail: newGmail, mobile: newMobile, image: newImage },
+        {
+          gmail: newGmail,
+          mobile: newMobile,
+          image: newImage,
+          address: newAddress,
+          name: newName,
+        },
         { new: true }
       )
   ).select("-password -refreshToken");

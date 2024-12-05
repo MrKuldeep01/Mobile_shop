@@ -28,10 +28,13 @@ class Profile {
     }    
   }
 
-  async editDetails(data = {}) {
+  async editDetails(data) {
     // it would be look like : {newGmail, newMobile, localAddress, city, postCode, state, experience }
     try {
-      const url = `${envConfig.serverBaseURI}/profile/edit-details`;
+      if(!data){
+        throw new Error("Please provide value to this service!")
+      }
+      const url = `${envConfig.serverBaseURI}/profile/editDetails`;
       const responseData = await fetchData(url, data);
       console.log("edited details status : " + responseData);
       return responseData;
