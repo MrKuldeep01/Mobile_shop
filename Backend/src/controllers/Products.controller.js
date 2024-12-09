@@ -23,18 +23,25 @@ export const addProduct = AsyncHandler(async (req, res) => {
     throw new ApiError(400, " Product details are not complete!");
   }
 
-  const image = await cloudinaryUploader(imageLocalPath);
+  quantity = req.body.quantity || 1;
+  // catagory = Array.from(catagory.toString().replaceAll(",", "")).filter(
+  //   (v) => v != " "
+  // );
+  if(catagory.includes(", ")){
+    catagory = catagory.trim().split(", ").filter(v => v.trim() !== "");
+  }else{
+    catagory = [catagory]
+  }
+  
+  const image = imageLocalPath
+  ? await cloudinaryUploader(imageLocalPath)
+  : "https://raw.githubusercontent.com/MrKuldeep01/Mobile_shop/refs/heads/main/Backend/public/images/productImgNotFound.jpg";
   if (!image) {
     throw new ApiError(
       501,
       " Process failed to upload image!, error from our side!"
     );
   }
-  quantity = req.body.quantity || 1;
-  catagory = Array.from(catagory.toString().replaceAll(",", "")).filter(
-    (v) => v != " "
-  );
-  catagory = catagory.trim().split(", ").filter(v => v.trim() !== "");
   const createdProduct = await productModel.create({
     name,
     desc,

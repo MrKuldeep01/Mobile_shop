@@ -1,12 +1,13 @@
 import React from 'react'
-import Product from "./Product.jsx"
+import ProductCard from "./Product.jsx"
 import { useDispatch, useSelector } from 'react-redux';
 import { setProducts, setLoading, setError } from '../store/Product.slice.js';
+import Loading from "./Loading.jsx"
 import axios from 'axios';
 
 const Products = () => {
   const dispatch = useDispatch();
-  const { products, currentPage, totalPages, isLoading } = useSelector(state => state.products);
+  const { products, currentPage, totalPages, isLoading } = useSelector(state => state.product);
   
   const fetchProducts = async (page) => {
       try {        
@@ -20,7 +21,7 @@ const Products = () => {
       }
   };
 
-  return (
+  return isLoading ? <Loading/> : (
       <div>
           {/* Products grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">

@@ -1,12 +1,12 @@
-import React from "react";
-
-const Product = () => {
-  return (
-    <div className="flex p-6 font-mono ">
+import React, { useEffect } from "react";
+import Loading from "./Loading.jsx"
+const Product = ({key, product, ...rest}) => {
+  return product ? (
+    <div className="flex p-6 font-mono " {...rest}>
       <div className="flex-none w-48 mb-10 relative z-10 before:absolute before:top-1 before:left-1 before:w-full before:h-full before:bg-teal-400">
         <img
-          src="/retro-shoe.jpg"
-          alt=""
+          src={product.image}
+          alt={product.name}
           className="absolute z-10 inset-0 w-full h-full object-cover rounded-lg"
           loading="lazy"
         />
@@ -14,10 +14,10 @@ const Product = () => {
       <form className="flex-auto pl-6">
         <div className="relative flex flex-wrap items-baseline pb-6 before:bg-black before:absolute before:-top-6 before:bottom-0 before:-left-60 before:-right-6">
           <h1 className="relative w-full flex-none mb-2 text-2xl font-semibold text-white">
-            Retro Shoe
+            {product.name}
           </h1>
-          <div className="relative text-lg text-white">$89.00</div>
-          <div className="relative uppercase text-teal-400 ml-3">In stock</div>
+          <div className="relative text-lg text-white">${product.price}</div>
+          <div className="relative uppercase text-teal-400 ml-3">{(product.quantity > 1) ? "In stock" : "out of stock"}</div>
         </div>
         <div className="flex items-baseline my-6">
           <div className="space-x-3 flex text-sm font-medium">
@@ -30,33 +30,10 @@ const Product = () => {
                 checked
               />
               <div className="relative w-10 h-10 flex items-center justify-center text-black peer-checked:bg-black peer-checked:text-white before:absolute before:z-[-1] before:top-0.5 before:left-0.5 before:w-full before:h-full peer-checked:before:bg-teal-400">
-                XS
+                {product.model}
               </div>
             </label>
-            <label>
-              <input className="sr-only peer" name="size" type="radio" value="s" />
-              <div className="relative w-10 h-10 flex items-center justify-center text-black peer-checked:bg-black peer-checked:text-white before:absolute before:z-[-1] before:top-0.5 before:left-0.5 before:w-full before:h-full peer-checked:before:bg-teal-400">
-                S
-              </div>
-            </label>
-            <label>
-              <input className="sr-only peer" name="size" type="radio" value="m" />
-              <div className="relative w-10 h-10 flex items-center justify-center text-black peer-checked:bg-black peer-checked:text-white before:absolute before:z-[-1] before:top-0.5 before:left-0.5 before:w-full before:h-full peer-checked:before:bg-teal-400">
-                M
-              </div>
-            </label>
-            <label>
-              <input className="sr-only peer" name="size" type="radio" value="l" />
-              <div className="relative w-10 h-10 flex items-center justify-center text-black peer-checked:bg-black peer-checked:text-white before:absolute before:z-[-1] before:top-0.5 before:left-0.5 before:w-full before:h-full peer-checked:before:bg-teal-400">
-                L
-              </div>
-            </label>
-            <label>
-              <input className="sr-only peer" name="size" type="radio" value="xl" />
-              <div className="relative w-10 h-10 flex items-center justify-center text-black peer-checked:bg-black peer-checked:text-white before:absolute before:z-[-1] before:top-0.5 before:left-0.5 before:w-full before:h-full peer-checked:before:bg-teal-400">
-                XL
-              </div>
-            </label>
+           
           </div>
         </div>
         <div className="flex space-x-2 mb-4 text-sm font-medium">
@@ -89,11 +66,11 @@ const Product = () => {
           </button>
         </div>
         <p className="text-xs leading-6 text-slate-500">
-          Free shipping on all continental US orders.
+          Free shipping on all continental orders.
         </p>
       </form>
     </div>
-  );
+  ) : <Loading/>
 };
 
 export default Product;

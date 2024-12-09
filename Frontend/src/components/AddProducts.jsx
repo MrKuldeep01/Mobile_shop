@@ -77,6 +77,8 @@ const AddProducts = () => {
             dispatch(setProduct(response.data));
             console.log("added product: ");
             console.log(response.data);
+            navigate('/products')
+
           } else {
             setErr(response.message || "Product addition faild!");
           }
@@ -139,6 +141,7 @@ const AddProducts = () => {
                 placeholder="image file"
                 value={productData && productData.image}
                 name="image"
+                accept="image/*"
                 onChange={changeHandler}
                 className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-amber-950 
               focus:border-dashed
