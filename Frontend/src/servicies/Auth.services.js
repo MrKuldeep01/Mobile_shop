@@ -18,7 +18,7 @@ class Auth {
         throw new Error("please provide data for registeration!");
       }
       const url = `${envConfig.serverBaseURI}/auth/register`;
-      const userData = await fetchData(url, formData);
+      const userData = await fetchData(url, formData); 
       console.log("registered userData  :-  ", userData);
       return userData;
       // setting details to local storage or something else;

@@ -1,15 +1,28 @@
 async function fetchData(url, data = null, method = "POST") {
   try {
+    console.log("fetching request for: ", url);
     let options = {
       method: method.toUpperCase(),
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      // Remove the header since fetch will set the correct boundary automatically
+      headers: {}, 
     };
-    if (data && method.toUpperCase() !== "GET") {
-      options.body = JSON.stringify(data);
+
+    // Create a FormData instance
+    const formData = new FormData();
+
+    // Append data to FormData
+    if (data) {
+      for (let key in data) {
+        formData.append(key, data[key]);
+      }
     }
+
+    // If the method is not GET, we set the body to our FormData
+    if (method.toUpperCase() !== "GET") {
+      options.body = formData;
+    }
+
     let res = await fetch(url, options);
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
@@ -19,4 +32,5 @@ async function fetchData(url, data = null, method = "POST") {
     throw new Error("Error in fetch call: " + error.message);
   }
 }
+
 export default fetchData;

@@ -15,15 +15,7 @@ async function generateTokens(user) {
 
 //MULTER: SINGLE FILE NAMED IMAGE ///////// ✅
 export const register = AsyncHandler(async (req, res) => {
-  const {
-    name,
-    gmail,
-    mobile,
-    gender,
-    password,
-    isOwner,
-    address,
-  } = req.body;
+  const { name, gmail, mobile, gender, password, isOwner, address } = req.body;
   // rating,
   // experience,
   const requiredField = { name, gmail, mobile, gender, password };
@@ -36,18 +28,16 @@ export const register = AsyncHandler(async (req, res) => {
     $or: [{ gmail }, { mobile }],
   });
   if (existingUser) {
-    throw new ApiError(409, "this gmail or mobile number is already in use!", [
-      existingUser,
-    ]);
+    throw new ApiError(409, "this gmail or mobile number is already in use!");
   }
   const imageLocalPath = req?.file?.path;
-
   let image;
 
   if (isOwner === true || isOwner == "true") {
     image = imageLocalPath
       ? await cloudinaryUploader(imageLocalPath)
       : "https://raw.githubusercontent.com/MrKuldeep01/Mobile_shop/refs/heads/main/Backend/public/images/owner.png";
+
     await registerOwner(
       name,
       gmail,
@@ -56,9 +46,10 @@ export const register = AsyncHandler(async (req, res) => {
       gender,
       image,
       address,
-      rating,
+
       experience
-    ); 
+    );
+    
     return;
   } else {
     image = imageLocalPath
@@ -229,7 +220,7 @@ export const login = AsyncHandler(async (req, res) => {
     }
     const isPasswordOk = await user.checkPassword(password);
     console.log("entered password is : ", isPasswordOk);
-    if (!isPasswordOk) { 
+    if (!isPasswordOk) {
       throw new ApiError(402, "Check the fields and fill with care!");
     }
 
@@ -246,7 +237,11 @@ export const login = AsyncHandler(async (req, res) => {
       .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
       .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
       .json(
-        new ApiResponse(201, `User ${authenticatedUser.name} is Loged in now.`, authenticatedUser)
+        new ApiResponse(
+          201,
+          `User ${authenticatedUser.name} is Loged in now.`,
+          authenticatedUser
+        )
       );
   }
 });

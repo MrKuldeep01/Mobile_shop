@@ -20,8 +20,7 @@ name,
     image from file with name 'image'
 */
 
-router.route("/register").post(upload.single("image"), register);
-
+router.route("/register").post(upload.single("image"), register); 
 /* login 
     password, gmail || mobile, isOwner  ✅
 */

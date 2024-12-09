@@ -188,8 +188,8 @@ name,
                 className="font-semibold text-base mx-2 px-2 py-1 rounded-md "
               >
                 <option > Select value </option>
-                <option value="no"> User </option>
-                <option value="yes"> Owner </option>
+                <option value="false"> User </option>
+                <option value="true"> Owner </option>
               </select>
              </label>
             </div>

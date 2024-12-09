@@ -160,8 +160,8 @@ function Login() {
                 onChange={changeHandler}
               >
                 <option>select your profile :-</option>
-                <option value="no">user</option>
-                <option value="yes">owner</option>
+                <option value="false">user</option>
+                <option value="true">owner</option>
               </select>
             </div>
             <div className="mt-5">
