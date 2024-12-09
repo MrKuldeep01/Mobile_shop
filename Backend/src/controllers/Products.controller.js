@@ -10,7 +10,7 @@ export const addProduct = AsyncHandler(async (req, res) => {
   if(!(req.user.isOwner)){
     throw new ApiError(400,"You are not authorized, for this task!")
   }
-  const { name, desc, model, catagory, price, quantity } = req.body;
+  let { name, desc, model, catagory, price, quantity } = req.body;
   const imageLocalPath = await req?.file?.path;
   // for (let value of [name, desc, catagory, price]) {
   //   if (value.trim() === "") {
@@ -34,6 +34,7 @@ export const addProduct = AsyncHandler(async (req, res) => {
   catagory = Array.from(catagory.toString().replaceAll(",", "")).filter(
     (v) => v != " "
   );
+  catagory = catagory.trim().split(", ").filter(v => v.trim() !== "");
   const createdProduct = await productModel.create({
     name,
     desc,

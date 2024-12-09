@@ -19,7 +19,7 @@ async function cloudinaryUploader(fileLink) {
     });
     if (uploadedFile) {
       fs.unlinkSync(fileLink);
-      console.log("file uploaded on cloudinary ", uploadedFile);
+      console.log("file uploaded on cloudinary : ", uploadedFile.resource_type);
       return uploadedFile.url;
     }
   } catch (error) {

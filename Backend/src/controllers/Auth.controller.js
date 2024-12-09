@@ -16,8 +16,6 @@ async function generateTokens(user) {
 //MULTER: SINGLE FILE NAMED IMAGE ///////// ✅
 export const register = AsyncHandler(async (req, res) => {
   const { name, gmail, mobile, gender, password, isOwner, address } = req.body;
-  // rating,
-  // experience,
   const requiredField = { name, gmail, mobile, gender, password };
   for (const [key, val] of Object.entries(requiredField)) {
     if (key?.val?.trim() === "") {
@@ -47,7 +45,6 @@ export const register = AsyncHandler(async (req, res) => {
       image,
       address,
 
-      experience
     );
     
     return;
@@ -110,15 +107,11 @@ export const register = AsyncHandler(async (req, res) => {
     gender,
     image,
     address,
-    rating,
-    experience
   ) {
     // const isAnyOwner = await ownerModel.find()
     // if(isAnyOwner.length >= 1){
     //   throw new ApiError(406,"Owner already available, please contect with real Owner or Dev. Mr kuldeep.")
     // }
-    rating = rating ? parseInt(rating) : 1;
-    experience = experience ? parseInt(experience) : 1;
     const createdOwner = await ownerModel.create({
       name,
       gmail,
@@ -127,8 +120,6 @@ export const register = AsyncHandler(async (req, res) => {
       image,
       address,
       password,
-      rating,
-      experience,
     });
 
     if (!createdOwner) {
