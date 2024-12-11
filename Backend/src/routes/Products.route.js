@@ -12,7 +12,7 @@ import { getCurrentUser as authMidd } from "../middlewares/Auth.middleware.js";
 // path is  :   /products
 //all products ✅
 // Get all products should use GET method instead of POST since it's retrieving data
-router.route("/").get(getProducts);
+router.route("/").get(getProducts); 
 
 // add product
 // MULTER SINGLE FILE NAMED  : image

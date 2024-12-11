@@ -68,18 +68,12 @@ name,
       setLoad(false);
       return;
     }
-    console.log(formData) // testing 
-    // calling services to move further
+    console.log(formData)
     auth.register(formData)
     .then(res => {
-      // setRes(res);      
-      // Redirect or show success message
       if (res.success) {
-        // You can add react-router navigation here        
-        // alert("Registration successful! Please login.");
         dispatch(login(res.data))
-        // window.location.href = '/login';
-        navigate('/me');  // redirection to the home or profile page
+        navigate('/me');
 
       } else {
         setErr(res.message || "Registration failed");        
@@ -92,35 +86,10 @@ name,
       setLoad(false);
       setErr("")
     })
-
-    // fetch(url, {
-    //   method: "POST",
-    //   body: formData,
-    // })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       setErr("Network response was not ok");
-    //       throw new Error("Error occurred");
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setRes(data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     setErr("An error occurred: " + error);
-    //   })
-    //   .finally(() => {
-    //     setLoad(false);
-    //     console.log("Loading is set to: ", loading);
-    //   });
   };
-
   return (
     <>
-      <div className="container max-w-md mx-auto w-full md:w-3/4 lg:w-1/3">
+      <div className="container max-w-md mx-auto w-full md:w-3/4 ">
         <div className=" hero max-w-[90%] sm:h-[70%] justify-center items-center mx-auto my-6 bg-zinc-300/10 px-8 sm:px-14 py-4 sm:py-8 md:py-14 rounded-3xl shadow-2xl">
           <div className="text-center my-8 sm:mt-6">
             <h1 className="font-thin text-4xl text-amber-950">Register</h1>
@@ -260,7 +229,7 @@ name,
             <div className="mt-3 flex justify-between items-center">
               <div className="w-full flex items-center justify-between">
                 <Link
-                  to="/login"
+                  to="/"
                   className="text-rose-600/80 text-sm font-semibold underline"
                 >
                   Existing User?

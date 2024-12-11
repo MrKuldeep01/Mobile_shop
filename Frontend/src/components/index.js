@@ -11,7 +11,7 @@ import Register from "./Register.jsx";
 import EditProfile from "./EditProfile.jsx";
 import Logo from "./Logo.jsx";
 import Profile from "./Profile.jsx"
-
+import Icons from "./Icons.jsx";
 export {
   Header,
   Footer,
@@ -25,5 +25,6 @@ export {
   ProductBanner,
   Register,
   EditProfile,
-  Profile
+  Profile,
+  Icons
 };

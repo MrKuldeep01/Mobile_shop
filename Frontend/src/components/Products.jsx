@@ -4,15 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setProducts, setLoading, setError } from '../store/Product.slice.js';
 import Loading from "./Loading.jsx"
 import axios from 'axios';
-
+import ProductService from "./../servicies/Product.services.js"
 const Products = () => {
   const dispatch = useDispatch();
   const { products, currentPage, totalPages, isLoading } = useSelector(state => state.product);
   
-  const fetchProducts = async (page) => {
+  const fetchProducts = async (page,limit= 12) => {
       try {        
           dispatch(setLoading(true));
-          const response = await axios.get(`/api/products?page=${page}&limit=12`);
+        //   const response = await axios.get(`/api/products?page=${page}&limit=12`);
+        const response = ProductService.getProductList(page, limit)
           dispatch(setProducts(response.data));
       } catch (error) {
           dispatch(setError(error.message));

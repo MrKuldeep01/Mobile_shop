@@ -10,11 +10,7 @@ function Login() {
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const url = `${envConfig.serverBaseURI}/auth/login`;
-  // const changeHandler = (e) => {
-  //   const key = e.ta[name;]  //   const value = e.ta[type ]== "file" ? e.ta[files[]] : e.ta[value;]  //   formData.set(key, value);
-  //   console.log("Updated FormData:", Array.from(formData.entries()));
-  // };
+
   const changeHandler = async (e) => {
     const { key, value } = onChageHandler(e);
     setFormData({ ...formData, [key]: value });
@@ -36,21 +32,11 @@ function Login() {
         setLoad(false);
         return;
       }
-      if (formData["mobile"]) {
-        setErr("No need to fill both gmail and mobile no.!");
-        setLoad(false);
-        return;
-      }
     }
     if (formData["mobile"]) {
       const mobileRegex = /^\d{10}$/;
       if (!mobileRegex.test(formData["mobile"])) {
         setErr("Mobile number must be 10 digits");
-        setLoad(false);
-        return;
-      }
-      if (formData["gmail"]) {
-        setErr("No need to fill both gmail and mobile no.!");
         setLoad(false);
         return;
       }
@@ -74,7 +60,7 @@ function Login() {
         // setRes(res);
         if (res.success) {
           dispatch(login(res.data));
-          alert("Login successful. state is printed in console.");
+          alert("Login successful.");
           navigate("/me");
         } else {
           setErr(data.message || "Login failed!");
@@ -88,36 +74,14 @@ function Login() {
         setErr("");
       });
 
-    // fetch(url, {
-    //   method: "POST",
-    //   body: formData,
-    // })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       setErr("Network response was not ok");
-    //       throw new Error("Error occurred");
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setRes(data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     setErr("An error occurred: " + error);
-    //   })
-    //   .finally(() => {
-    //     setLoad(false);
-    //     console.log("Loading is set to: ", loading);
-    //   });
+   
   };
   /*
-  fields are : password, mobile, gmail
+  fields are : password, mobile, gmail, isOwner
   */
   return (
     <>
-      <div className="container max-w-md mx-auto w-full md:w-3/4 lg:w-1/3">
+      <div className="container max-w-md mx-auto w-full md:w-3/4">
         <div className=" hero max-w-[90%] sm:h-[70%] justify-center items-center mx-auto my-16 bg-zinc-500/10 px-8 sm:px-14 py-4 sm:py-8 md:py-14 rounded-3xl shadow-2xl">
           <div className="text-center my-8 sm:mt-6">
             <h1 className="font-thin text-4xl text-amber-950">Login</h1>
@@ -183,8 +147,6 @@ function Login() {
                 >
                   New User?
                 </Link>
-                {/* <a href="#" className="text-rose-600/40 text-sm font-semibold underline">
-                  Fo[Password?]                </a> */}
               </div>
             </div>
           </form>

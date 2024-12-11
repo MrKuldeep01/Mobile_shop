@@ -8,7 +8,7 @@ class Profile {
       return currentUser;
       // further actions as per your requirement
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.message);
     }    
   }
 

@@ -75,13 +75,12 @@ function EditUser() {
       });
   };
   return (
-    <div className="container max-w-md mx-auto w-full md:w-3/4 lg:w-1/3">
+    <div className="container max-w-md mx-auto w-full md:w-3/4">
       <div className=" hero max-w-[90%] sm:h-[70%] justify-center items-center mx-auto my-6 bg-zinc-300/10 px-8 sm:px-14 py-4 sm:py-8 md:py-14 rounded-3xl shadow-2xl">
         <div className="text-center my-8 sm:mt-6">
           <h1 className="font-thin text-4xl text-amber-950">Edit Profile</h1>
         </div>
         <form encType="multipart/form-data" onSubmit={submitHandler}>
-          {" "}
           <div className="name mt-5">
             <input
               type="text"

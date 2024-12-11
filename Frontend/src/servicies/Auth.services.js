@@ -44,7 +44,7 @@ class Auth {
     try {
       const url = `${envConfig.serverBaseURI}/auth/logout`;
       const status = await fetchData(url);
-      console.log("your logout status is : " + status.message);
+      console.log(status?.message);
       return status;
       // future working will be here ...
     } catch (error) {

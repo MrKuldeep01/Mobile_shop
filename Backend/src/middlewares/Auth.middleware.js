@@ -7,18 +7,36 @@ import constants from "../constants.js";
 // import ApiError from "../utils/ApiError.js";
 export const getCurrentUser = AsyncHandler(async (req, res, next) => {
   const accessToken = await req.cookies?.accessToken;
+  // const refreshToken = await req.cookies?.refreshToken;
   if (!accessToken) {
     return res.status(401).json({
       success: false,
       message: "Unauthorized access. Please login first.",
-      data:null,
+      data: null,
     });
   }
 
-  const payload = jwt.verify(
-    String(accessToken),
-    envConfig.accessTokenSecretKey
-  );
+  function varifyToken(token, tokenKey) {
+    try {
+      return jwt.verify(String(token), tokenKey);
+    } catch (error) {
+      return null;
+    }
+  }
+  let payload = null;
+  try {
+    payload = varifyToken(accessToken, envConfig.accessTokenSecretKey);
+    if(!payload)throw new Error("jwt Token expired!")    
+  } catch (error) { 
+    return res.status(406)
+    .clearCookie('accessToken')
+    .clearCookie('refreshToken')
+    .json({
+      success: false,
+      message: "jwt tokens expired!",
+      data: null,
+    });
+  }
   // console.log(payload && `Yes payload is available`);
   // if (!payload) {
   //   console.log(
@@ -31,14 +49,14 @@ export const getCurrentUser = AsyncHandler(async (req, res, next) => {
     currentUser = await ownerModel
       .findById(payload?._id)
       .select("-password -refreshToken");
-    console.log("owner fetched");
+    console.log("owner is fetched :)");
     req.user = currentUser;
     return next();
   } else {
     currentUser = await userModel
       .findById(payload?._id)
       .select("-password -refreshToken");
-    console.log("user fetched");
+    console.log("user is fetched :)");
     req.user = currentUser;
     return next();
   }

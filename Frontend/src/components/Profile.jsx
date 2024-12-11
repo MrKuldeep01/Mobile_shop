@@ -23,24 +23,31 @@ function Profile() {
   const [load, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const dispatch = useDispatch();
-  useEffect(() => {
-    setLoading(true);
-    ProfileService.getCurrentUser()
-      .then((response) => {
-        if (response?.success) {
-          dispatch(login(response.data));
-        } else {
-          dispatch(logout());
-          navigate("/");
-        }
-      })
-      .catch((err) => {
-        setErr(err.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [dispatch, navigate]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   ProfileService.getCurrentUser()
+  //     .then((response) => {
+  //       if (response?.success) {
+  //         dispatch(login(response.data));
+  //       } else {
+  //         dispatch(logout());
+  //         navigate("/");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setErr(err.message);
+  //     })
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // }, [dispatch, navigate]);
+
+  useEffect(()=>{
+    if(!isLogin || !userData){
+      // alert("You are not authenticated :(")
+      navigate('/')
+    }
+  },[])
 
   const onLogoutClick = async () => {
     try {

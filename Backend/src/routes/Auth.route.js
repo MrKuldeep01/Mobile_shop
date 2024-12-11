@@ -24,7 +24,7 @@ router.route("/register").post(upload.single("image"), register);
 /* login 
     password, gmail || mobile, isOwner  ✅
 */
-router.route("/login").post(login);
+router.route("/login").post(upload.none(),login);
 
 // Protected : logout
 router.route("/logout").post(authMidd, logout);

@@ -169,7 +169,7 @@ export const login = AsyncHandler(async (req, res) => {
     throw new ApiError(406, "You have missed required fields!");
     // 406 for unacceptable
   }
-  const owner = undefined;
+  let owner = undefined;
   if (Boolean(isOwner) === true || isOwner == "true") {
     owner = await ownerModel.findOne({
       $or: [{ gmail }, { mobile }],
@@ -184,7 +184,7 @@ export const login = AsyncHandler(async (req, res) => {
       throw new ApiError(401, "Invalid credentials, fill it carefully1");
       // 401 for unauthorized
     }
-    const { accessToken, refreshToken } = generateTokens(owner);
+    const { accessToken, refreshToken } = await generateTokens(owner);
     owner.refreshToken = refreshToken;
     await owner.save({ validateBeforeSave: false });
     const authenticatedOwner = await ownerModel
@@ -249,7 +249,11 @@ export const login = AsyncHandler(async (req, res) => {
 export const logout = AsyncHandler(async (req, res) => {
   const userCheck = req.user;
   if (!userCheck) {
-    throw new ApiError(400, "Bad request, You are not authorized!");
+    return res
+    .status(200)
+    .clearCookie("accessToken")
+    .clearCookie("refreshToken")
+    .json(new ApiResponse(200, "You are logged out now."));
   }
   const dbUser = await (userCheck.isOwner
     ? ownerModel.findById(userCheck._id)

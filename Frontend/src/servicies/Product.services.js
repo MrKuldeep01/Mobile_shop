@@ -1,11 +1,12 @@
 import fetchData from "../../utils/FetchData.js";
 import envConfig from "../../config/envConfig.js";
 class Product {
-    async getProductList(){
+    async getProductList(page, limit= 12, ){
         try {
-            const url = `${envConfig.serverBaseURI}/products/`;
-            const responseData = await fetchData(url, {},"get");
-            if(responseData){console.log("response data : "+ responseData.success);}
+            const url = `${envConfig.serverBaseURI}/products?page=${page}&${limit}`; 
+            const responseData = await fetchData(url, {},"GET");
+            if(responseData){
+              console.log("Product list response status : "+ responseData.success);}
             return responseData;
             // more work will be here 
         } catch (error) {

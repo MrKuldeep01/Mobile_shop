@@ -25,11 +25,11 @@ async function fetchData(url, data = null, method = "POST") {
 
     let res = await fetch(url, options);
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      throw new Error(`HTTP error :( ${(res.message) ? (" :-" + res.message) : ""} with status code: ${res.status}`);
     }
     return await res.json();
   } catch (error) {
-    throw new Error("Error in fetch call: " + error.message);
+    throw new Error("Failed to get data because of " + error.message);
   }
 }
 
