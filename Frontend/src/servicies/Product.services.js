@@ -12,7 +12,6 @@ class Product {
         } catch (error) {
             throw new Error(error);
           }
-          return null;
     }
     async addProduct(data={}){
         try {

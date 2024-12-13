@@ -258,12 +258,12 @@ export const logout = AsyncHandler(async (req, res) => {
   const dbUser = await (userCheck.isOwner
     ? ownerModel.findById(userCheck._id)
     : userModel.findById(userCheck._id));
-  console.log(dbUser, " is logged out.");
+  console.log(dbUser.isOwner ? "Owner " : "User ",dbUser.name, " is logged out.");
   dbUser.refreshToken = null;
   await dbUser.save({ validateBeforeSave: false });
   return res
     .status(200)
     .clearCookie("accessToken")
     .clearCookie("refreshToken")
-    .json(new ApiResponse(200, "You are logged out now."));
+    .json(new ApiResponse(200, `${dbUser.isOwner ? "Owner " : "User "} ${dbUser.name} is logged out.`));
 });
