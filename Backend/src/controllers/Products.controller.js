@@ -138,11 +138,10 @@ export const getProduct = AsyncHandler(async (req, res) => {
   ////////////////// this is must to send product id in url as  /:productId
   let productId = req.params?.productId;
   const product = await productModel.findById(productId);
-  console.log("getting product from db... " + productId);
-  console.log(product);
   if (!product) {
     throw new ApiError("400", `product is not found!`);
   }
+  console.log("getting product from db... " + product.name);
   return res
     .status(201)
     .json(new ApiResponse(200, "Product found successfully.", product));

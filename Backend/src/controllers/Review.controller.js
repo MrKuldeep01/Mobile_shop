@@ -95,7 +95,7 @@ export const createProductReview = AsyncHandler(async (req, res) => {
   const createdReview = await reviewModel
     .findById(review._id)
     .select("-userId -ownerId -productId");
-  if (!review) {
+  if (!createdReview) { 
     throw new ApiError(
       500,
       `Internal server error in the process of saving , ${user.name}'s review`
@@ -108,7 +108,7 @@ export const createProductReview = AsyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         "Review is successfully saved form this product.",
-        review
+        createdReview
       )
     );
 });

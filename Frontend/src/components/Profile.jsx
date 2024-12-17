@@ -105,8 +105,9 @@ function Profile() {
               </div>
               {/* Profile Info */}
               <div className="pt-20 pb-8 px-8">
-                <div className="text-center mb-8">
-                  <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                <div className="text-center mb-8 ">
+                  <h1 className="text-3xl font-bold text-gray-800 mb-2 relative">
+                  <span className="font-bold text-xl text-gray-800/40 px-6 py-3 rounded absolute block left-0 -top-2">{userData?.isOwner ? "Owner" : "User" } </span>
                     {userData?.name || "User Name"}
                   </h1>
                   <p className="text-gray-500">
@@ -158,10 +159,10 @@ function Profile() {
                 </div>
               </div>
               {isOwner && (
-                <div className="absolute bottom-4 right-4">
+                <div className="absolute bottom-1 right-1">
                   <Link
                     to={"./../products/add"}
-                    className="flex items-center gap-2 bg-amber-950 hover:bg-amber-800 text-white px-4 py-2 rounded-lg transition-colors duration-300"
+                    className="flex items-center gap-2 bg-amber-950 hover:bg-amber-800 text-white px-4 py-2 rounded-xl transition-colors duration-300"
                   >
                     <FiFilePlus className="w-4 h-4" />
                     Add Products

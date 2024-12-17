@@ -1,9 +1,63 @@
-import React from "react";
-import { TbReceiptRupee } from "react-icons/tb";
-
+import React, { useEffect, useState } from "react";
+import { TbReceiptRupee, TbEdit } from "react-icons/tb";
+import { MdDeleteOutline } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import ProductServices from "../servicies/Product.services.js";
+import Loading from "./Loading.jsx";
 const SmallProductCard = ({ product }) => {
-  return (
+  const navigate = useNavigate();
+  const userData = useSelector((state) => state.auth.userData);
+  const [error, setError] = useState("");
+  const [load, setLoading] = useState(false)
+  useEffect(() => {
+    if (!product) {
+      setError("Product not available");
+    }
+    if (!userData) {
+      throw new Error("userData is not available!");
+    }
+  });
+  function deleteHandler(productId) {
+    if (!productId) {
+      throw new Error("product id is not given to delete.");
+    }
+    setLoading(true)
+    ProductServices.deleteProduct(productId)
+      .then((res) => {
+        if (res.success) {
+          alert(res.message);
+          console.log(res);
+          console.log(res.message);
+        }
+      })
+      .catch((err) => {
+        throw new err;
+      }).finally(()=>{
+        setLoading(false)
+      })
+  }
+  return !error ? (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105">
+      {userData.isOwner && (
+        <span className=" flex flex-col-reverse gap-4 items-center justify-center absolute right-1 bottom-0 text-lg p-2 text-amber-800 bg-white/30 rounded backdrop-blur-sm">
+         {!load ? <MdDeleteOutline
+            onClick={() => {
+              const canDelete = confirm(
+                "Are you really wanna delete this document"
+              );
+              if (canDelete) {
+                console.log(
+                  `${product.name}, ${product.model}/${product.price} is ready to delete.`
+                );
+                deleteHandler(product._id);
+              }
+            }}
+          /> : <Loading/>}
+
+          <TbEdit onClick={() => navigate(`./edit/${product._id}`)} />
+        </span>
+      )}
       <img
         src={product.image}
         alt={product.name}
@@ -19,6 +73,14 @@ const SmallProductCard = ({ product }) => {
         <p className="text-gray-500">Quantity: {product.quantity}</p>
       </div>
     </div>
+  ) : (
+    <p
+      role="alert"
+      className="text-red-600 px-8 py-4 m-4 text-xl font-semibold bg-black/20 rounded-md"
+    >
+      {" "}
+      {error}
+    </p>
   );
 };
 

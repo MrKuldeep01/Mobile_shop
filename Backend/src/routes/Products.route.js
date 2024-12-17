@@ -29,7 +29,7 @@ name, desc, price, catagory, model, quantity ✅
 */
 router
   .route("/edit/:productId")
-  .post(upload.single("image"), await editProduct);
+  .post(authMidd, upload.single("image"), await editProduct);
 
 // get single product
 // product id in params is requested without any name
@@ -37,5 +37,5 @@ router.route("/:productId").post(getProduct);
 
 // delete single product
 // product id in params is requested without any name
-router.route("/delete/:productId").post(deleteProduct);
+router.route("/delete/:productId").post(authMidd, deleteProduct);
 export default router;

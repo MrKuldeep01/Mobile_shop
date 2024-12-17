@@ -19,24 +19,23 @@ const Products = () => {
   const fetchProducts = async (page, limit = 12) => {
     try {
       setPage(page += 1);
-     
-        console.log("fetching the data for page no. : ", page)
         /*products: []
       currentPage: 1
       totalPages: 1
       totalProducts: 2
+      =======
 {
     "statusCode": 200,
     "message": "Product list successfully found.",
     "data": {
         "products": [
             {
-                "_id": "675a8e0f4f0677780827d553",
+                "_id": "627d553",
                 "name": "product one",
                 "price": 999,
                 "model": "model one",
                 "desc": "product one description is for demonsteration.",
-                "image": "http://res.cloudinary.com/dngrrtwa9/image/upload/v1733987854/kiunfp5ufqgnsrk9z4qe.gif",
+                "image": "http://dngrrtwa9/image/upload/v1733987854/kiunfp5ufqgnsrk9z4qe.gif",
                 "quantity": 99,
                 "catagory": [
                     "test"
@@ -44,33 +43,17 @@ const Products = () => {
                 "createdAt": "2024-12-12T07:17:35.760Z",
                 "updatedAt": "2024-12-12T07:17:35.760Z",
                 "__v": 0
-            },
-            {
-                "_id": "67572cfcf3f5666b423b5562",
-                "name": "Drake Best",
-                "price": 865,
-                "model": "Deserunt dolor sed q",
-                "desc": "Adipisci nemo qui al",
-                "image": "http://res.cloudinary.com/dngrrtwa9/image/upload/v1733766396/zngy4oijni3rb6z2w5z8.png",
-                "quantity": 56,
-                "catagory": [
-                    "Voluptas vel ea amet"
-                ],
-                "createdAt": "2024-12-09T17:46:36.675Z",
-                "updatedAt": "2024-12-09T17:46:36.675Z",
-                "__v": 0
-            }
-        ],
+            },...],
         "currentPage": 1,
         "totalPages": 1,
         "totalProducts": 2
     },
     "success": true
+    ===========
 }
       */
         setLoading(true);
       const response = await ProductService.getProductList(page, limit);
-      console.log(response);
       dispatch(setProducts(response?.data));
       setProductsCurrent(response.data.products);
       if (response.data.totalPages < (page + 1)) {
