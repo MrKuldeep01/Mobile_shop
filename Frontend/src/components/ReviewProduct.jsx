@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import onChangeHandler from "../../utils/changeHandler.js";
-import product from "../servicies/Product.services.js";
+import reviewService from "../servicies/Review.services.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setProduct } from "../store/Product.slice.js";
 import Loading from "./Loading.jsx";
 import { useParams, useNavigate } from "react-router-dom";
-export default ReviewProduct = () => {
+const ReviewProduct = () => {
   // rating, reviewText
   // give me review id if you wanna use me as edit component in params
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
   const isLogin = useSelector((state) => state.auth.authStatus);
   const isOwner = userData?.isOwner || "false";
-  const { productId } = useParams();
+  const { productId, reviewId } = useParams();
   const [loading, setLoad] = useState(false);
   const [err, setErr] = useState("");
   const [formData, setFormData] = useState({});
@@ -22,35 +22,11 @@ export default ReviewProduct = () => {
     if (!isLogin) {
       navigate("/");
     }
-    if (isLogin && !isOwner) {
-      setLoad(true);
-      setErr("you are not authorized for add product");
-      setLoad(false);
-      setErr("");
-      navigate("/me");
+    if (!productId || !reviewId) {
+      alert("there is no productid or review id !");
     }
   }, [userData]);
-  useEffect(() => {
-    if (productId) {
-      setLoad(true);
-      product
-        .getProductDetails(productId)
-        .then((response) => {
-          if (response.success) {
-            setProductData(response.data);
-          } else {
-            setErr("Error while fetching data!");
-          }
-        })
-        .catch((error) => {
-          setErr(error.message || "Error in fetching Data");
-        })
-        .finally(() => {
-          setLoad(false);
-          setErr("");
-        });
-    }
-  }, [productId]);
+
   const changeHandler = (e) => {
     const { key, value } = onChangeHandler(e);
     setFormData({ ...formData, [key]: value });
@@ -59,35 +35,44 @@ export default ReviewProduct = () => {
     e.preventDefault();
     // validations
     setLoad(true);
-    if (!formData.name && !formData.desc && !formData.image) {
-      setErr("Please provide required information!");
+    if (!formData.rating && !formData.reviewText) {
+      setErr("Please provide rating and review text to move further!");
     }
-    (productId
-      ? product.editProduct(formData, productId).then((response) => {
+
+    //rating, reviewText
+    (
+      productId &&
+      reviewService
+        .createProductReview(formData, productId)
+        .then((response) => {
           if (response.success) {
-            console.log("edited product: ");
+            console.log(response.message || "Review for product is submitted ");
             console.log(response.data);
+            navigate("/products")
           } else {
-            setErr(response.message || "Product edit faild!");
+            setErr(response.message || "Product review faild!");
           }
         })
-      : product.addProduct(formData).then((response) => {
-          if (response.success) {
-            dispatch(setProduct(response.data));
-            console.log("added product: ");
-            console.log(response.data);
-            navigate("/products");
-          } else {
-            setErr(response.message || "Product addition faild!");
-          }
-        })
+    )(
+      reviewService.updateProductReview(formData, reviewId).then((response) => {
+        if (response.success) {
+          console.log(
+            response.message || "Product review edited.\nresponse data is : \n"
+          );
+          console.log(response.data);
+          navigate("/products");
+        } else {
+          setErr(response.message || "Product addition faild!");
+        }
+      })
     )
       .catch((error) => {
         setErr(
           error.response?.data?.message ||
             error.message ||
-            "Product add/edit failed with error"
+            "Product's review add/edit failed with error"
         );
+        setLoad(false);
       })
       .finally(() => {
         setLoad(false);
@@ -102,7 +87,7 @@ export default ReviewProduct = () => {
             <h1 className="font-thin text-4xl text-amber-950">
               {productId ? "Edit" : "Add New"} Review
             </h1>
-          </div>you
+          </div>
           <form
             className="space-y-4"
             encType="multipart/form-data"
@@ -112,16 +97,20 @@ export default ReviewProduct = () => {
               <input
                 type="range"
                 placeholder="rate me 1 - 5"
+                id="rating"
                 // value={productData && productData.price}
                 name="rating"
                 onChange={changeHandler}
                 min={1}
                 max={5}
-                className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-amber-950 
+                className="w-full text-amber-900 px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-amber-950 
                   focus:border-dashed
                   focus:outline-none"
                 required
               />
+              <label htmlFor="rating" className="text-amber-800">
+                Rating: {formData.rating}
+              </label>
             </div>
 
             <div>
@@ -167,3 +156,5 @@ export default ReviewProduct = () => {
     <Loading />
   );
 };
+
+export default ReviewProduct;

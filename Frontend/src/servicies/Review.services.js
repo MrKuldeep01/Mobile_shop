@@ -1,5 +1,5 @@
-import fetchData from "../utils/FetchData.js";
-import envConfig from "../Config/envConfig.js";
+import fetchData from "../../utils/FetchData.js";
+import envConfig from "../../config/envConfig.js";
 class Review {
     
     async createProductReview(data={},productId){

@@ -4,7 +4,7 @@ user_id
 product_id
 rating
 review_text
-created_at
+created_at 
 */
 const reviewSchema = new mongoose.Schema(
   {

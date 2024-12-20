@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TbReceiptRupee, TbEdit } from "react-icons/tb";
+import { TbReceiptRupee, TbEdit, TbMessage2Bolt } from "react-icons/tb";
 import { MdDeleteOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -41,7 +41,7 @@ const SmallProductCard = ({ product }) => {
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105">
       {userData.isOwner && (
         <span className=" flex flex-col-reverse gap-4 items-center justify-center absolute right-1 bottom-0 text-lg p-2 text-amber-800 bg-white/30 rounded backdrop-blur-sm">
-         {!load ? <MdDeleteOutline
+         {!load ? <MdDeleteOutline title="Delete product"
             onClick={() => {
               const canDelete = confirm(
                 "Are you really wanna delete this document"
@@ -55,7 +55,8 @@ const SmallProductCard = ({ product }) => {
             }}
           /> : <Loading/>}
 
-          <TbEdit onClick={() => navigate(`./edit/${product._id}`)} />
+          <TbEdit title="Edit product" onClick={() => navigate(`./edit/${product._id}`)} />
+          <TbMessage2Bolt title="Review 📮" onClick={() => navigate(`./review/add/${product._id}`)} />
         </span>
       )}
       <img

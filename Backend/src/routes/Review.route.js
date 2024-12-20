@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { upload } from "../middlewares/multer.middleware.js";
 const router = Router();
 import {
   createProductReview,
@@ -8,7 +9,7 @@ import {
 import { getCurrentUser as authMidd } from "../middlewares/Auth.middleware.js";
 
 //      router.route("/currentUser").post(authMidd, getCurrentUser);
-router.route("/product/new/:productId").post(authMidd, createProductReview);
+router.route("/product/new/:productId").post(authMidd, upload.none(), createProductReview);
 // protected
 // review id in params
 
@@ -16,6 +17,6 @@ router.route("/product/remove/:reviewId").post(authMidd, removeProductReview);
 
 // protected
 // review id in params
-router.route("/product/update/:reviewId").post(authMidd, updateProductReview);
+router.route("/product/update/:reviewId").post(authMidd, upload.none(), updateProductReview);
 
 export default router;

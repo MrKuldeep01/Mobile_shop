@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import {Login, Register, Profile, EditProfile, AddProducts, Products, Home, Icons} from "./components/index.js"
+import {Login, Register, Profile, EditProfile, AddProducts, Products, Home, ReviewProduct } from "./components/index.js"
 import {createBrowserRouter, RouterProvider} from "react-router-dom"
 import { Provider } from "react-redux"
 import store from "./store/Store.js"
@@ -18,10 +18,6 @@ const router = createBrowserRouter([
       {
         path:"home",
         element: <Home/>
-      },
-      {
-        path:"icons",
-        element: <Icons/>
       },
       {
         path:"register",
@@ -54,6 +50,18 @@ const router = createBrowserRouter([
           {
             path:"edit/:productId",
             element:<AddProducts/>
+          },
+          {
+            path:"reviews/:productId", 
+            element:<ReviewProduct/>
+          },
+          {
+            path:"review/add/:productId",
+            element:<ReviewProduct/>
+          },
+          {
+            path:"review/edit/:reviewId",
+            element:<ReviewProduct/>
           },
         ]
       }

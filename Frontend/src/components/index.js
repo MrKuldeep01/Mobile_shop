@@ -8,6 +8,7 @@ import Product from "./Product.jsx";
 import Products from "./Products.jsx";
 import ProductBanner from "./ProductBanner.jsx"
 import Register from "./Register.jsx";
+import ReviewProduct from "./ReviewProduct.jsx";
 import EditProfile from "./EditProfile.jsx";
 import Logo from "./Logo.jsx";
 import Profile from "./Profile.jsx"
@@ -24,6 +25,7 @@ export {
   Products,
   ProductBanner,
   Register,
+  ReviewProduct,
   EditProfile,
   Profile,
   Icons

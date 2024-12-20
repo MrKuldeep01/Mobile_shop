@@ -93,8 +93,7 @@ export const createProductReview = AsyncHandler(async (req, res) => {
     productId,
   });
   const createdReview = await reviewModel
-    .findById(review._id)
-    .select("-userId -ownerId -productId");
+    .findById(review._id);
   if (!createdReview) { 
     throw new ApiError(
       500,
