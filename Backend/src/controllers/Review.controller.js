@@ -92,9 +92,8 @@ export const createProductReview = AsyncHandler(async (req, res) => {
     reviewText,
     productId,
   });
-  const createdReview = await reviewModel
-    .findById(review._id);
-  if (!createdReview) { 
+  const createdReview = await reviewModel.findById(review._id);
+  if (!createdReview) {
     throw new ApiError(
       500,
       `Internal server error in the process of saving , ${user.name}'s review`
@@ -145,6 +144,28 @@ export const removeProductReview = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Review is removed successfully."));
 });
 
+export const getProductReviews = AsyncHandler(async (req, res) => {
+  const productId = req.params?.productId;
+  if (!productId) {
+    throw new ApiError(405, "product id is not given!");
+  }
+  const totalReviews = await reviewModel.countDocuments();
+  const reviews = await reviewModel.find({ productId });
+  console.log("Getting product's reviews list...");
+  if (!reviews) {
+    console.log("product's review not found!");
+    throw new ApiError(503, `Faild to load products data!`);
+  }
+  console.log("Review list found. :)");
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(200, "Product's reviews list successfully found.", {
+        reviews,
+        totalReviews,
+      })
+    );
+});
 export const updateProductReview = AsyncHandler(async (req, res) => {
   /*
    - review id from params

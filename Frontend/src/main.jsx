@@ -52,15 +52,11 @@ const router = createBrowserRouter([
             element:<AddProducts/>
           },
           {
-            path:"reviews/:productId", 
-            element:<ReviewProduct/>
-          },
-          {
             path:"review/add/:productId",
             element:<ReviewProduct/>
           },
           {
-            path:"review/edit/:reviewId",
+            path:"review/edit/:productId/:reviewId",
             element:<ReviewProduct/>
           },
         ]

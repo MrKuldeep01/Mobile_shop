@@ -43,6 +43,25 @@ class Review {
         }
         return null;
     }
+    async getProductReviews(productId){
+        try {
+            // productId in parameters
+            const url = `${envConfig.serverBaseURI}/review/product/list/${productId}`;
+            const responseData = await fetchData(url);
+            console.log("product review deletion status : " + responseData);
+            return responseData;    
+        } catch (error) {
+            console.log(
+                "Error while deleting product review data :: review services.js :: services :- " +
+                  error
+              );
+              throw new Error(
+                "Error while deleting product review data :: review services.js :: services :- " +
+                  error
+              );
+        }
+        return null;
+    }
     async updateProductReview(data={},reviewId){
         try {
             // data will look like : {rating, reviewText} and reviewId in parameters

@@ -15,6 +15,8 @@ router.route("/product/new/:productId").post(authMidd, upload.none(), createProd
 
 router.route("/product/remove/:reviewId").post(authMidd, removeProductReview);
 
+router.route("/product/list/:productId").post(authMidd, removeProductReview);
+
 // protected
 // review id in params
 router.route("/product/update/:reviewId").post(authMidd, upload.none(), updateProductReview);

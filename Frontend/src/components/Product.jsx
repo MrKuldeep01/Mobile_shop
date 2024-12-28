@@ -23,23 +23,31 @@ const Product = ({ product }) => {
     <>
       <div
         key={product._id}
-        className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl"
+        className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl"        
       >
         {/* Product Card */}
         {!error ? (
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            {product.isOwner && (
-              <span
-                className="absolute left-1 top-1"
-                onClick={() => navigate(`../edit/${product._id}`)}
-              >
-                <TbEdit
-                  className={
-                    "p-2 text-amber-800 bg-white/20 rounded backdrop-blur-sm"
-                  }
-                />
-              </span>
-            )}
+            {userData.isOwner && (
+        <span className=" flex flex-col-reverse gap-4 items-center justify-center absolute right-1 bottom-0 text-lg p-2 text-amber-800 bg-white/30 rounded backdrop-blur-sm">
+         {!load ? <MdDeleteOutline title="Delete product"
+            onClick={() => {
+              const canDelete = confirm(
+                "Are you really wanna delete this document"
+              );
+              if (canDelete) {
+                console.log(
+                  `${product.name}, ${product.model}/${product.price} is ready to delete.`
+                );
+                deleteHandler(product._id);
+              }
+            }}
+          /> : <Loading/>}
+
+          <TbEdit title="Edit product" onClick={() => navigate(`./edit/${product._id}`)} />
+          <TbMessage2Bolt title="Review 📮" onClick={() => navigate(`./review/add/${product._id}`)} />
+        </span>
+      )}
             {product.isOwner && (
               <span
                 className="absolute right-1 top-1"

@@ -5,6 +5,7 @@ function ReviewCard({reviewData}) {
         if(!reviewData){
             console.log("review data is not available this time.")
         }
+        
     })
   return (
     <div className="w-full h-auto px-4 py-2 bg-white/30 backdrop-blur-sm flex flex-col gap-2 items-start justify-center">

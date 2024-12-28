@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProductServices from "../servicies/Product.services.js";
 import Loading from "./Loading.jsx";
-const SmallProductCard = ({ product }) => {
+const SmallProductCard = ({ product, preview = false }) => {
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
   const [error, setError] = useState("");
-  const [load, setLoading] = useState(false)
+  const [load, setLoading] = useState(false);
+  const [reviewStatus, setReviewStatus] = useState(false);
   useEffect(() => {
     if (!product) {
       setError("Product not available");
@@ -22,7 +23,7 @@ const SmallProductCard = ({ product }) => {
     if (!productId) {
       throw new Error("product id is not given to delete.");
     }
-    setLoading(true)
+    setLoading(true);
     ProductServices.deleteProduct(productId)
       .then((res) => {
         if (res.success) {
@@ -32,31 +33,54 @@ const SmallProductCard = ({ product }) => {
         }
       })
       .catch((err) => {
-        throw new err;
-      }).finally(()=>{
-        setLoading(false)
+        throw new err();
       })
+      .finally(() => {
+        setLoading(false);
+      });
   }
   return !error ? (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105">
-      {userData.isOwner && (
-        <span className=" flex flex-col-reverse gap-4 items-center justify-center absolute right-1 bottom-0 text-lg p-2 text-amber-800 bg-white/30 rounded backdrop-blur-sm">
-         {!load ? <MdDeleteOutline title="Delete product"
-            onClick={() => {
-              const canDelete = confirm(
-                "Are you really wanna delete this document"
-              );
-              if (canDelete) {
-                console.log(
-                  `${product.name}, ${product.model}/${product.price} is ready to delete.`
-                );
-                deleteHandler(product._id);
-              }
-            }}
-          /> : <Loading/>}
+      {!preview && (
+        <span className=" flex flex-col gap-4 items-center justify-center absolute right-1 bottom-0 text-lg p-2 text-amber-800 bg-white/30 rounded backdrop-blur-sm">
+          {userData.name && (
+            <span className="reviewItem">
+              <TbMessage2Bolt
+                title="Review 📮"
+                onClick={() => {
+                  navigate(`./review/add/${product._id}`); // navigating to{review/add/productId} review page :)
+                  console.log("naviage to ./review/add/${product._id} ");
+                }}
+              />
+            </span>
+          )}
+          {userData.isOwner && (
+            <span className="editDelete flex flex-col items-center justify-center gap-2">
+              {!load ? (
+                <MdDeleteOutline
+                  title="Delete product"
+                  onClick={() => {
+                    const canDelete = confirm(
+                      "Are you really wanna delete this document"
+                    );
+                    if (canDelete) {
+                      console.log(
+                        `${product.name}, ${product.model}/${product.price} is ready to delete.`
+                      );
+                      deleteHandler(product._id);
+                    }
+                  }}
+                />
+              ) : (
+                <Loading />
+              )}
 
-          <TbEdit title="Edit product" onClick={() => navigate(`./edit/${product._id}`)} />
-          <TbMessage2Bolt title="Review 📮" onClick={() => navigate(`./review/add/${product._id}`)} />
+              <TbEdit
+                title="Edit product"
+                onClick={() => navigate(`./edit/${product._id}`)}
+              />
+            </span>
+          )}
         </span>
       )}
       <img
