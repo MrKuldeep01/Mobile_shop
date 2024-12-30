@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import onChangeHandler from "../../utils/changeHandler.js";
 import reviewService from "../servicies/Review.services.js";
-import { useDispatch, useSelector } from "react-redux";
-import { setProduct } from "../store/Product.slice.js";
+import { useSelector } from "react-redux";
 import Loading from "./Loading.jsx";
 import { useParams, useNavigate } from "react-router-dom";
-import SmallProductCard from "./SmallProductCard.jsx"
+import SmallProductCard from "./SmallProductCard.jsx";
 const ReviewProduct = () => {
   // rating, reviewText
   // give me review id if you wanna use me as edit component in params
@@ -18,8 +17,7 @@ const ReviewProduct = () => {
   const [err, setErr] = useState("");
   const [formData, setFormData] = useState({});
   const products = useSelector((state) => state.product.products);
-  const dispatch = useDispatch();
-  
+
   useEffect(() => {
     if (!isLogin) {
       navigate("/");
@@ -30,12 +28,37 @@ const ReviewProduct = () => {
     }
   }, [userData]);
   let product = undefined;
-  if(productId){
-    product = products.find((p) => p._id == productId);
-    console.log("product in review component: \n");
-    console.log(product);
-  }
   let reviews = []; // the array that we need to fetch from db :)
+
+  if (productId) {    
+    // product = products.find((p) => productId === p._id);
+    product = products.find((p) => {
+      console.log(`Checking if ${productId} === ${p._id}`);
+      return productId === p._id;
+    });
+
+    if (!product) {
+      console.log("No matching product found.");
+    } else {
+      console.log("product in review component: \n");
+      console.log(product);
+    }
+    reviewService
+      .getProductReviews(productId)
+      .then((res) => {
+        if (res.success) {
+          reviews = res.data;
+          console.log("reviews list found.");
+          console.log(res.data);
+        } else {
+          console.log("something wrong with reviews!" || res.message);
+        }
+      })
+      .catch((error) => {
+        console.log("error occured while fetching reviews!", error.message);
+      });
+  }
+
   const changeHandler = (e) => {
     const { key, value } = onChangeHandler(e);
     setFormData({ ...formData, [key]: value });
@@ -63,16 +86,19 @@ const ReviewProduct = () => {
         })
     )(
       reviewId &&
-      reviewService.updateProductReview(formData, reviewId).then((response) => {
-        if (response.success) {
-          console.log(
-            response.message || "Product review edited.\nresponse data is : \n"
-          );
-          console.log(response.data);
-        } else {
-          setErr(response.message || "Product addition faild!");
-        }
-      })
+        reviewService
+          .updateProductReview(formData, reviewId)
+          .then((response) => {
+            if (response.success) {
+              console.log(
+                response.message ||
+                  "Product review edited.\nresponse data is : \n"
+              );
+              console.log(response.data);
+            } else {
+              setErr(response.message || "Product addition faild!");
+            }
+          })
     )
       .catch((error) => {
         setErr(
@@ -103,60 +129,60 @@ const ReviewProduct = () => {
     //           {productId ? "Edit" : "Add New"} Review
     //         </h1>
     //       </div>
-          // <form
-          //   className="space-y-4"
-          //   encType="multipart/form-data"
-          //   onSubmit={submitHandler}
-          // >
-          //   <div>
-          //     <input
-          //       type="range"
-          //       placeholder="rate me 1 - 5"
-          //       id="rating"
-          //       // value={productData && productData.price}
-          //       name="rating"
-          //       onChange={changeHandler}
-          //       min={1}
-          //       max={5}
-          //       className="w-full text-amber-900 px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-amber-950 
-          //         focus:border-dashed
-          //         focus:outline-none"
-          //       required
-          //     />
-          //     <label htmlFor="rating" className="text-amber-800">
-          //       Rating: {formData.rating}
-          //     </label>
-          //   </div>
+    // <form
+    //   className="space-y-4"
+    //   encType="multipart/form-data"
+    //   onSubmit={submitHandler}
+    // >
+    //   <div>
+    //     <input
+    //       type="range"
+    //       placeholder="rate me 1 - 5"
+    //       id="rating"
+    //       // value={productData && productData.price}
+    //       name="rating"
+    //       onChange={changeHandler}
+    //       min={1}
+    //       max={5}
+    //       className="w-full text-amber-900 px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-amber-950
+    //         focus:border-dashed
+    //         focus:outline-none"
+    //       required
+    //     />
+    //     <label htmlFor="rating" className="text-amber-800">
+    //       Rating: {formData.rating}
+    //     </label>
+    //   </div>
 
-          //   <div>
-          //     <textarea
-          //       placeholder="Review text here..."
-          //       name="reviewText"
-          //       onChange={changeHandler}
-          //       // value={productData && productData.desc}
-          //       className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-amber-950 
-          //         focus:border-dashed
-          //         focus:outline-none"
-          //       rows="3"
-          //       required
-          //     ></textarea>
-          //   </div>
-          //   {err && (
-          //     <p
-          //       role="alert"
-          //       className="py-2 px-4 bg-white/20 text-red-700 font-semibold text-base my-2 rounded border-red-600 border-2 "
-          //     >
-          //       {err}
-          //     </p>
-          //   )}
-          //   <button
-          //     type="submit"
-          //     disabled={loading}
-          //     className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
-          //   >
-          //     {loading ? "loading..." : "Add Product"}
-          //   </button>
-          // </form>
+    //   <div>
+    //     <textarea
+    //       placeholder="Review text here..."
+    //       name="reviewText"
+    //       onChange={changeHandler}
+    //       // value={productData && productData.desc}
+    //       className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-amber-950
+    //         focus:border-dashed
+    //         focus:outline-none"
+    //       rows="3"
+    //       required
+    //     ></textarea>
+    //   </div>
+    //   {err && (
+    //     <p
+    //       role="alert"
+    //       className="py-2 px-4 bg-white/20 text-red-700 font-semibold text-base my-2 rounded border-red-600 border-2 "
+    //     >
+    //       {err}
+    //     </p>
+    //   )}
+    //   <button
+    //     type="submit"
+    //     disabled={loading}
+    //     className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
+    //   >
+    //     {loading ? "loading..." : "Add Product"}
+    //   </button>
+    // </form>
     //     </div>
     //   ) : (
     //     <p
@@ -168,11 +194,10 @@ const ReviewProduct = () => {
     //   )}
     // </div>
 
-
     <div className="container mx-auto p-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Upper Left: Product Details */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="p-1">
           <SmallProductCard product={product} preview={true} />
         </div>
 
@@ -230,7 +255,7 @@ const ReviewProduct = () => {
               disabled={loading}
               className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
             >
-              {loading ? "loading..." : "Add Product"}
+              {loading ? "loading..." : "Done"}
             </button>
           </form>
         </div>
@@ -243,7 +268,10 @@ const ReviewProduct = () => {
           <p>No reviews yet.</p>
         ) : (
           reviews.map((review) => (
-            <div key={review.id} className="flex items-start mb-4 border-b pb-2">
+            <div
+              key={review.id}
+              className="flex items-start mb-4 border-b pb-2"
+            >
               <img
                 src={review.user.image}
                 alt={review.user.name}

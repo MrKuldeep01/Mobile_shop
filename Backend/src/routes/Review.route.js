@@ -5,6 +5,7 @@ import {
   createProductReview,
   removeProductReview,
   updateProductReview,
+  getProductReviews
 } from "../controllers/Review.controller.js";
 import { getCurrentUser as authMidd } from "../middlewares/Auth.middleware.js";
 
@@ -15,7 +16,7 @@ router.route("/product/new/:productId").post(authMidd, upload.none(), createProd
 
 router.route("/product/remove/:reviewId").post(authMidd, removeProductReview);
 
-router.route("/product/list/:productId").post(authMidd, removeProductReview);
+router.route("/product/list/:productId").post(authMidd, getProductReviews);
 
 // protected
 // review id in params

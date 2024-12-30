@@ -160,10 +160,11 @@ export const getProductReviews = AsyncHandler(async (req, res) => {
   return res
     .status(201)
     .json(
-      new ApiResponse(200, "Product's reviews list successfully found.", {
-        reviews,
-        totalReviews,
-      })
+      new ApiResponse(
+        200,
+        "Product's reviews list successfully found.",
+        reviews
+      )
     );
 });
 export const updateProductReview = AsyncHandler(async (req, res) => {

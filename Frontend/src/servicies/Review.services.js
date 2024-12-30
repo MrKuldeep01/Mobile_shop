@@ -51,12 +51,8 @@ class Review {
             console.log("product review deletion status : " + responseData);
             return responseData;    
         } catch (error) {
-            console.log(
-                "Error while deleting product review data :: review services.js :: services :- " +
-                  error
-              );
               throw new Error(
-                "Error while deleting product review data :: review services.js :: services :- " +
+                "Error while fetching product reviews :: review services.js :: services :- " +
                   error
               );
         }
