@@ -8,7 +8,6 @@ connection()
   .then(() => {
     console.log("Let's start...");
     app.on("error", (error) => {
-      // process.exit(1);
       console.log(
         "Error occured with server connection in app :: index.js :: ",
         error

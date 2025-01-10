@@ -3,7 +3,7 @@ import SmallProductCard from "./SmallProductCard.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts, setLoading, setError } from "../store/Product.slice.js";
 import Loading from "./Loading.jsx";
-import ProductService from "./../servicies/Product.services.js";
+import ProductService from "../servicies/Product.services.js";
 const Products = () => {
   const dispatch = useDispatch();
   // const products = useSelector((state) => state.product.products);

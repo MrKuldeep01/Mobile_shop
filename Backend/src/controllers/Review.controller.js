@@ -86,11 +86,12 @@ export const createProductReview = AsyncHandler(async (req, res) => {
   if (!productId) {
     throw new ApiError(500, "Invalid product to add review!");
   }
+  const currentUser = req.user;
   const review = await reviewModel.create({
     [user.isOwner ? "ownerId" : "userId"]: user._id,
     rating,
     reviewText,
-    productId,
+    productId, "user": currentUser
   });
   const createdReview = await reviewModel.findById(review._id);
   if (!createdReview) {

@@ -48,7 +48,7 @@ class Review {
             // productId in parameters
             const url = `${envConfig.serverBaseURI}/review/product/list/${productId}`;
             const responseData = await fetchData(url);
-            console.log("product review deletion status : " + responseData);
+            console.log("product reviews fetching status : " + responseData);
             return responseData;    
         } catch (error) {
               throw new Error(

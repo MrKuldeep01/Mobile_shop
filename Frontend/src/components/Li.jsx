@@ -6,10 +6,9 @@ function Li({title="", to="", classes="", activeClasses="", text='', icon=(<i cl
       title={title}
       to={to}
 
-      className={(isActive) =>{
-        `list-none text-2xl font-semibold px-2 flex items-center justify-center ${classes} ${
-          isActive ? "text-amber-700" + activeClasses : "text-black"
-        }`}}
+      className={
+        "list-none text-lg font-semibold px-2 flex items-center justify-center text-amber-950"
+        }
         {...props}
       >
       {icon}

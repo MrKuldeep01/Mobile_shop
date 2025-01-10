@@ -27,27 +27,27 @@ function Header() {
             <Li
               title="Products 🎁"
               to="/Products"
-              text="All"
+              // text="All"
               icon={<i className="ri-layout-masonry-fill"></i>}
             />
             <Li
               title="category 👩‍⚖️"
               to="/category"
-              text="category"
+              // text="category"
               icon={<i className="ri-equalizer-fill"></i>}
             />
 
             <Li
               title="services 🛠"
               to="/services"
-              text="services"
+              // text="services"
               icon={<i className="ri-tools-fill"></i>}
             />
 
             <Li
               title="contact 🤝"
               to="/contact"
-              text="contact"
+              // text="contact"
               icon={<i className="ri-shake-hands-fill"></i>}
             />
           </div>
@@ -55,7 +55,7 @@ function Header() {
           <div className="navRight w-auto flex items-center justify-end sm:gap-4 gap-1 px-4 ml-2">
             <li
               title="search 🔍"
-              className="list-none text-base font-semibold hidden sm:inline-block px-2 cursor-pointer "
+              className="list-none text-lg font-semibold hidden sm:inline-block px-2 cursor-pointer  text-amber-950"
             >
               <i className="ri-search-2-line"></i>
             </li>

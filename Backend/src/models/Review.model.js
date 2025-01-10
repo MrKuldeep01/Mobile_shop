@@ -20,11 +20,12 @@ const reviewSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
     },
+    user: Object,
     rating: {
       type: Number,
       required: true,
-      min:[1,"Rating can be vary between 1 - 5"],
-      max:[5,"Rating can be vary between 1 - 5"]
+      min: [1, "Rating can be vary between 1 - 5"],
+      max: [5, "Rating can be vary between 1 - 5"],
     },
     reviewText: {
       type: String,

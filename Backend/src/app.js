@@ -4,14 +4,26 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import constants from "./constants.js";
 const app = express();
-app.use(cors({ 
-    origin: envConfig.allowed_Origin,
-    credentials: true, // Allow cookies to be sent
- }));
+// Define the CORS options with dynamic origin handling
+const corsOptions = {
+    origin: (origin, callback) => {
+      if (origin) {
+        // Log the incoming origin for debugging
+        console.log(`Origin received: ${origin}`);
+      }
+  
+      // Allow all origins dynamically
+      callback(null, origin);
+    },
+    credentials: true, // Allow cookies or credentials to be sent
+  };
+  
+  // Use the CORS middleware with the defined options
+  app.use(cors(corsOptions));
 // app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true, limit: "32kb" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 import homeRouter from "./routes/Home.route.js";

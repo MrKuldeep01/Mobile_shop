@@ -13,6 +13,7 @@ import EditProfile from "./EditProfile.jsx";
 import Logo from "./Logo.jsx";
 import Profile from "./Profile.jsx"
 import Icons from "./Icons.jsx";
+import NotFound from "./NotFound.jsx"
 export {
   Header,
   Footer,
@@ -25,6 +26,7 @@ export {
   Products,
   ProductBanner,
   Register,
+  NotFound,
   ReviewProduct,
   EditProfile,
   Profile,

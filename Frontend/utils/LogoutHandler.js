@@ -13,7 +13,3 @@ const handleLogout = async () => {
 };
 
 export default handleLogout;
-
-
-
-
