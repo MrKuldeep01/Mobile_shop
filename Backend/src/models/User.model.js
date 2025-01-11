@@ -44,7 +44,6 @@ const userSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      required: true,
       default:
         "https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-512.png",
     },
