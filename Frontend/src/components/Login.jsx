@@ -60,7 +60,6 @@ function Login() {
         // setRes(res);
         if (res.success) {
           dispatch(login(res.data));
-          alert("Login successful.");
           navigate("/me");
         } else {
           setErr(data.message || "Login failed!");

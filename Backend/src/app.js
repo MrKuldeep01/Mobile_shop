@@ -5,21 +5,29 @@ import cors from "cors";
 import constants from "./constants.js";
 const app = express();
 // Define the CORS options with dynamic origin handling
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://mobile-shop-frontend-brown.vercel.app",
+  "https://mobileshopweb.netlify.app",
+];
+
+// CORS configuration
 const corsOptions = {
-    origin: (origin, callback) => {
-      if (origin) {
-        // Log the incoming origin for debugging
-        console.log(`Origin received: ${origin}`);
-      }
-  
-      // Allow all origins dynamically
-      callback(null, origin);
-    },
-    credentials: true, // Allow cookies or credentials to be sent
-  };
-  
-  // Use the CORS middleware with the defined options
-  app.use(cors(corsOptions));
+  origin: (origin, callback) => {
+    // Check if the origin is in the allowed origins array or if it's undefined (for non-browser requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow the request
+    } else {
+      callback(new Error("Not allowed by CORS")); // Block the request
+    }
+  },
+  credentials: true, // Allow cookies to be sent
+  allowedHeaders: ["Content-Type", "Authorization"], // Add any required headers
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow all needed methods
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions));
 // app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
