@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux"
-import { login } from "../store/Auth.slice.js" 
-import auth from "../servicies/Auth.services.js"
+import { useDispatch } from "react-redux";
+import { login } from "../store/Auth.slice.js";
+import auth from "../servicies/Auth.services.js";
 
 import onChangeHandler from "../../utils/changeHandler.js";
 // =================
 
 function Register() {
-  const [err , setErr] = useState("");
+  const [err, setErr] = useState("");
   const [loading, setLoad] = useState(false);
-  // const [formData, setFormData] = useState(new FormData()); 
-  const [formData, setFormData] = useState({}); 
+  // const [formData, setFormData] = useState(new FormData());
+  const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const changeHandler = (e) => {
-    const {key, value} = onChangeHandler(e);
+    const { key, value } = onChangeHandler(e);
     // formData.set(key, value);
-    setFormData({...formData,[key]:value})
-  };  
+    setFormData({ ...formData, [key]: value });
+  };
   /*
 name,
     gmail,
@@ -31,13 +31,13 @@ name,
 
     uri: http://localhost:3000/api/v1/auth/register
     */
-    const submitHandler = (e) => {
-      e.preventDefault();
-      setLoad(true);
-      setErr("");
-// validate formData before sending to server
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setLoad(true);
+    setErr("");
+    // validate formData before sending to server
     // Validate required fields
-    const requiredFields = ['name', 'gmail', 'mobile', 'gender', 'password'];
+    const requiredFields = ["name", "gmail", "mobile", "gender", "password"];
     for (const field of requiredFields) {
       if (!formData[field]) {
         setErr(`${field} is required!`);
@@ -48,49 +48,49 @@ name,
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData['gmail'])) {
-      setErr('Invalid email format');
+    if (!emailRegex.test(formData["gmail"])) {
+      setErr("Invalid email format");
       setLoad(false);
       return;
     }
 
     // Validate mobile number (10 digits)
     const mobileRegex = /^\d{10}$/;
-    if (!mobileRegex.test(formData['mobile'])) {
-      setErr('Mobile number must be 10 digits');
+    if (!mobileRegex.test(formData["mobile"])) {
+      setErr("Mobile number must be 10 digits");
       setLoad(false);
       return;
     }
 
     // Validate password (min 6 chars)
-    if (formData['password'].length < 6) {
-      setErr('Password must be at least 6 characters');
+    if (formData["password"].length < 6) {
+      setErr("Password must be at least 6 characters");
       setLoad(false);
       return;
     }
-    console.log(formData)
-    auth.register(formData)
-    .then(res => {
-      if (res.success) {
-        dispatch(login(res.data))
-        navigate('/me');
-
-      } else {
-        setErr(res.message || "Registration failed");        
-      }
-    })
-    .catch(error => {
-      setErr( error.message || "Registration failed");
-    })
-    .finally(() => {
-      setLoad(false);
-      setErr("")
-    })
+    console.log(formData);
+    auth
+      .register(formData)
+      .then((res) => {
+        if (res.success) {
+          dispatch(login(res.data));
+          navigate("/me");
+        } else {
+          setErr(res.message || "Registration failed");
+        }
+      })
+      .catch((error) => {
+        setErr(error.message || "Registration failed");
+      })
+      .finally(() => {
+        setLoad(false);
+        setErr("");
+      });
   };
   return (
     <>
       <div className="container max-w-md mx-auto w-full md:w-3/4 ">
-        <div className=" hero max-w-[90%] sm:h-[70%] justify-center items-center mx-auto my-6 bg-zinc-300/10 px-8 sm:px-14 py-4 sm:py-8 md:py-14 rounded-3xl shadow-2xl">
+        <div className=" hero max-w-[90%] sm:h-[70%] justify-center items-center mx-auto my-6 bg-zinc-300/10 px-4 sm:px-10 py-4 sm:py-8 md:py-14 rounded-3xl shadow-2xl">
           <div className="text-center my-8 sm:mt-6">
             <h1 className="font-thin text-4xl text-amber-950">Register</h1>
           </div>
@@ -131,36 +131,42 @@ name,
               />
             </div>
             <div className=" gender mt-5 w-full flex items-center justify-start gap-2 ">
-             <label htmlFor="gender" className="text-amber-900 font-semibold outline-1 outline-dashed outline-zinc-600/50 border-none p-2 rounded-md w-full flex items-center justify-around ">
-             gender : 
-              <select
-                name="gender"                
-                id="gender"                
-                onChange={changeHandler}
-                className="font-semibold text-base mx-2 px-2 py-1 rounded-md "
+              <label
+                htmlFor="gender"
+                className="text-amber-900 font-semibold outline-1 outline-dashed outline-zinc-600/50 border-none p-2 rounded-md w-full flex items-center justify-around "
               >
-                <option > Select value </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select> 
-             </label>
+                gender :
+                <select
+                  name="gender"
+                  id="gender"
+                  onChange={changeHandler}
+                  className="font-semibold text-base mx-2 px-2 py-1 rounded-md "
+                >
+                  <option> Select value </option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
             </div>
 
             <div className="isOwner mt-5 w-full flex items-center justify-start gap-2">
-             <label htmlFor="isOwner" className="text-amber-900 font-semibold outline-1 outline-dashed outline-zinc-600/50 border-none p-2 rounded-md w-full flex items-center justify-around ">
-              isOwner :
-              <select
-                name="isOwner"
-                id="isOwner"               
-                onChange={changeHandler}
-                className="font-semibold text-base mx-2 px-2 py-1 rounded-md "
+              <label
+                htmlFor="isOwner"
+                className="text-amber-900 font-semibold outline-1 outline-dashed outline-zinc-600/50 border-none p-2 rounded-md w-full flex items-center justify-around "
               >
-                <option > Select value </option>
-                <option value="false"> User </option>
-                <option value="true"> Owner </option>
-              </select>
-             </label>
+                isOwner :
+                <select
+                  name="isOwner"
+                  id="isOwner"
+                  onChange={changeHandler}
+                  className="font-semibold text-base mx-2 px-2 py-1 rounded-md "
+                >
+                  <option> Select value </option>
+                  <option value="false"> User </option>
+                  <option value="true"> Owner </option>
+                </select>
+              </label>
             </div>
             <div className="image mt-5 w-full p-2 rounded-md outline-1 outline-dashed outline-zinc-600/50">
               <label
@@ -197,46 +203,35 @@ name,
                 className="block w-full p-2 border rounded-md outline-1 outline-dashed outline-zinc-600/50 border-none font-semibold text-amber-900"
               />
             </div>
-            { err && <p
+            {err && (
+              <p
                 role="alert"
                 autoFocus
                 className="py-2 px-4 bg-white/20 text-red-700 font-semibold text-base my-2 rounded border-red-600 border-2 "
               >
                 {err}
               </p>
-            }
+            )}
             <div className="submit button mt-5">
-              {/* <button
-                type="submit"
-                className="border-2 border-white bg-black text-white py-2 w-full rounded-xl active:bg-white active:text-black font-semibold active:scale-[1.02]"
-              >
-                Register
-              </button> */}
               {loading && (
                 <p className="py-2 px-4 text-center bg-white/20 text-rose-700 font-semibold text-base my-2 rounded-md border-red-600">
                   Loading...
                 </p>
               )}
-
-              <input
-                type="submit"
-                value="Register"
-                disabled={loading}
-                className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
-              />
-            </div>
-
-            <div className="mt-3 flex justify-between items-center">
-              <div className="w-full flex items-center justify-between">
+              <div className="buttonSection w-full flex items-center justify-between gap-2 mt-5">
                 <Link
                   to="/"
-                  className="text-rose-600/80 text-sm font-semibold underline"
+                  className="bg-amber-900 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
                 >
-                  Existing User?
+                  login
                 </Link>
-                {/* <a href="#" className="text-rose-600/40 text-sm font-semibold underline">
-                      Forget Password?
-                    </a> */}
+
+                <input
+                  type="submit"
+                  value={loading ? "loading..." : "Register"}
+                  disabled={loading}
+                  className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
+                />
               </div>
             </div>
           </form>

@@ -85,7 +85,6 @@ const AddProducts = () => {
             console.log("added product: ");
             console.log(response.data);
             navigate('/products')
-
           } else {
             setErr(response.message || "Product addition faild!");
           }

@@ -2,7 +2,7 @@ import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Header, Footer, Register } from "./components";
+import { Header, Footer, Register, LowerBar } from "./components";
 import Profile from "./servicies/Profile.services.js";
 import ProductService from "./servicies/Product.services.js";
 import Loading from "./components/Loading.jsx";
@@ -26,10 +26,11 @@ function App() {
           dispatch(logout());
           alert(response.message || "not authenticated");
           navigate("/");
-        } 
+        }
       })
       .catch((err) => {
         setErr(err.message);
+        console.log(err);
       })
       .finally(() => {
         setLoading(false);
@@ -52,12 +53,13 @@ function App() {
     <Loading />
   ) : (
     <div className="min-h-screen flex flex-wrap content-center">
-      <div className="w-full block">
-        <Header />
+      <div className="w-full h-screen inline-block">
+        <Header />        
           <Container>
             <Outlet />
           </Container>        
         <Footer />
+        <LowerBar />
       </div>
     </div>
   );

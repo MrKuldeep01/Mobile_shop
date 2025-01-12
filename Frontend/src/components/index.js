@@ -14,6 +14,7 @@ import Logo from "./Logo.jsx";
 import Profile from "./Profile.jsx"
 import Icons from "./Icons.jsx";
 import NotFound from "./NotFound.jsx"
+import LowerBar from "./LowerBar.jsx";
 export {
   Header,
   Footer,
@@ -30,5 +31,6 @@ export {
   ReviewProduct,
   EditProfile,
   Profile,
-  Icons
+  Icons,
+  LowerBar
 };

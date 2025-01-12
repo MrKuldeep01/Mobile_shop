@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/Auth.slice.js";
 function Header() {
   const login = useSelector((state) => state.auth.authStatus);
-  const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.userData);
+    const auth = useSelector(state => state.auth.authStatus)
 
   return (
     <>
-      <header className="header w-full backdrop-blur-sm h-[100px] py-4 sm:py-6 px-8 sm:px-12  bg-gray-400/40 text-semibold text-[var(--fontPrimaryColor)/50] flex items-center justify-between sticky top-0 left-0 z-50">
+      <header className="header w-full backdrop-blur-sm h-[100px] py-4 sm:py-6 px-8 sm:px-10  bg-gray-400/40 text-semibold text-[var(--fontPrimaryColor)/50] flex items-center justify-between sticky top-0 left-0 z-50">
         {/* <div className="logo left w-16 h-16 rounded-2xl flex items-center justify-center p-0.5 mx-2 mr-2 ">
           <img src="mobileShop.png" alt="Mobile Shop logo" className="overflow-hidden w-auto h-auto"/>
         </div> */}
@@ -29,56 +30,53 @@ function Header() {
               to="/Products"
               // text="All"
               icon={<i className="ri-layout-masonry-fill"></i>}
+              className=''
             />
-            <Li
+            {/* <Li
               title="category 👩‍⚖️"
               to="/category"
               // text="category"
               icon={<i className="ri-equalizer-fill"></i>}
-            />
+            /> */}
 
-            <Li
-              title="services 🛠"
-              to="/services"
-              // text="services"
-              icon={<i className="ri-tools-fill"></i>}
-            />
-
-            <Li
-              title="contact 🤝"
-              to="/contact"
-              // text="contact"
-              icon={<i className="ri-shake-hands-fill"></i>}
-            />
-          </div>
-
-          <div className="navRight w-auto flex items-center justify-end sm:gap-4 gap-1 px-4 ml-2">
+            {(auth && user.isOwner) && (
+              <Li
+                to={"./../products/add"}
+                icon={<i className="ri-add-circle-fill"></i>}
+                title="Add Products ➕"
+                className="font-semibold px-2 py-2 text-lg "
+              />
+            )}
+           
+            <li
+              title="cart 🛒"
+              className="list-none text-lg font-semibold hidden md:inline-block py-2 px-3 rounded-full hover:bg-amber-800/20 cursor-pointer text-amber-950"
+            >
+              <i className="ri-shopping-cart-fill"></i>
+            </li>
             <li
               title="search 🔍"
-              className="list-none text-lg font-semibold hidden sm:inline-block px-2 cursor-pointer  text-amber-950"
+              className="list-none text-lg font-semibold hidden md:inline-block py-2 px-3 rounded-full hover:bg-amber-800/20 cursor-pointer text-amber-950"
             >
               <i className="ri-search-2-line"></i>
             </li>
+          </div>
 
+          <div className="navRight w-auto flex items-center justify-end sm:gap-4 gap-1 pl-4 ml-2">
+           
             {login ? (
               <Li
-                title="Profile"
+                title="Profile 😇"
                 to="/me"
-                icon={<i className="ri-user-6-fill"></i>}               
+                icon={<i className="ri-user-6-fill"></i>}
               />
             ) : (
               <Li
-                title="login"
+                title="login 😇"
                 to="/"
                 icon={<i className="ri-user-6-line"></i>}
               />
             )}
-
-            <Li
-              title="cart 🛒"
-              to="/cart"
-              icon={<i className="ri-shopping-cart-fill"></i>}
-            />
           </div>
         </div>
       </header>

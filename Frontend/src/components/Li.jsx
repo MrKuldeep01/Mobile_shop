@@ -7,12 +7,12 @@ function Li({title="", to="", classes="", activeClasses="", text='', icon=(<i cl
       to={to}
 
       className={
-        "list-none text-lg font-semibold px-2 flex items-center justify-center text-amber-950"
+        "list-none text-lg font-semibold py-2 px-3 rounded-full hover:bg-amber-800/20 flex items-center justify-center text-amber-950 outline-none focus:bg-amber-800/20"
         }
         {...props}
       >
       {icon}
-      <span className="hidden md:inline-block mx-2 font-semibold"> {text} </span>{" "}
+      { text && <span className="hidden md:inline-block mx-2 font-semibold"> {text} </span>}
     </NavLink>
   );
 }

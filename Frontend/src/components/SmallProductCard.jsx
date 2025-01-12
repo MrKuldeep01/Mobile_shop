@@ -7,16 +7,19 @@ import ProductServices from "../servicies/Product.services.js";
 import Loading from "./Loading.jsx";
 const SmallProductCard = ({ product, preview = false }) => {
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.auth.userData);
+  const auth = useSelector((state) => state.auth.authStatus);
   const [error, setError] = useState("");
   const [load, setLoading] = useState(false);
-  const [reviewStatus, setReviewStatus] = useState(false);
   useEffect(() => {
     if (!product) {
       setError("Product not available");
     }
-    if (!userData) {
-      throw new Error("userData is not available!");
+    if (!auth) {
+      const readyToLogin = confirm("Please login, if you want to use this properly!")
+      if(readyToLogin){
+        navigate('/')
+      }
+      console.log("userData is not available!");
     }
   });
   function deleteHandler(productId) {
@@ -43,7 +46,7 @@ const SmallProductCard = ({ product, preview = false }) => {
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105">
       {!preview && (
         <span className=" flex flex-col gap-4 items-center justify-center absolute right-1 bottom-0 text-lg p-2 text-amber-800 bg-white/30 rounded backdrop-blur-sm">
-          {userData.name && (
+          {auth && (
             <span className="reviewItem">
               <TbMessage2Bolt
                 title="Review 📮"
@@ -54,7 +57,7 @@ const SmallProductCard = ({ product, preview = false }) => {
               />
             </span>
           )}
-          {userData.isOwner && (
+          {auth && (
             <span className="editDelete flex flex-col items-center justify-center gap-2">
               {!load ? (
                 <MdDeleteOutline

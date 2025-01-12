@@ -82,7 +82,7 @@ function Login() {
   return (
     <>
       <div className="container max-w-md mx-auto w-full md:w-3/4">
-        <div className=" hero max-w-[90%] sm:h-[70%] justify-center items-center mx-auto my-16 bg-zinc-500/10 px-8 sm:px-14 py-4 sm:py-8 md:py-14 rounded-3xl shadow-2xl">
+        <div className=" hero max-w-[90%] sm:h-[70%] justify-center items-center mx-auto my-16 bg-zinc-500/10 px-4 sm:px-10 py-4 sm:py-8 md:py-14 rounded-3xl shadow-2xl">
           <div className="text-center my-8 sm:mt-6">
             <h1 className="font-thin text-4xl text-amber-950">Login</h1>
           </div>
@@ -132,22 +132,19 @@ function Login() {
               {err && <p className="text-red-500">{err}</p>}
               {loading && <p className="text-red-500">Loading...</p>}
             </div>
-            <div className="mt-5">
+             <div className="buttonSection w-full flex items-center justify-between gap-2 mt-5">
+                        <Link
+                          to="/register"
+                          className="bg-amber-900 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
+                        >
+                          Register 
+                        </Link>
               <input
                 type="submit"
                 className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
-                value={"Login"}
-              />
-            </div>
-            <div className="mt-3 flex justify-between items-center">
-              <div className="w-full flex items-center justify-between">
-                <Link
-                  to="/register"
-                  className="text-rose-600/80 text-sm font-semibold underline"
-                >
-                  New User?
-                </Link>
-              </div>
+                value={loading ? "loading..." : "Login"}
+
+              />                       
             </div>
           </form>
         </div>

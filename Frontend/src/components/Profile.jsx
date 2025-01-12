@@ -42,12 +42,12 @@ function Profile() {
   //     });
   // }, [dispatch, navigate]);
 
-  useEffect(()=>{
-    if(!isLogin || !userData){
+  useEffect(() => {
+    if (!isLogin || !userData) {
       // alert("You are not authenticated :(")
-      navigate('/')
+      navigate("/");
     }
-  },[])
+  }, []);
 
   const onLogoutClick = async () => {
     try {
@@ -77,6 +77,14 @@ function Profile() {
             <div className="relative">
               {/* Profile Image */}
               <div className="absolute -top-20 left-1/2 transform -translate-x-1/2">
+                {userData?.isOwner ? (
+                  <span className="absolute rotate-[25deg] text-white -top-7 right-3">
+                    <i className="ri-vip-crown-2-line text-4xl"></i>
+                  </span> ):(
+                  <span className="absolute text-white -top-5 -right-3">
+                    <i class="ri-sparkling-2-fill text-4xl"></i>
+                  </span>
+                )}
                 <img
                   src={userData?.image || "avatar.png"}
                   alt="Profile"
@@ -88,26 +96,37 @@ function Profile() {
               <div className="absolute top-4 right-4">
                 <Link
                   to={"./edit"}
-                  className="flex items-center gap-2 bg-amber-950 hover:bg-amber-800 text-white px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex items-center gap-2 bg-amber-950 hover:bg-amber-800 text-white px-3 md:px-4 py-2 rounded-full md:rounded-lg transition-colors duration-300"
                 >
-                  <FiEdit2 className="w-4 h-4" />
-                  Edit Profile
+                  <i class="ri-file-edit-line"></i>
+                  <span className="hidden md:inline-block mr-2">
+                    {" "}
+                    Edit Profile{" "}
+                  </span>
                 </Link>
               </div>
               <div className="absolute top-4 left-4">
                 <button
-                  className="flex items-center gap-2 bg-amber-950 hover:bg-amber-800 text-white px-4 py-2 rounded-lg transition-colors duration-300"
-                  onClick={onLogoutClick}
+                  title="Logout"
+                  className="flex items-center gap-2 bg-amber-950 hover:bg-amber-800 text-white px-3 md:px-4 py-2 rounded-full md:rounded-lg transition-colors duration-300"
+                  onClick={(event) => {
+                    const isReadyToLogOut = confirm(
+                      "Are you want to logout 😢"
+                    );
+                    if (isReadyToLogOut) {
+                      onLogoutClick(event);
+                    }
+                  }}
                 >
-                  <FiUserX className="w-4 h-4" />
-                  Logout
+                  <span className="hidden md:inline-block mr-2"> Logout</span>
+                  <i class="ri-user-unfollow-line"></i>
                 </button>
               </div>
               {/* Profile Info */}
               <div className="pt-20 pb-8 px-8">
                 <div className="text-center mb-8 ">
                   <h1 className="text-3xl font-bold text-gray-800 mb-2 relative">
-                  <span className="font-bold text-xl text-gray-800/40 px-6 py-3 rounded absolute block left-0 -top-2">{userData?.isOwner ? "Owner" : "User" } </span>
+                    {/* <span className="font-bold text-xl text-gray-800/40 px-6 py-3 rounded absolute block left-0 -top-2">{userData?.isOwner ? "Owner" : "User" } </span> */}
                     {userData?.name || "User Name"}
                   </h1>
                   <p className="text-gray-500">
@@ -159,13 +178,16 @@ function Profile() {
                 </div>
               </div>
               {isOwner && (
-                <div className="absolute bottom-1 right-1">
+                <div className="absolute bottom-2 md:bottom-1 right-2 md:right-1">
                   <Link
                     to={"./../products/add"}
-                    className="flex items-center gap-2 bg-amber-950 hover:bg-amber-800 text-white px-4 py-2 rounded-xl transition-colors duration-300"
+                    title=" Add Products"
+                    className="flex items-center gap-2 bg-amber-950 hover:bg-amber-800 text-white px-3 md:px-2 py-2 rounded-full md:rounded-lg transition-colors duration-300"
                   >
-                    <FiFilePlus className="w-4 h-4" />
-                    Add Products
+                    <i class="ri-file-add-line"></i>
+                    <span className="hidden md:inline-block mr-2">
+                      Add Products
+                    </span>
                   </Link>
                 </div>
               )}
@@ -173,13 +195,14 @@ function Profile() {
           </div>
 
           {/* Error Message */}
-          { err && <p
-                role="alert"
-                className="py-2 px-4 bg-white/20 text-red-700 font-semibold text-base my-2 rounded border-red-600 border-2 "
-              >
-                {err}
-              </p>
-            }
+          {err && (
+            <p
+              role="alert"
+              className="py-2 px-4 bg-white/20 text-red-700 font-semibold text-base my-2 rounded border-red-600 border-2 "
+            >
+              {err}
+            </p>
+          )}
         </div>
       ) : (
         <p
