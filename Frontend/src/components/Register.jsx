@@ -213,11 +213,7 @@ name,
               </p>
             )}
             <div className="submit button mt-5">
-              {loading && (
-                <p className="py-2 px-4 text-center bg-white/20 text-rose-700 font-semibold text-base my-2 rounded-md border-red-600">
-                  Loading...
-                </p>
-              )}
+             
               <div className="buttonSection w-full flex items-center justify-between gap-2 mt-5">
                 <Link
                   to="/"

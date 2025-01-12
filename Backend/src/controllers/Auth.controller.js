@@ -136,9 +136,9 @@ export const register = AsyncHandler(async (req, res) => {
       throw new ApiError(409, "Error in owner's regesteration!");
     }
     return res
-      .status(200)
-      .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
-      .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
+    .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
+    .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
+    .status(200)
       .json(
         new ApiResponse(
           201,
@@ -192,9 +192,9 @@ export const login = AsyncHandler(async (req, res) => {
       .select("-password -refreshToken");
 
     return res
-      .status(200)
-      .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
-      .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
+    .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
+    .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
+    .status(200)
       .json(
         new ApiResponse(
           201,
@@ -224,9 +224,9 @@ export const login = AsyncHandler(async (req, res) => {
       .select(" -password -refreshToken ");
 
     return res
-      .status(200)
-      .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
-      .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
+    .cookie("accessToken", accessToken, constants.ATOptionsForCookies)
+    .cookie("refreshToken", refreshToken, constants.RTOptionsForCookies)
+    .status(200)
       .json(
         new ApiResponse(
           201,

@@ -23,6 +23,17 @@ async function fetchData(url, data = null, method = "POST") {
       options.body = formData;
     }
 
+    if (data) {
+      if (method.toUpperCase() === "POST" || method.toUpperCase() === "PUT") {
+        if (data instanceof FormData) {
+          options.body = data;
+        } else {
+          options.body = JSON.stringify(data);
+          options.headers["Content-Type"] = "application/json";
+        }
+      }
+    }
+    
     let res = await fetch(url, options);
     if (!res.ok) {
       throw new Error(`HTTP error :( ${(res.message) ? (" :-" + res.message) : ""} with status code: ${res.status}`);

@@ -130,7 +130,6 @@ function Login() {
             </div>
             <div className="mt-5">
               {err && <p className="text-red-500">{err}</p>}
-              {loading && <p className="text-red-500">Loading...</p>}
             </div>
              <div className="buttonSection w-full flex items-center justify-between gap-2 mt-5">
                         <Link
