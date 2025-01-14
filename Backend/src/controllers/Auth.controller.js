@@ -7,6 +7,7 @@ import { Owner as ownerModel } from "../models/Owner.model.js";
 import cloudinaryUploader from "../utils/Cloudinary.js";
 // import { Address as addressModel } from "../models/Address.model.js";
 async function generateTokens(user) {
+  console.log(`${user.isOwner ? "Owner" : "User"} ${user.name} [${user.gmail}] is here.`);
   console.log("generating tokens...");
   const accessToken = await user.generateAccessToken();
   const refreshToken = await user.generateRefreshToken();

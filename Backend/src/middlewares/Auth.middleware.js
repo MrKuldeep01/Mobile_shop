@@ -8,7 +8,9 @@ import constants from "../constants.js";
 export const getCurrentUser = AsyncHandler(async (req, res, next) => {
   const accessToken = await req.cookies?.accessToken;
   // const refreshToken = await req.cookies?.refreshToken;
+  console.log(req.cookies);
   if (!accessToken) {
+    console.log("access token is not found");
     return res.status(401).json({
       success: false,
       message: "Unauthorized access. Please login first.",

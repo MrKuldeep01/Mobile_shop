@@ -8,7 +8,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://mobile-shop-frontend-brown.vercel.app",
-  "https://mobileshopweb.netlify.app",
+  "https://mobileshopweb.netlify.app"
 ];
 
 // CORS configuration
@@ -22,8 +22,6 @@ const corsOptions = {
     }
   },
   credentials: true, // Allow cookies to be sent
-  allowedHeaders: ["Content-Type", "Authorization"], // Add any required headers
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow all needed methods
 };
 
 // Apply CORS middleware

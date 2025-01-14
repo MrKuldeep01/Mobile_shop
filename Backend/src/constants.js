@@ -5,18 +5,14 @@ const bcryptRound = 12;
 const ATOptionsForCookies = {
   maxAge: accessTokenExpiry * 1000,
   httpOnly: true,
-  secure: true, // in production
-  // // secure: false, // testing in http env
-  sameSite: "strict", // in production : restrict to navigate through same site
-  // // sameSite: "lax" 
+  secure: true, 
+  sameSite: "none"
 };
 const RTOptionsForCookies = {
   maxAge: refreshTokenExpiry * 1000, 
   httpOnly: true,
-   secure: true,  // in  production
-  // // secure: false, // testing in http env
-  sameSite: "strict", // i n production : restrict to navigate through same site
-  // // sameSite: "lax" 
+   secure: true,  
+  sameSite: "none"  
 };
 const baseUrl = "/api/v1"; 
 export default {
