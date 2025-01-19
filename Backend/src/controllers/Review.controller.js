@@ -91,7 +91,8 @@ export const createProductReview = AsyncHandler(async (req, res) => {
     [user.isOwner ? "ownerId" : "userId"]: user._id,
     rating,
     reviewText,
-    productId, "user": currentUser
+    productId,
+    user: currentUser,
   });
   const createdReview = await reviewModel.findById(review._id);
   if (!createdReview) {
@@ -127,19 +128,13 @@ export const removeProductReview = AsyncHandler(async (req, res) => {
       "Internal server error due to review id! Kindly report this error to the Owner."
     );
   }
-  if (
-    !(
-      (user.isOwner && review.ownerId === user._id) ||
-      review.userId === user._id
-    )
-  ) {
+  if (!user && review.user._id !== user._id) {
     throw new ApiError(
       405,
       "Unauthorized request, you are not creater of this review! "
     );
   }
   await reviewModel.deleteOne({ _id: reviewId });
-  console.log("review is deleted successfully");
   return res
     .status(200)
     .json(new ApiResponse(200, "Review is removed successfully."));
@@ -152,12 +147,9 @@ export const getProductReviews = AsyncHandler(async (req, res) => {
   }
   const totalReviews = await reviewModel.countDocuments();
   const reviews = await reviewModel.find({ productId });
-  console.log("Getting product's reviews list...");
   if (!reviews) {
-    console.log("product's review not found!");
     throw new ApiError(503, `Faild to load products data!`);
   }
-  console.log("Review list found. :)");
   return res
     .status(201)
     .json(
@@ -233,7 +225,7 @@ export const updateProductReview = AsyncHandler(async (req, res) => {
       `Internal server error in the process of updating , ${user.name}'s review`
     );
   }
-  console.log("review is created by", user.name);
+  console.log("review is updated by", user.name);
   return res
     .status(200)
     .json(

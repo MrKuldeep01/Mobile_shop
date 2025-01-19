@@ -82,7 +82,7 @@ function Profile() {
                     <i className="ri-vip-crown-2-line text-4xl"></i>
                   </span> ):(
                   <span className="absolute text-white -top-5 -right-3">
-                    <i class="ri-sparkling-2-fill text-4xl"></i>
+                    <i className="ri-sparkling-2-fill text-4xl"></i>
                   </span>
                 )}
                 <img
@@ -98,7 +98,7 @@ function Profile() {
                   to={"./edit"}
                   className="flex items-center gap-2 bg-amber-950 hover:bg-amber-800 text-white px-3 md:px-4 py-2 rounded-full md:rounded-lg transition-colors duration-300"
                 >
-                  <i class="ri-file-edit-line"></i>
+                  <i className="ri-file-edit-line"></i>
                   <span className="hidden md:inline-block mr-2">
                     {" "}
                     Edit Profile{" "}
@@ -119,7 +119,7 @@ function Profile() {
                   }}
                 >
                   <span className="hidden md:inline-block mr-2"> Logout</span>
-                  <i class="ri-user-unfollow-line"></i>
+                  <i className="ri-user-unfollow-line"></i>
                 </button>
               </div>
               {/* Profile Info */}
@@ -184,7 +184,7 @@ function Profile() {
                     title=" Add Products"
                     className="flex items-center gap-2 bg-amber-950 hover:bg-amber-800 text-white px-3 md:px-2 py-2 rounded-full md:rounded-lg transition-colors duration-300"
                   >
-                    <i class="ri-file-add-line"></i>
+                    <i className="ri-file-add-line"></i>
                     <span className="hidden md:inline-block mr-2">
                       Add Products
                     </span>

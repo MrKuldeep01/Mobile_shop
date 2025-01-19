@@ -15,7 +15,7 @@ function LowerBar() {
       />
      {(auth && user.isOwner) && <Li
         to={"./../products/add"}
-        icon={<i class="ri-add-circle-fill"></i>}
+        icon={<i className="ri-add-circle-fill"></i>}
         title="Add Products ➕"
         className="font-semibold px-3 py-2 text-lg "
       />}

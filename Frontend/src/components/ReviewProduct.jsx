@@ -1,121 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import onChangeHandler from "../../utils/changeHandler.js";
-// import reviewService from "../services/Review.services.js";
-// import { useSelector } from "react-redux";
-// import Loading from "./Loading.jsx";
-// import { useParams, useNavigate } from "react-router-dom";
-// import SmallProductCard from "./SmallProductCard.jsx";
-// const ReviewProduct = () => {
-//   // rating, reviewText
-//   // give me review id if you wanna use me as edit component in params
-//   const navigate = useNavigate();
-//   const userData = useSelector((state) => state.auth.userData);
-//   const isLogin = useSelector((state) => state.auth.authStatus);
-//   const isOwner = userData?.isOwner || false;
-//   const { productId, reviewId } = useParams();
-//   const [loading, setLoad] = useState(false);
-//   const [err, setErr] = useState("");
-//   const [formData, setFormData] = useState({});
-//   const [reviews, setReviews ] = useState([]);
-//   const products = useSelector((state) => state.product.products);
-
-//   useEffect(() => {
-//     if (!isLogin) {
-//       navigate("/");
-//     }
-//     if (!productId && !reviewId) {
-//       alert("there is no productid and review id !");
-//       navigate("../../");
-//     }
-//   }, [userData]);
-//   let product = undefined;
-//   // let reviews = []; // the array that we need to fetch from db :)
-
-//   if (productId) {
-//     // product = products.find((p) => productId === p._id);
-//     product = products.find((p) => {
-//       console.log(`Checking if ${productId} === ${p._id}`);
-//       return productId === p._id;
-//     });
-
-//     if (!product) {
-//       console.log("No matching product found.");
-//     } else {
-//       console.log("product in review component: \n");
-//       console.log(product);
-//     }
-//     reviewService
-//       .getProductReviews(productId)
-//       .then((res) => {
-//         if (res.success) {
-//           // reviews = res.data;
-//           setReviews(res.data)
-//           console.log("reviews list found.");
-//           // console.log(res.data);
-//         } else {
-//           console.log("something wrong with reviews!" || res.message);
-//         }
-//       })
-//       .catch((error) => {
-//         console.log("error occured while fetching reviews!", error.message);
-//       });
-//   }
-
-//   const changeHandler = (e) => {
-//     const { key, value } = onChangeHandler(e);
-//     setFormData({ ...formData, [key]: value });
-//   };
-//   const submitHandler = (e) => {
-//     e.preventDefault();
-//     // validations
-//     setLoad(true);
-//     if (!formData.rating && !formData.reviewText) {
-//       setErr("Please provide rating and review text to move further!");
-//     }
-
-//     //rating, reviewText
-//     (
-//       !reviewId &&
-//       reviewService
-//         .createProductReview(formData, productId)
-//         .then((response) => {
-//           if (response.success) {
-//             console.log(response.message || "Review for product is submitted ");
-//             console.log(response.data);
-//           } else {
-//             setErr(response.message || "Product review faild!");
-//           }
-//         })
-//     )(
-//       reviewId &&
-//         reviewService
-//           .updateProductReview(formData, reviewId)
-//           .then((response) => {
-//             if (response.success) {
-//               console.log(
-//                 response.message ||
-//                   "Product review edited.\nresponse data is : \n"
-//               );
-//               console.log(response.data);
-//             } else {
-//               setErr(response.message || "Product addition faild!");
-//             }
-//           })
-//     )
-//       .catch((error) => {
-//         setErr(
-//           error.response?.data?.message ||
-//             error.message ||
-//             "Product's review add/edit failed with error"
-//         );
-//         setLoad(false);
-//       })
-//       .finally(() => {
-//         setLoad(false);
-//         setErr("");
-//       });
-//   };
-
 import React, { useEffect, useState } from "react";
 import onChangeHandler from "../../utils/changeHandler.js";
 import reviewService from "../servicies/Review.services.js"; // Corrected 'servicies' to 'services'
@@ -151,13 +33,12 @@ const ReviewProduct = () => {
         .then((res) => {
           if (res.success) {
             setReviews(res.data);
-            console.log("Reviews list found.");
           } else {
-            console.log("Something went wrong with reviews!", res.message);
+            console.log("Something went wrong with reviews!" || res.message);
           }
         })
         .catch((error) => {
-          console.log("Error occurred while fetching reviews!", error.message);
+          throw new Error("Error occurred while fetching reviews!", error.message);
         });
     }
   }, [isLogin, productId, reviewId, navigate]);
@@ -166,17 +47,32 @@ const ReviewProduct = () => {
 
   if (productId) {
     product = products.find((p) => {
-      console.log(`Checking if ${productId} === ${p._id}`);
       return productId === p._id;
     });
 
-    if (!product) {
-      console.log("No matching product found.");
-    } else {
+    if (product) {
       console.log("Product in review component: \n", product);
     }
   }
-
+  function deleteReview (id){
+    // /product/remove/:reviewId
+    setLoading(true);
+    reviewService
+      .deleteProductReview(id)
+      .then((res) => {
+        if (res.success) {
+          alert(res.message || "Your review has been deleted.");
+        } else {
+          alert(res.message || "error in deleting review.");
+        }
+      })
+      .catch((err) => {
+        alert(err.message || "error in deleting review.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   const changeHandler = (e) => {
     const { key, value } = onChangeHandler(e);
     setFormData((prevData) => ({ ...prevData, [key]: value })); // Updated to use functional update
@@ -218,10 +114,10 @@ const ReviewProduct = () => {
       })
       .finally(() => {
         setLoading(false);
+        navigate("../");
       });
-      navigate('../../');
   };
-  return !loading ? (    
+  return !loading ? (
     <div className="container mx-auto p-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Upper Left: Product Details */}
@@ -290,7 +186,7 @@ const ReviewProduct = () => {
       </div>
 
       {/* Lower Portion: Reviews */}
-      <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+      <div className="mt-8 bg-white p-6 rounded-lg shadow-md" >
         <h2 className="text-xl font-bold mb-4">Reviews</h2>
         {reviews.length === 0 ? (
           <p>No reviews yet.</p>
@@ -307,23 +203,36 @@ const ReviewProduct = () => {
               />
               <div className=" w-full">
                 <span className="flex items-center justify-start gap-3">
-                  <h3 className="text-base font-semibold text-black/80 px-2 "> {review.user.name} </h3>
-                <p className="px-2">{(" ⭐").repeat(review.rating)}</p>
+                  <h3 className="text-base font-semibold text-black/80 px-2 ">
+                    {" "}
+                    {review.user.name}{" "}
+                  </h3>
+                  <p className="px-2">{" ⭐".repeat(review.rating)}</p>
                 </span>
                 <span className="flex px-2 items-center justify-between gap-3">
-                <p className="text-black p-2 rounded bg-gray-300/60 w-full pl-2 text-base ">{review.reviewText}</p>
-                <button
-                  className="bg-blue-500 text-white p-1 rounded mt-1 self-end"
-                  onClick={() => {
-                    alert("We are working on this...");
-                    // setReviewText(review.text);
-                    // setEditReviewId(review.id);
-                  }}
-                  hidden={userData._id === review.user._id ? false : true}
-                >
-                  Edit
-                </button>
-</span>
+                  <p className="text-black p-2 rounded bg-gray-300/60 w-full pl-2 text-base ">
+                    {review.reviewText}
+                  </p>
+                  {/* <button
+                    className="bg-blue-500 text-white p-1 rounded mt-1 self-end"
+                    onClick={() => {
+                      alert("We are working on this...");
+                      // setReviewText(review.text);
+                      // setEditReviewId(review.id);
+                    }}
+                    hidden={userData._id === review.user._id ? false : true}
+                  >
+                    Edit
+                  </button> */}
+                  <button
+                    className="bg-transparent text-amber-900 py-2 px-1 rounded self-end"
+                    onClick={()=>{
+                      deleteReview(review._id)}}
+                    hidden={userData._id === review.user._id ? false : true}
+                  >
+                    <i className="ri-delete-bin-fill text-xl"></i>
+                  </button>
+                </span>
               </div>
             </div>
           ))

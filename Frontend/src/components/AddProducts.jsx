@@ -33,7 +33,6 @@ const AddProducts = () => {
     }   
     if(productId){
       let tempProductData = products.find(item => item._id == productId)
-      console.log(tempProductData);
       setProductData(tempProductData);
     }
   }, [userData,productId]);
@@ -72,21 +71,18 @@ const AddProducts = () => {
     (productId
       ? product.editProduct(formData, productId).then((response) => {
           if (response.success) {
-            console.log("edited product: ");
-            console.log(response.data);
+            alert("Edited product: \n",response.data);
             navigate('../')
           } else {
-            setErr(response.message || "Product edit faild!");
+            setErr(response.message || "Product edit failed!");
           }
         })
       : product.addProduct(formData).then((response) => {
           if (response.success) {
             dispatch(setProduct(response.data));
-            console.log("added product: ");
-            console.log(response.data);
             navigate('/products')
           } else {
-            setErr(response.message || "Product addition faild!");
+            setErr(response.message || "Product addition failed!");
           }
         })
     )

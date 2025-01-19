@@ -26,16 +26,14 @@ class Review {
     async deleteProductReview(reviewId){
         try {
             // reviewId in parameters
+            
             const url = `${envConfig.serverBaseURI}/review/product/remove/${reviewId}`;
+            
             const responseData = await fetchData(url);
             console.log("product review deletion status : " + responseData);
             // more work will be here 
             return responseData;    
         } catch (error) {
-            console.log(
-                "Error while deleting product review data :: review services.js :: services :- " +
-                  error
-              );
               throw new Error(
                 "Error while deleting product review data :: review services.js :: services :- " +
                   error
@@ -67,10 +65,6 @@ class Review {
             // more work will be here 
             return responseData;
         } catch (error) {
-            console.log(
-                "Error while updating product review data :: review services.js :: services :- " +
-                  error
-              );
               throw new Error(
                 "Error while updating product review data :: review services.js :: services :- " +
                   error

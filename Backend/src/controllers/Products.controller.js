@@ -122,12 +122,11 @@ export const getProducts = AsyncHandler(async (req, res) => {
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
-  console.log("Getting product list...");
+  console.log("Fetching product list...");
   if (!products) {
-    console.log("products not found!")
+    alert("products not found!")
     throw new ApiError("503", `Faild to load products data!`);
   }
-  console.log('List found. :)')
   return res
     .status(201)
     .json(new ApiResponse(200, "Product list successfully found.",{ products, currentPage: page, totalPages: Math.ceil(totalProducts / limit), totalProducts}));
@@ -141,7 +140,7 @@ export const getProduct = AsyncHandler(async (req, res) => {
   if (!product) {
     throw new ApiError("400", `product is not found!`);
   }
-  console.log("getting product from db... " + product.name);
+  console.log("Fetching product from db... " + product.name);
   return res
     .status(201)
     .json(new ApiResponse(200, "Product found successfully.", product));

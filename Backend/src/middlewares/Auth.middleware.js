@@ -8,7 +8,7 @@ import constants from "../constants.js";
 export const getCurrentUser = AsyncHandler(async (req, res, next) => {
   const accessToken = await req.cookies?.accessToken;
   // const refreshToken = await req.cookies?.refreshToken;
-  console.log(req.cookies);
+  console.log(req.cookies.accessToken && "cookies are available.");
   if (!accessToken) {
     console.log("access token is not found");
     return res.status(401).json({
@@ -39,26 +39,20 @@ export const getCurrentUser = AsyncHandler(async (req, res, next) => {
       data: null,
     });
   }
-  // console.log(payload && `Yes payload is available`);
-  // if (!payload) {
-  //   console.log(
-  //     `redirecting unauthorized user to login page: ${constants.baseUrl}/auth/login`
-  //   );
-  //   return res.redirect(`${constants.baseUrl}/auth/login`);
-  // }
+
   let currentUser = {};
   if (payload?.isOwner || payload?.isOwner == "true") {
     currentUser = await ownerModel
       .findById(payload?._id)
       .select("-password -refreshToken");
-    console.log("owner is fetched :)");
+    console.log("Owner ", currentUser.name, "[", currentUser.gmail,"] is online :)");
     req.user = currentUser;
     return next();
   } else {
     currentUser = await userModel
       .findById(payload?._id)
       .select("-password -refreshToken");
-    console.log("user is fetched :)");
+      console.log("User ", currentUser.name, "[", currentUser.gmail,"] is online :)");
     req.user = currentUser;
     return next();
   }

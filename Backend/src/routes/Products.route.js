@@ -19,7 +19,7 @@ router.route("/").get(getProducts);
 /*
 name, desc, model, catagory, price, quantity  ✅
 */
-router.route("/add").post(authMidd, upload.single("image"), await addProduct);
+router.route("/add").post(authMidd, upload.single("image"), addProduct);
 
 // edit product
 /*
