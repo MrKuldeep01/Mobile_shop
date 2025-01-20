@@ -23,20 +23,16 @@ const SmallProductCard = ({ product, preview = false }) => {
     }
   });
   function deleteHandler(productId) {
-    if (!productId) {
-      throw new Error("product id is not given to delete.");
-    }
     setLoading(true);
     ProductServices.deleteProduct(productId)
       .then((res) => {
         if (res.success) {
-          alert(res.message);
+          alert(res.message || "product deleted.");
           console.log(res);
-          console.log(res.message);
         }
       })
       .catch((err) => {
-        throw new err();
+        throw new Error (err.message || "Error occured during product deletion.");
       })
       .finally(() => {
         setLoading(false);
@@ -52,7 +48,7 @@ const SmallProductCard = ({ product, preview = false }) => {
                 title="Review 📮"
                 onClick={() => {
                   navigate(`./review/add/${product._id}`); // navigating to{review/add/productId} review page :)
-                  console.log("naviage to ./review/add/${product._id} ");
+                  console.log(`naviage to ./review/add/${product._id}`);
                 }}
               />
             </span>

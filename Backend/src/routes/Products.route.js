@@ -5,6 +5,7 @@ import {
   getProducts,
   getProduct,
   deleteProduct,
+  searchProducts
 } from "../controllers/Products.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 const router = Router();
@@ -31,11 +32,15 @@ router
   .route("/edit/:productId")
   .post(authMidd, upload.single("image"), await editProduct);
 
+// get products 
+// product name in params is requested without any name
+router.route("/search/:productName").post(searchProducts);
+
 // get single product
 // product id in params is requested without any name
 router.route("/:productId").post(getProduct);
 
 // delete single product
 // product id in params is requested without any name
-router.route("/delete/:productId").post(authMidd, deleteProduct);
+router.route("/delete/:productId").delete(authMidd, deleteProduct);
 export default router;

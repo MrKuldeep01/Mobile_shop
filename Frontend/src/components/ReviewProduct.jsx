@@ -49,10 +49,6 @@ const ReviewProduct = () => {
     product = products.find((p) => {
       return productId === p._id;
     });
-
-    if (product) {
-      console.log("Product in review component: \n", product);
-    }
   }
   function deleteReview (id){
     // /product/remove/:reviewId

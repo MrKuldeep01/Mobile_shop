@@ -5,59 +5,37 @@ async function fetchData(url, data = null, method = "POST", headers = {}) {
       credentials: "include",
       headers: {
         ...headers,
-        "Content-Type":
-          method.toUpperCase() === "GET" ? "application/json" : null,
+        // Do not set Content-Type here
       },
     };
 
+    // Handle GET requests by appending query parameters to the URL
     if (method.toUpperCase() === "GET" && data) {
       const params = new URLSearchParams(data).toString();
       url += "?" + params;
     } else if (data) {
-      if (
-        method.toUpperCase() === "POST" ||
-        method.toUpperCase() === "PUT" ||
-        method.toUpperCase() === "PATCH"
-      ) {
-        if (Object.values(data).some((value) => value instanceof File)) {
+      if (["POST", "PUT", "PATCH"].includes(method.toUpperCase())) {
+        // Check for file data and use FormData if needed
+        if (Object.values(data).some((item) => item instanceof File)) {
           const formData = new FormData();
           Object.entries(data).forEach(([key, value]) => {
-            if (value instanceof File) {
-              formData.append(key, value);
-            } else {
-              formData.append(key, value);
-            }
+            formData.append(key, value);
           });
-          options.body = formData;
-          options.headers["Content-Type"] = null;
-        } else {
-          options.body = JSON.stringify(data);
-          options.headers["Content-Type"] = "application/json";
+          options.body = formData; // Automatically sets content-type for FormData
         }
       } else {
-        throw new Error(
-          `Unsupported method: ${method}. Only GET, POST, PUT, and PATCH are supported.`
-        );
+        throw new Error(`Unsupported method: ${method}.`);
       }
     }
 
-    console.log(
-      "Options object for fetch call:",
-      options,
-      `to hit the URL: ${url}`
-    );
     const response = await fetch(url, options);
+    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status} ${response.statusText}`);
-    }
-
+    // Return response based on content type
     const contentType = response.headers.get("Content-Type");
-    if (contentType && contentType.includes("application/json")) {
-      return await response.json();
-    } else {
-      return await response.text();
-    }
+    return contentType && contentType.includes("application/json")
+      ? await response.json()
+      : await response.text();
   } catch (error) {
     throw new Error(`Failed to fetch data: ${error.message}`);
   }

@@ -132,7 +132,20 @@ export const getProducts = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Product list successfully found.",{ products, currentPage: page, totalPages: Math.ceil(totalProducts / limit), totalProducts}));
 });
 
-// specific product
+// Products by search
+export const searchProducts = AsyncHandler(async (req, res) => {
+  ////////////////// this is must to send product name in url as  /:productName
+  let productName = req.params?.productName;
+  console.log("productName in search backend: ", productName)
+  const products = await productModel.find({name : productName});
+  console.log("Fetching products from db by searching the name: " + productName);
+  console.log(products)
+  return res
+    .status(201)
+    .json(new ApiResponse(200, "Product found successfully.", products));
+});
+
+// specific product by Id
 export const getProduct = AsyncHandler(async (req, res) => {
   ////////////////// this is must to send product id in url as  /:productId
   let productId = req.params?.productId;

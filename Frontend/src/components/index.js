@@ -15,6 +15,7 @@ import Profile from "./Profile.jsx"
 import Icons from "./Icons.jsx";
 import NotFound from "./NotFound.jsx"
 import LowerBar from "./LowerBar.jsx";
+import Search from "./Search.jsx";
 export {
   Header,
   Footer,
@@ -32,5 +33,6 @@ export {
   EditProfile,
   Profile,
   Icons,
-  LowerBar
+  LowerBar,
+  Search,
 };
