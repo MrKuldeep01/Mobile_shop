@@ -8,6 +8,7 @@ import Loading from "./Loading.jsx";
 const SmallProductCard = ({ product, preview = false }) => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth.authStatus);
+  const owner = useSelector((state) => state.auth?.userData?.isOwner);
   const [error, setError] = useState("");
   const [load, setLoading] = useState(false);
   useEffect(() => {
@@ -28,7 +29,7 @@ const SmallProductCard = ({ product, preview = false }) => {
       .then((res) => {
         if (res.success) {
           alert(res.message || "product deleted.");
-          console.log(res);
+          // console.log(res);
         }
       })
       .catch((err) => {
@@ -39,7 +40,11 @@ const SmallProductCard = ({ product, preview = false }) => {
       });
   }
   return !error ? (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105">
+    <div className="productContainer bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105"
+      onClick={() => {
+        navigate(`./review/add/${product._id}`)
+      }}
+    >
       {!preview && (
         <span className=" flex flex-col gap-4 items-center justify-center absolute right-1 bottom-0 text-lg p-2 text-amber-800 bg-white/30 rounded backdrop-blur-sm">
           {auth && (
@@ -48,12 +53,11 @@ const SmallProductCard = ({ product, preview = false }) => {
                 title="Review 📮"
                 onClick={() => {
                   navigate(`./review/add/${product._id}`); // navigating to{review/add/productId} review page :)
-                  console.log(`naviage to ./review/add/${product._id}`);
                 }}
               />
             </span>
           )}
-          {auth && (
+          {owner && (
             <span className="editDelete flex flex-col items-center justify-center gap-2">
               {!load ? (
                 <MdDeleteOutline

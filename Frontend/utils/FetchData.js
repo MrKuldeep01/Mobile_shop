@@ -7,7 +7,7 @@ async function fetchData(url, data = null, method = "POST", headers = {}) {
         ...headers,
         // Do not set Content-Type here
       },
-    };
+    }; 
 
     // Handle GET requests by appending query parameters to the URL
     if (method.toUpperCase() === "GET" && data) {

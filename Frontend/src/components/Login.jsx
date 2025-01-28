@@ -51,7 +51,7 @@ function Login() {
       setLoad(false);
       return;
     }
-    console.log(formData);
+    // console.log(formData);
     // setLoad(false);
     // setErr("");
     auth

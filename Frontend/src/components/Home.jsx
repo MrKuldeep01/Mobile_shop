@@ -14,18 +14,7 @@ const Home = () => {
             aria-hidden="true"
           >
             <polygon points="50,0 100,0 50,100 0,100" />
-          </svg>
-          {/* <!--
-        Mobile menu, show/hide based on menu open state.
-
-        Entering: "duration-150 ease-out"
-          From: "opacity-0 scale-95"
-          To: "opacity-100 scale-100"
-        Leaving: "duration-100 ease-in"
-          From: "opacity-100 scale-100"
-          To: "opacity-0 scale-95"
-      --> */}
-
+          </svg>      
           <main className="pt-10 mx-auto max-w-7xl px-4 sm:px-6  lg:px-8">
             <div className="sm:text-center lg:text-left">
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">

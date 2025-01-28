@@ -44,7 +44,7 @@ class CartServices{
         } catch (error) {
             console.log("Error while removing product from cart :: cart services.js :: services :- "+error);
             throw new Error("Error while removing product from cart :: cart services.js :: services :- "+error);
-        }
+        } 
     }
 }
 const cart = new CartServices();

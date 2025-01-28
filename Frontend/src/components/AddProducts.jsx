@@ -55,7 +55,7 @@ const AddProducts = () => {
           setLoad(false);
           setErr("");
         });
-    }
+    } 
   }, [productId]);
   const changeHandler = (e) => {
     const { key, value } = onChangeHandler(e);

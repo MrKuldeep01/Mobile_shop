@@ -182,10 +182,6 @@ function EditUser() {
               className="w-full bg-amber-950 text-white rounded-lg px-4 py-3 mt-6 hover:bg-amber-800 focus:outline-2 focus:outline-white/70 focus:outline-opacity-50 "
             />
           </div>
-         
-          {/* <a href="#" className="text-rose-600/40 text-sm font-semibold underline">
-                        Forget Password?
-                      </a> */}
         </form>
       </div>
     </div>

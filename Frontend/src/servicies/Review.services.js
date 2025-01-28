@@ -69,7 +69,7 @@ class Review {
                 "Error while updating product review data :: review services.js :: services :- " +
                   error
               );
-        }
+        } 
         return null;
     }    
 }       

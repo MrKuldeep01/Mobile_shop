@@ -11,7 +11,7 @@ class Profile {
       throw new Error(error.message);
     }    
   }
-
+ 
   async passwordChange(data = {}) {
     try {
       // { gmail, mobile, prePassword, newPassword }

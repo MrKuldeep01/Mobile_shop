@@ -47,7 +47,7 @@ class Product {
         "Error while editing product data :: product services.js :: services :- " +
           error
       );
-    }
+    } 
     return null;
   }
   async getProductDetails(productId) {

@@ -11,8 +11,7 @@ import Register from "./Register.jsx";
 import ReviewProduct from "./ReviewProduct.jsx";
 import EditProfile from "./EditProfile.jsx";
 import Logo from "./Logo.jsx";
-import Profile from "./Profile.jsx"
-import Icons from "./Icons.jsx";
+import Profile from "./Profile.jsx";
 import NotFound from "./NotFound.jsx"
 import LowerBar from "./LowerBar.jsx";
 import Search from "./Search.jsx";
@@ -31,8 +30,7 @@ export {
   NotFound,
   ReviewProduct,
   EditProfile,
-  Profile,
-  Icons,
+  Profile,  
   LowerBar,
   Search,
 };

@@ -96,7 +96,7 @@ const ReviewProduct = () => {
           console.log(
             response.message || "Review for product is submitted/edited."
           );
-          console.log(response.data);
+          // console.log(response.data);
         } else {
           setErr(response.message || "Product review failed!");
         }
@@ -182,12 +182,12 @@ const ReviewProduct = () => {
       </div>
 
       {/* Lower Portion: Reviews */}
-      <div className="mt-8 bg-white p-6 rounded-lg shadow-md" >
+      <div className="reviewContainer mt-8 bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-bold mb-4">Reviews</h2>
         {reviews.length === 0 ? (
           <p>No reviews yet.</p>
         ) : (
-          reviews.map((review) => (
+          [...reviews].reverse().map((review) => (
             <div
               key={review.id}
               className="flex items-start w-full mb-4 border-b pb-2"
@@ -201,7 +201,7 @@ const ReviewProduct = () => {
                 <span className="flex items-center justify-start gap-3">
                   <h3 className="text-base font-semibold text-black/80 px-2 ">
                     {" "}
-                    {review.user.name}{" "}
+                    {review.user.name}{(review.user._id == userData._id) && "  (You)"}
                   </h3>
                   <p className="px-2">{" ⭐".repeat(review.rating)}</p>
                 </span>

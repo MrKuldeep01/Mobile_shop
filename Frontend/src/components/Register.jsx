@@ -68,7 +68,7 @@ name,
       setLoad(false);
       return;
     }
-    console.log(formData);
+    // console.log(formData);
     auth
       .register(formData)
       .then((res) => {
