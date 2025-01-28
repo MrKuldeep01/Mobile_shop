@@ -1,12 +1,12 @@
 import fetchData from "../../utils/FetchData.js";
-import envConfig from "../../Config/envConfig.js";
+import envConfig from "../../config/envConfig.js";
 
 class CartServices{
     async addProductToCart(productId){
         try {
             const url = `${envConfig.serverBaseURI}/cart/add/${productId}`;
             const responseData = await fetchData(url,{},"POST");
-            console.log("product added to cart status : "+responseData);   
+            console.log(responseData && "product added to cart.");   
             return responseData;
         } catch (error) {
             console.log("Error while adding product to cart :: cart services.js :: services :- "+error);
@@ -28,7 +28,7 @@ class CartServices{
                 quantity: quantity
             };
             const responseData = await fetchData(url, payload, "PATCH");
-            console.log("Cart quantity updated status: ", responseData);
+            console.log(responseData && "Cart quantity updated.");
             return responseData;
         } catch (error) {
             console.log("Error while updating cart quantity :: cart services.js :: services :- ", error);
@@ -39,7 +39,7 @@ class CartServices{
         try {
             const url = `${envConfig.serverBaseURI}/cart/remove/${productId}`;
             const responseData = await fetchData(url,{},"DELETE");
-                console.log("product removed from cart status : "+responseData);   
+                console.log(responseData && "product removed from cart.");   
             return responseData;
         } catch (error) {
             console.log("Error while removing product from cart :: cart services.js :: services :- "+error);

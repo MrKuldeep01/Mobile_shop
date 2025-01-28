@@ -16,13 +16,13 @@ async function fetchData(url, data = null, method = "POST", headers = {}) {
     } else if (data) {
       if (["POST", "PUT", "PATCH"].includes(method.toUpperCase())) {
         // Check for file data and use FormData if needed
-        if (Object.values(data).some((item) => item instanceof File)) {
-          const formData = new FormData();
+        const formData = new FormData();
+        // if (Object.values(data).some((item) => item instanceof File)) {
           Object.entries(data).forEach(([key, value]) => {
             formData.append(key, value);
           });
-          options.body = formData; // Automatically sets content-type for FormData
-        }
+        // }
+        options.body = formData; // Automatically sets content-type for FormData
       } else {
         throw new Error(`Unsupported method: ${method}.`);
       }

@@ -17,7 +17,7 @@ class Profile {
       // { gmail, mobile, prePassword, newPassword }
       const url = `${envConfig.serverBaseURI}/profile/password-change`;
       const responseData = await fetchData(url, data);
-      console.log("password change status : " + responseData);
+      console.log(responseData && "password changed");
       // here we can work further
       return responseData;
     } catch (error) {
@@ -36,7 +36,7 @@ class Profile {
       }
       const url = `${envConfig.serverBaseURI}/profile/editDetails`;
       const responseData = await fetchData(url, data);
-      console.log("edited details status : " + responseData);
+      console.log(responseData && "Profile updation done.");
       return responseData;
     } catch (error) {
       throw new Error(

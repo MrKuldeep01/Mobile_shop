@@ -6,7 +6,7 @@ class Product {
       const url = `${envConfig.serverBaseURI}/products?page=${page}&${limit}`;
       const responseData = await fetchData(url, {}, "GET");
       if (responseData) {
-        console.log("Product list response status : " + responseData.success);
+        console.log("Product list response available");
       }
       return responseData;
       // more work will be here
@@ -20,7 +20,7 @@ class Product {
       const url = `${envConfig.serverBaseURI}/products/add`;
       console.log(url);
       const responseData = await fetchData(url, data);
-      console.log("add product status : \n" + responseData);
+      console.log("add product process done.");
       // more work will be here
       return responseData;
     } catch (error) {
@@ -36,7 +36,7 @@ class Product {
       // name, desc, model, catagory, price, quantity
       const url = `${envConfig.serverBaseURI}/products/edit/${productId}`;
       const responseData = await fetchData(url, data);
-      console.log("edit product status : " + responseData);
+      console.log("edit product process done.");
       return responseData;
     } catch (error) {
       console.log(
@@ -73,7 +73,7 @@ class Product {
     try {
       const url = `${envConfig.serverBaseURI}/products/delete/${productId}`;
       const responseData = await fetchData(url, null, "delete");
-      console.log("delete product status : \n" + responseData);
+      console.log("delete product process done.");
       return responseData;
     } catch (error) {
       console.log(

@@ -3,6 +3,7 @@ import { User as userModel } from "../models/User.model.js";
 import { Owner as ownerModel } from "../models/Owner.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
+import cloudinaryUploader from "../utils/Cloudinary.js";
 //_______________________ Profile ______________________//
 
 // getCurrentUser PROTECTED ///////// ✅

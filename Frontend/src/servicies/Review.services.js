@@ -7,7 +7,7 @@ class Review {
             // data will look like : {rating, reviewText}
             const url = `${envConfig.serverBaseURI}/review/product/new/${productId}`;
             const responseData = await fetchData(url,data);
-            console.log("product review creation status : "+ responseData);
+            console.log("product review creation process done.");
             // more work will be here 
             return responseData;
 
@@ -30,7 +30,7 @@ class Review {
             const url = `${envConfig.serverBaseURI}/review/product/remove/${reviewId}`;
             
             const responseData = await fetchData(url);
-            console.log("product review deletion status : " + responseData);
+            console.log("product review deletion process done.");
             // more work will be here 
             return responseData;    
         } catch (error) {
@@ -46,7 +46,7 @@ class Review {
             // productId in parameters
             const url = `${envConfig.serverBaseURI}/review/product/list/${productId}`;
             const responseData = await fetchData(url);
-            console.log("product reviews fetching status : " + responseData);
+            console.log("product reviews fetching process done.");
             return responseData;    
         } catch (error) {
               throw new Error(
@@ -61,7 +61,7 @@ class Review {
             // data will look like : {rating, reviewText} and reviewId in parameters
             const url = `${envConfig.serverBaseURI}/review/product/update/${reviewId}`;
             const responseData = await fetchData(url,data);
-            console.log("product review update status : "+responseData);
+            console.log("product review update process done.");
             // more work will be here 
             return responseData;
         } catch (error) {
