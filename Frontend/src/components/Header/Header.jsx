@@ -48,12 +48,12 @@ function Header() {
               />
             )}
            
-            <li
+            {/* <li
               title="cart 🛒"
               className="list-none text-lg font-semibold hidden md:inline-block py-2 px-3 rounded-full hover:bg-amber-800/20 cursor-pointer text-amber-950"
             >
               <i className="ri-shopping-cart-fill"></i>
-            </li>
+            </li> */}
             <li
               title="search 🔍"
               className="list-none text-lg font-semibold hidden md:inline-block py-2 px-3 rounded-full hover:bg-amber-800/20 cursor-pointer text-amber-950"

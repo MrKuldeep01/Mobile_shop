@@ -10,7 +10,7 @@ function AsyncHandler(subFun) {
         new ApiError(
           error.statusCode || 501,
           error.message ||
-            "Something wrong with server, the process is returned with ERROR.",
+            "Something wrong with server, the process is exited with Failure.",
           error
         )
       );

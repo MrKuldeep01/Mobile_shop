@@ -8,7 +8,7 @@ const connection = async () => {
       `${envConfig.dataBaseUri}/${constants.dataBaseName}`
     );
     console.log("connecting to database...");
-    console.log("connection established with:",connect.connection.name);
+    console.log(" with: ",connect.connection.name);
   } catch (error) {
     console.log("Error occured in Database connection due to:\n", error.message);
     process.exit(1);

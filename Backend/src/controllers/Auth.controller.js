@@ -19,7 +19,7 @@ export const register = AsyncHandler(async (req, res) => {
   const { name, gmail, mobile, gender, password, isOwner, address } = req.body;
   const requiredField = { name, gmail, mobile, gender, password };
   for (const [key, val] of Object.entries(requiredField)) {
-    if (key?.val?.trim() === "") {
+    if (key[val].trim() === "") {
       throw new ApiError(402, `${key} is required field!`);
     }
   }
@@ -37,17 +37,7 @@ export const register = AsyncHandler(async (req, res) => {
       ? await cloudinaryUploader(imageLocalPath)
       : "https://raw.githubusercontent.com/MrKuldeep01/Mobile_shop/refs/heads/main/Backend/public/images/owner.png";
 
-    await registerOwner(
-      name,
-      gmail,
-      mobile,
-      password,
-      gender,
-      image,
-      address,
-
-    );
-    
+    await registerOwner( name, gmail, mobile, password, gender, image, address );
     return;
   } else {
     image = imageLocalPath

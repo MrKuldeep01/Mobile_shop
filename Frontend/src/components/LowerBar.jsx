@@ -24,12 +24,12 @@ function LowerBar() {
         to={"./../products/search"}
         icon={<i className="ri-search-2-line"></i>}
       />
-      <Li
+      {/* <Li
         title="cart 🛒"
         to="/cart"
         icon={<i className="ri-shopping-cart-fill"></i>}
         
-      />
+      /> */}
     </div>
   );
 }
