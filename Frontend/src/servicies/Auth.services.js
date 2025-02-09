@@ -1,5 +1,28 @@
 import envConfig from "../../config/envConfig.js";
 import fetchData from "../../utils/FetchData.js";
+function checkCookie() {
+  let nameValue = null; // Store the value here
+  document.cookie.forEach((item) => {
+    const separatorIndex = item.indexOf("=");
+
+    if (separatorIndex !== -1) {
+      const name = item.substring(0, separatorIndex).trim();
+
+      if (name === "accessToken") {
+        nameValue = item.substring(separatorIndex + 1).trim();
+      }
+    } else {
+      localStorage.setItem("handShake", null);
+    }
+  });
+
+  if (nameValue !== null) {
+    localStorage.setItem("handShake", nameValue);
+    console.log("hand Shake cookie setted.")
+  } else {
+    console.log("Hand Shake cookie not found.");
+  }
+}
 class Auth {
   async register(formData) {
     try {
@@ -18,10 +41,10 @@ class Auth {
         throw new Error("please provide data for registeration!");
       }
       const url = `${envConfig.serverBaseURI}/auth/register`;
-      const userData = await fetchData(url, formData); 
+      const userData = await fetchData(url, formData);
+      checkCookie();
       console.log("registered.");
       return userData;
-      // setting details to local storage or something else;
     } catch (error) {
       throw new Error(error);
     }
@@ -34,8 +57,8 @@ class Auth {
       }
       const url = `${envConfig.serverBaseURI}/auth/login`;
       const loginUserData = await fetchData(url, formData);
+      checkCookie();
       return loginUserData;
-      // further processing as per requirement
     } catch (error) {
       throw new Error(error);
     }
@@ -45,8 +68,8 @@ class Auth {
       const url = `${envConfig.serverBaseURI}/auth/logout`;
       const status = await fetchData(url);
       console.log(status?.message);
+      localStorage.removeItem("handShake");
       return status;
-      // future working will be here ...
     } catch (error) {
       throw new Error(error);
     }

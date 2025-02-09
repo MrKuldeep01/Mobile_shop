@@ -84,7 +84,6 @@ name,
       })
       .finally(() => {
         setLoad(false);
-        setErr("");
       });
   };
   return (

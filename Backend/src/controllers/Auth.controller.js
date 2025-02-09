@@ -18,8 +18,9 @@ async function generateTokens(user) {
 export const register = AsyncHandler(async (req, res) => {
   const { name, gmail, mobile, gender, password, isOwner, address } = req.body;
   const requiredField = { name, gmail, mobile, gender, password };
+  console.log(requiredField)
   for (const [key, val] of Object.entries(requiredField)) {
-    if (key[val].trim() === "") {
+    if (val.trim() === "") {
       throw new ApiError(402, `${key} is required field!`);
     }
   }

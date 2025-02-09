@@ -6,7 +6,7 @@ import { Owner as ownerModel } from "../models/Owner.model.js";
 import constants from "../constants.js";
 // import ApiError from "../utils/ApiError.js";
 export const getCurrentUser = AsyncHandler(async (req, res, next) => {
-  const accessToken = await req.cookies?.accessToken;
+  const accessToken = await req.cookies?.accessToken || req.header["Authorization"]?.replace("Bearer ", "");
   // const refreshToken = await req.cookies?.refreshToken;
   console.log(req.cookies.accessToken && "cookies are available.");
   if (!accessToken) {

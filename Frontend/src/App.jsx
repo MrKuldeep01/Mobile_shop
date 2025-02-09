@@ -24,7 +24,7 @@ function App() {
           navigate("/me");
         } else {
           dispatch(logout());
-          alert(response.message || "not authenticated");
+          // alert(response.message || "not authenticated");
           navigate("/");
         }
       })

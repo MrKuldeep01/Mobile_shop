@@ -58,11 +58,12 @@ function Login() {
       .login(formData)
       .then((res) => {
         // setRes(res);
+        console.log(res);
         if (res.success) {
           dispatch(login(res.data));
           navigate("/me");
         } else {
-          setErr(data.message || "Login failed!");
+          setErr(res.message || "Login failed!");
         }
       })
       .catch((error) => {
@@ -128,7 +129,7 @@ function Login() {
               </select>
             </div>
             <div className="mt-5">
-              {err && <p className="text-red-500">{err}</p>}
+              {err && <p className="text-red-500 font-serif">{err}</p>}
             </div>
              <div className="buttonSection w-full flex items-center justify-between gap-2 mt-5">
                         <Link

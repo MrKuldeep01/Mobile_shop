@@ -1,4 +1,13 @@
-async function fetchData(url, data = null, method = "POST", headers = {}) {
+let token = localStorage.getItem("handShake") || null;
+console.log("hand shake value in fetxh call is ", token || "Not availabe!");
+async function fetchData(
+  url,
+  data = null,
+  method = "POST",
+  headers = {
+    [token ? "Authorization" : "undefined"]: `Bearer ${token}`,
+  }
+) {
   try {
     const options = {
       method: method.toUpperCase(),
@@ -7,7 +16,7 @@ async function fetchData(url, data = null, method = "POST", headers = {}) {
         ...headers,
         // Do not set Content-Type here
       },
-    }; 
+    };
 
     // Handle GET requests by appending query parameters to the URL
     if (method.toUpperCase() === "GET" && data) {
@@ -18,9 +27,9 @@ async function fetchData(url, data = null, method = "POST", headers = {}) {
         // Check for file data and use FormData if needed
         const formData = new FormData();
         // if (Object.values(data).some((item) => item instanceof File)) {
-          Object.entries(data).forEach(([key, value]) => {
-            formData.append(key, value);
-          });
+        Object.entries(data).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
         // }
         options.body = formData; // Automatically sets content-type for FormData
       } else {
@@ -29,8 +38,7 @@ async function fetchData(url, data = null, method = "POST", headers = {}) {
     }
 
     const response = await fetch(url, options);
-    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
+    // if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
     // Return response based on content type
     const contentType = response.headers.get("Content-Type");
     return contentType && contentType.includes("application/json")
